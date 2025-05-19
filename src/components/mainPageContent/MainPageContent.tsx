@@ -108,7 +108,7 @@ const FrontPage: React.FC = () => {
 
     return (
         <SiteLayout>
-            <div className="bg-gray-50 min-h-screen">
+            <div className="bg-gray-50">
                 {/* Header dengan animasi subtle */}
                 <div className="relative py-6 px-4 mb-6 overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-b-lg shadow-lg">
                     {/* Background patterns */}
@@ -122,7 +122,7 @@ const FrontPage: React.FC = () => {
                                 Sebaran Data Patroli & Pemadaman
                             </h1>
                         </div>
-                        <p className="text-blue-100 text-sm max-w-2xl">
+                        <p className="text-blue-100 text-l max-w-2xl">
                             Platform visualisasi data monitoring patroli dan pemadaman kebakaran hutan dan lahan
                         </p>
                     </div>
@@ -175,7 +175,7 @@ const FrontPage: React.FC = () => {
 
                             <button
                                 onClick={goToToday}
-                                className="ml-1 px-3 py-1 text-sm text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition"
+                                className="ml-1 px-3 py-1 text-l text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition"
                             >
                                 Hari Ini
                             </button>
@@ -183,7 +183,7 @@ const FrontPage: React.FC = () => {
 
                         <div className="flex items-center bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl shadow-md px-4 py-3">
                             <div className="flex flex-col items-center">
-                                <span className="text-xs text-blue-100">Total Aktivitas</span>
+                                <span className="text-l text-blue-100">Total Aktivitas</span>
                                 <span className="font-bold text-2xl">
                                     {loading ?
                                         <div className="animate-pulse w-8 h-6 bg-white/20 rounded"></div>
@@ -229,7 +229,7 @@ const FrontPage: React.FC = () => {
                         `}>
                             <div className="p-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
                                 <h2 className="text-xl font-bold">Statistik Data</h2>
-                                <p className="text-blue-100 text-sm">Aktivitas {formattedDate}</p>
+                                <p className="text-blue-100 text-l">Aktivitas {formattedDate}</p>
                             </div>
 
                             <div className="grid grid-cols-1 divide-y">
@@ -242,7 +242,7 @@ const FrontPage: React.FC = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-medium text-gray-800">Patroli Mandiri</h3>
-                                                <p className="text-xs text-gray-500">Dilakukan oleh individu petugas</p>
+                                                <p className="text-l text-gray-500">Dilakukan oleh individu petugas</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -264,7 +264,7 @@ const FrontPage: React.FC = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-medium text-gray-800">Patroli Rutin</h3>
-                                                <p className="text-xs text-gray-500">Patroli terjadwal rutin</p>
+                                                <p className="text-l text-gray-500">Patroli terjadwal rutin</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -286,7 +286,7 @@ const FrontPage: React.FC = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-medium text-gray-800">Patroli Terpadu</h3>
-                                                <p className="text-xs text-gray-500">Kolaborasi antar instansi</p>
+                                                <p className="text-l text-gray-500">Kolaborasi antar instansi</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -308,7 +308,7 @@ const FrontPage: React.FC = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-medium text-gray-800">Pemadaman</h3>
-                                                <p className="text-xs text-gray-500">Aktivitas pemadaman kebakaran</p>
+                                                <p className="text-l text-gray-500">Aktivitas pemadaman kebakaran</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -324,11 +324,10 @@ const FrontPage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Info Footer */}
                     <div className="mb-8">
                         <div className="bg-white rounded-xl shadow-md p-4">
                             <h3 className="text-lg font-semibold text-gray-800 mb-2">Tentang Data</h3>
-                            <p className="text-gray-600 text-sm">
+                            <p className="text-gray-600 text-l">
                                 Data patroli dan pemadaman kebakaran hutan dan lahan bersumber dari laporan petugas di lapangan.
                                 Visualisasi ini membantu memahami distribusi aktivitas pencegahan dan penanganan karhutla di seluruh Indonesia.
                             </p>
