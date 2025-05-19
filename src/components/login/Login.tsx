@@ -54,7 +54,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
     const handleChange = (prop: string) => (
         event: ChangeEvent<HTMLInputElement>
     ) => {
-        // Reset error when typing
         if (prop === 'email' && values.emailError) {
             setValues({
                 ...values,
@@ -72,18 +71,52 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
         }
     }
 
-    const showSuccessAlert = () => {
+    const showSuccessAlert = (userData: any) => {
+        const userName = userData?.name || userData?.full_name || getUserNameFromEmail(values.email);
+
+        const hour = new Date().getHours();
+        let greeting = "";
+
+        if (hour < 12) {
+            greeting = "Selamat pagi";
+        } else if (hour < 15) {
+            greeting = "Selamat siang";
+        } else if (hour < 18) {
+            greeting = "Selamat sore";
+        } else {
+            greeting = "Selamat malam";
+        }
+
         Swal.fire({
             icon: 'success',
-            title: 'Login Berhasil',
-            text: 'Selamat datang di SIPP Karhutla',
-            timer: 1500,
+            title: `${greeting}, ${userName}!`,
+            text: 'Senang melihat Anda kembali di SIPP Karhutla',
+            timer: 3000,
             showConfirmButton: false,
             timerProgressBar: true,
             customClass: {
-                popup: 'animate__animated animate__fadeInUp'
-            }
+                popup: 'animate__animated animate__fadeInUp',
+                title: 'text-xl font-bold text-gray-800',
+                htmlContainer: 'text-gray-600'
+            },
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdrop: 'rgba(0, 0, 123, 0.1)'
         });
+    }
+
+    const getUserNameFromEmail = (email: string): string => {
+        if (!email) return "Pengguna";
+
+        const namePart = email.split('@')[0];
+
+        if (namePart.includes('.') || namePart.includes('_')) {
+            return namePart
+                .split(/[._]/)
+                .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+                .join(' ');
+        }
+
+        return namePart.charAt(0).toUpperCase() + namePart.slice(1);
     }
 
     const showErrorAlert = (message: string) => {
@@ -105,19 +138,16 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
             e.preventDefault()
         }
 
-        // Validasi form
         const validate = loginValidator(values)
 
         if (validate.pass) {
             setLoading(true)
             try {
-                // Gunakan fungsi login dari auth context
                 const result = await login(
                     values.email.trim(),
                     values.password.trim()
                 )
 
-                // Jika login gagal, tampilkan pesan error
                 if (!result.success) {
                     setValues({
                         ...values,
@@ -125,19 +155,15 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                         showAlert: false
                     })
 
-                    // Tampilkan sweetalert error
                     showErrorAlert(result.message as string);
                 } else {
-                    // Tampilkan sweetalert sukses sebelum redirect
-                    showSuccessAlert();
+                    showSuccessAlert(result.data);
 
-                    // Redirect ditangani oleh auth context
                     setTimeout(() => {
-                        // Auth context sudah menangani redirect
                         if (redirectTo) {
                             router.push(redirectTo);
                         }
-                    }, 1000);
+                    }, 1500);
                 }
             } catch (error) {
                 const errorMessage = "Terjadi kesalahan saat menghubungi server. Silakan coba lagi.";
@@ -147,7 +173,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                     showAlert: false
                 })
 
-                // Tampilkan sweetalert error
                 showErrorAlert(errorMessage);
             } finally {
                 setLoading(false)
@@ -161,7 +186,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                 showAlert: false
             })
 
-            // Tampilkan sweetalert error
             showErrorAlert(validate.message);
         }
     }
@@ -174,11 +198,11 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
 
     return (
         <div className={`bg-white backdrop-blur-lg bg-opacity-95 rounded-2xl shadow-2xl ${cardAnimation} ${customClass} overflow-hidden w-full`}>
-            <Link href="/" className="absolute top-4 left-4 z-20 flex items-center px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm text-gray-700 hover:text-blue-600 hover:bg-white/90 transition-all duration-300 transform hover:scale-105">
+            <Link href="/" className="absolute top-4 left-4 z-20 flex items-center px-3 py-1.5 bg-white/80 backdrop-blur-l rounded-full shadow-l text-gray-700 hover:text-blue-600 hover:bg-white/90 transition-all duration-300 transform hover:scale-105">
                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
-                <span className="text-sm font-medium">Beranda</span>
+                <span className="text-l font-medium">Beranda</span>
             </Link>
 
             {/* Decorative Elements */}
@@ -205,7 +229,7 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                 {/* Card Body */}
                 <div className="space-y-5 sm:space-y-6">
                     <div className="space-y-1 sm:space-y-2">
-                        <label htmlFor="email" className="block text-gray-700 text-sm font-semibold mb-1">
+                        <label htmlFor="email" className="block text-gray-700 text-l font-semibold mb-1">
                             Email
                         </label>
                         <div className="relative group">
@@ -239,7 +263,7 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                             </div>
                         </div>
                         {values.emailError && (
-                            <p className="text-red-500 text-xs mt-1 flex items-center">
+                            <p className="text-red-500 text-l mt-1 flex items-center">
                                 <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                                 </svg>
@@ -249,7 +273,7 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                     </div>
 
                     <div className="space-y-1 sm:space-y-2">
-                        <label htmlFor="password" className="block text-gray-700 text-sm font-semibold mb-1">
+                        <label htmlFor="password" className="block text-gray-700 text-l font-semibold mb-1">
                             Password
                         </label>
                         <div className="relative group">
@@ -289,7 +313,7 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                             </button>
                         </div>
                         {values.passwordError && (
-                            <p className="text-red-500 text-xs mt-1 flex items-center">
+                            <p className="text-red-500 text-l mt-1 flex items-center">
                                 <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                                 </svg>
@@ -327,10 +351,10 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                     <div className="w-full text-center">
                         <button
                             type="button"
-                            className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200 text-sm flex items-center justify-center mx-auto"
+                            className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200 text-l flex items-center justify-center mx-auto"
                             onClick={(event) => {
                                 event.preventDefault()
-                                router.push('/forgot_password')
+                                router.push('/forgot-password')
                             }}
                         >
                             <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

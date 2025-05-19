@@ -42,8 +42,7 @@ export default function Home() {
                     ))}
                 </div>
 
-                {/* Feature Highlights */}
-                <div className="hidden lg:block absolute left-10 bottom-10 max-w-xs bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-sm border border-white/10">
+                <div className="hidden lg:block absolute left-10 bottom-10 max-w-l bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-l border border-white/10">
                     <div className="flex items-start space-x-3">
                         <div className="p-1.5 bg-blue-500/30 rounded-full text-blue-100">
                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -51,13 +50,13 @@ export default function Home() {
                             </svg>
                         </div>
                         <div>
-                            <h3 className="text-sm font-medium text-white">Monitor Lapangan Secara Real-time</h3>
-                            <p className="text-xs text-blue-100/80 mt-1">Akses data terkini dan analitik lapangan dengan sistem GIS terintegrasi.</p>
+                            <h3 className="text-l font-medium text-white">Monitor Lapangan Secara Real-time</h3>
+                            <p className="text-l text-blue-100/80 mt-1">Akses data terkini dan analitik lapangan dengan sistem GIS terintegrasi.</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="hidden lg:block absolute right-10 top-10 max-w-xs bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-sm border border-white/10">
+                <div className="hidden lg:block absolute right-10 top-10 max-w-l bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-l border border-white/10">
                     <div className="flex items-start space-x-3">
                         <div className="p-1.5 bg-indigo-500/30 rounded-full text-indigo-100">
                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -65,8 +64,8 @@ export default function Home() {
                             </svg>
                         </div>
                         <div>
-                            <h3 className="text-sm font-medium text-white">Pengelolaan Data Terintegrasi</h3>
-                            <p className="text-xs text-indigo-100/80 mt-1">Koordinasi operasi lapangan dan analisis data menjadi lebih efisien.</p>
+                            <h3 className="text-l font-medium text-white">Pengelolaan Data Terintegrasi</h3>
+                            <p className="text-l text-indigo-100/80 mt-1">Koordinasi operasi lapangan dan analisis data menjadi lebih efisien.</p>
                         </div>
                     </div>
                 </div>
@@ -74,7 +73,7 @@ export default function Home() {
                 <div className="relative z-10 w-full max-w-md">
                     <LoginForm />
 
-                    <div className="text-center mt-6 text-white/70 text-xs">
+                    <div className="text-center mt-6 text-white/70 text-l">
                         © {new Date().getFullYear()} SIPP Karhutla. All rights reserved.
                     </div>
                 </div>
