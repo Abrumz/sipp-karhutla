@@ -65,7 +65,8 @@ export const getPatroli = async (
 					reportLink: '',
 					patrolRegion: '',
 					operationRegion: '',
-					patrolDate: ''
+					patrolDate: '',
+					patroli: null
 				}
 				data2.reportLink = `${apiV2URL}/karhutla/download/${patroli.id_laporan_header}`
 				data2.patrolRegion =
