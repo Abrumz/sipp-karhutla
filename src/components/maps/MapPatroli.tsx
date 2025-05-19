@@ -18,8 +18,8 @@ interface MapContainerProps {
 		lng: number;
 	};
 	zoom: number;
-	spots?: SpotData[];
-	isLoggedin?: boolean;
+	spots: any[];
+	isLoggedin: boolean;
 }
 
 const mapOptions = {
@@ -129,7 +129,7 @@ const MapContainer: React.FC<MapContainerProps> = ({ center, zoom, spots, isLogg
 
 	const mapContainerStyle = useMemo(() => ({
 		width: '100%',
-		height: '75vh',
+		height: '100vh',
 		borderRadius: '12px',
 		overflow: 'hidden',
 		boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
