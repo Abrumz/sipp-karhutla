@@ -71,7 +71,6 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
                 }`}
         >
             <div className="container mx-auto px-4">
-                {/* Partners section with different views for mobile and desktop */}
                 <div className="flex flex-col items-center">
                     {/* Heading */}
                     <div className="text-center mb-6">
@@ -79,7 +78,6 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
                         <div className="h-0.5 w-20 mx-auto mt-2 bg-blue-500"></div>
                     </div>
 
-                    {/* Mobile Carousel View - Only visible on small screens */}
                     <div
                         className="md:hidden w-full overflow-hidden"
                         onTouchStart={handleTouchStart}
@@ -96,7 +94,7 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
                                 </svg>
                             </button>
 
-                            <div className={`p-4 rounded-lg ${whiteFont ? 'bg-white/10 backdrop-blur-sm' : 'bg-gray-50'} shadow-md w-40 h-28 flex items-center justify-center transition-all duration-300`}>
+                            <div className={`p-4 rounded-lg ${whiteFont ? 'bg-white/10 backdrop-blur-l' : 'bg-gray-50'} shadow-md w-40 h-28 flex items-center justify-center transition-all duration-300`}>
                                 <Image
                                     src={partners[currentIndex].logo}
                                     alt={partners[currentIndex].altText}
@@ -121,7 +119,6 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
                             </button>
                         </div>
 
-                        {/* Carousel Indicators */}
                         <div className="flex justify-center space-x-2 mb-4">
                             {partners.map((_, index) => (
                                 <button
@@ -136,18 +133,17 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
                             ))}
                         </div>
 
-                        <p className="text-center text-sm mb-6">
+                        <p className="text-center text-l mb-6">
                             {partners[currentIndex].name}
                         </p>
                     </div>
 
-                    {/* Desktop Grid View - Only visible on medium screens and up */}
                     <div className="hidden md:grid grid-cols-5 gap-4 justify-items-center items-center">
                         {partners.map((partner, index) => (
                             <div
                                 key={index}
-                                className={`p-4 rounded-lg ${whiteFont ? 'bg-white/10 backdrop-blur-sm hover:bg-white/20' : 'bg-gray-50 hover:bg-gray-100'
-                                    } shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center h-28 w-36`}
+                                className={`p-4 rounded-lg ${whiteFont ? 'bg-white/10 backdrop-blur-l hover:bg-white/20' : 'bg-gray-50 hover:bg-gray-100'
+                                    } shadow-l hover:shadow-md transition-all duration-300 flex items-center justify-center h-28 w-36`}
                             >
                                 <Image
                                     src={partner.logo}
@@ -164,17 +160,16 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
                         ))}
                     </div>
 
-                    {/* About section (collapsible) */}
                     <details className="mt-8 w-full max-w-3xl">
                         <summary className={`flex items-center justify-center cursor-pointer ${whiteFont ? 'text-blue-200 hover:text-white' : 'text-blue-600 hover:text-blue-800'
-                            } text-sm font-medium`}>
+                            } text-l font-medium`}>
                             <span>Informasi Kolaborasi</span>
                             <svg className="ml-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </summary>
 
-                        <div className={`mt-3 text-sm ${whiteFont ? 'text-blue-100' : 'text-gray-600'}`}>
+                        <div className={`mt-3 text-l ${whiteFont ? 'text-blue-100' : 'text-gray-600'}`}>
                             <p className="text-center md:text-justify">
                                 Sistem ini dikembangkan oleh Departemen Ilmu Komputer FMIPA
                                 IPB, bekerja sama dengan Balai Pengendalian
@@ -188,10 +183,9 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
                         </div>
                     </details>
 
-                    {/* Footer bottom with copyright and social links */}
                     <div className={`mt-6 pt-4 border-t ${whiteFont ? 'border-white/10' : 'border-gray-200'} w-full`}>
                         <div className="flex flex-col sm:flex-row justify-between items-center">
-                            <p className={`text-sm ${whiteFont ? 'text-white/80' : 'text-gray-600'}`}>
+                            <p className={`text-l ${whiteFont ? 'text-white/80' : 'text-gray-600'}`}>
                                 © {new Date().getFullYear()} SIPP Karhutla
                             </p>
                         </div>
