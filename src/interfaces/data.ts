@@ -140,6 +140,12 @@ export interface PatrolListData {
 	patrolRegion: string
 	operationRegion: string
 	patrolDate: string
+	patroli: PatrolInfo | null;
+}
+
+export interface PatrolInfo {
+  id: string;
+  type: string; 
 }
 
 export interface SuratTugasData {
