@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Footer from '@/components/footer/Footer';
 import Header from '@/components/navbar/header/Header';
@@ -8,12 +8,54 @@ import { ColorType } from '@/utils/colorUtils';
 interface SiteLayoutProps {
     children: React.ReactNode;
     headerColor?: ColorType;
+    scrollChange?: boolean;
 }
 
 const SiteLayout: React.FC<SiteLayoutProps> = ({
     children,
     headerColor = 'transparent'
 }) => {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+
+        // Add CSS for mobile menu animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            
+            @keyframes slideIn {
+                from { transform: translateX(-100%); }
+                to { transform: translateX(0); }
+            }
+            
+            @keyframes slideDown {
+                from { max-height: 0; opacity: 0; }
+                to { max-height: 500px; opacity: 1; }
+            }
+            
+            /* Make sure mobile menu takes full height */
+            .mobile-menu {
+                height: 100vh;
+                overflow-y: auto;
+            }
+            
+            /* Transitions for menu items */
+            .menu-item-transition {
+                transition: background-color 0.2s ease;
+            }
+        `;
+        document.head.appendChild(style);
+
+        return () => {
+            document.head.removeChild(style);
+        };
+    }, []);
+
     return (
         <div className="min-h-screen flex flex-col">
             <Head>
@@ -24,16 +66,20 @@ const SiteLayout: React.FC<SiteLayoutProps> = ({
                 <link rel="manifest" href="/site.webmanifest" />
                 <meta name="msapplication-TileColor" content="#ffffff" />
                 <meta name="theme-color" content="#ffffff" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             </Head>
+
             <Header
                 brand="SIPP Karhutla"
-                rightLinks={<HeaderLinks />}
+                rightLinks={<HeaderLinks headerColor={headerColor} />}
                 fixed
                 color={headerColor}
             />
+
             <main className="flex-grow">
                 {children}
             </main>
+
             <Footer />
         </div>
     );
