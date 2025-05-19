@@ -76,6 +76,19 @@ const Header: React.FC<HeaderProps> = ({
         };
     }, [color, fixed, changeColorOnScroll]);
 
+    // Add body lock when mobile menu is open
+    useEffect(() => {
+        if (mobileOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [mobileOpen]);
+
     const handleDrawerToggle = (): void => {
         setMobileOpen(!mobileOpen);
     };
@@ -144,46 +157,55 @@ const Header: React.FC<HeaderProps> = ({
                     </div>
                 </div>
 
-                {mobileOpen && (
-                    <div className="md:hidden fixed inset-0 z-50">
-                        <div
-                            className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
-                            onClick={handleDrawerToggle}
-                        ></div>
-                        <div className="absolute right-0 top-0 h-full w-72 bg-white shadow-xl transform transition-transform duration-300 ease-in-out overflow-y-auto">
-                            <div className="p-6 space-y-6">
-                                <div className="flex justify-between items-center border-b pb-4">
-                                    <span className="text-lg font-bold">{brand}</span>
-                                    <button
-                                        onClick={handleDrawerToggle}
-                                        className="p-2 rounded-full hover:bg-gray-100"
-                                    >
-                                        <CloseIcon />
-                                    </button>
-                                </div>
+                {/* Mobile Menu Modal */}
+                <div
+                    className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300 ${mobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                        }`}
+                    onClick={handleDrawerToggle}
+                >
+                    {/* Mobile Menu Content */}
+                    <div
+                        className={`absolute top-0 left-0 h-full w-4/5 max-w-l bg-white shadow-xl overflow-y-auto transform transition-transform duration-300 ease-in-out ${mobileOpen ? 'translate-x-0' : '-translate-x-full'
+                            }`}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Menu Header */}
+                        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+                            <div className="text-lg font-bold">{brand}</div>
+                            <button
+                                onClick={handleDrawerToggle}
+                                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                                aria-label="Close menu"
+                            >
+                                <CloseIcon />
+                            </button>
+                        </div>
 
-                                <div className="space-y-6">
-                                    {leftLinks && (
-                                        <div className="space-y-4 border-b pb-4">
-                                            {leftLinks}
-                                        </div>
-                                    )}
+                        {/* Menu Items */}
+                        <div className="px-4">
+                            <div className="py-2 border-b border-gray-100">
+                                {leftLinks && (
+                                    <div className="space-y-2 py-2">
+                                        {leftLinks}
+                                    </div>
+                                )}
+                            </div>
 
-                                    {rightLinks && (
-                                        <div className="space-y-4">
-                                            {rightLinks}
-                                        </div>
-                                    )}
-                                </div>
+                            <div className="py-2">
+                                {rightLinks && (
+                                    <div className="space-y-2 py-2">
+                                        {/* Clone rightLinks and add isMobile prop */}
+                                        {React.isValidElement<{ isMobile?: boolean }>(rightLinks) && React.cloneElement(rightLinks, { isMobile: true })}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
-                )}
+                </div>
             </header>
 
             {fixed && headerHeight > 0 && (
                 <div
-                    // style={{ height: `${headerHeight}px` }}
                     className="w-full"
                     aria-hidden="true"
                 />
