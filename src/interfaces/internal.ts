@@ -147,3 +147,23 @@ export interface resetPassword {
 }
 
 export type DeleteNonPatroliUser = NonPatroliUserData
+
+
+export interface PatroliData {
+  id?: string;
+  kode?: string;
+  kategori?: string;
+  daerah?: string;
+  daops?: string;
+  ketua?: string;
+  lat?: string;
+  lon?: string;
+}
+
+export interface SpotData {
+  id: string;
+  latitude: string;
+  longitude: string;
+  marker: string;
+  patroli: PatroliData;
+}
