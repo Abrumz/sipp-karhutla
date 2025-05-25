@@ -1,6 +1,6 @@
 import React from 'react';
 import SiteLayout from '@/components/layout/siteLayout/SiteLayout';
-import Balai from '@/pages/wilayah/balai';
+import Balai from '@/components/wilayah/balai/Balai';
 import Loader from '@/components/loader/Loader';
 import { ProtectRoute } from '@/context/auth';
 import useAuth from '@/context/auth';
@@ -17,10 +17,8 @@ const BalaiPage: React.FC<BalaiPageProps> = () => {
         <SiteLayout>
             <CustomHead
                 title='Detail Balai'
-                description='Platform visualisasi data monitoring laporan patroli dan pemadaman kebakaran hutan dan lahan'
-            >
-                <Balai />
-            </CustomHead>
+                description='Platform visualisasi data monitoring laporan patroli dan pemadaman kebakaran hutan dan lahan' children={undefined} />
+            <Balai />
         </SiteLayout>
     );
 };
