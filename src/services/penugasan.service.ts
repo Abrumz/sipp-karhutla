@@ -21,39 +21,38 @@ import { uploadPenugasanValidator, deletePenugasanValidator } from '@/validators
 import axios from 'axios'
 
 export const getAllPenugasan = async (): Promise<SuratTugasData[]> => {
-	// const r: APIResponse<SuratTugasResponse[]> = await SimaduAPI.get('/listsk')
-	const r: APIResponse<SuratTugasResponse[]> = await apiV2.get(
-		'simadu/listsk'
-	)
-	if (r.status === 200) {
-		return r.data.map((work) => {
-			const date_awal = new Date(work.tanggal_awal)
-			const part_awal = work.tanggal_awal.split('-')
-			const part_akhir = work.tanggal_akhir.split('-')
-			const date_akhir = new Date(work.tanggal_akhir)
-			const month_awal = date_awal.toLocaleString('default', {
-				month: 'short'
-			})
-			const month_akhir = date_akhir.toLocaleString('default', {
-				month: 'short'
-			})
+    const r: APIResponse<SuratTugasResponse[]> = await apiV2.get(
+        'simadu/listsk'
+    )
+    if (r.status === 200) {
+        return r.data.map((work) => {
+            const date_awal = new Date(work.tanggal_awal)
+            const part_awal = work.tanggal_awal.split('-')
+            const part_akhir = work.tanggal_akhir.split('-')
+            const date_akhir = new Date(work.tanggal_akhir)
+            const month_awal = date_awal.toLocaleString('default', {
+                month: 'short'
+            })
+            const month_akhir = date_akhir.toLocaleString('default', {
+                month: 'short'
+            })
 
-			const tanggal_awal =
-				part_awal[2] + ' ' + month_awal + ' ' + part_awal[0]
-			const tanggal_akhir =
-				part_akhir[2] + ' ' + month_akhir + ' ' + part_akhir[0]
+            const tanggal_awal =
+                part_awal[2] + ' ' + month_awal + ' ' + part_awal[0]
+            const tanggal_akhir =
+                part_akhir[2] + ' ' + month_akhir + ' ' + part_akhir[0]
 
-			return {
-				id: work.id,
-				number: work.nomor,
-				type: work.jenis_surat,
-				startDate: tanggal_awal,
-				finishDate: tanggal_akhir,
-				reportLink: `${apiV2URL}/karhutla/downloadPeriode?nomor_sk=${work.nomor}`
-			}
-		})
-	}
-	return []
+            return {
+                id: work.id,
+                number: work.nomor,
+                type: work.jenis_surat,
+                startDate: tanggal_awal,
+                finishDate: tanggal_akhir,
+                reportLink: `${apiV2URL}/karhutla/downloadPeriode?nomor_sk=${work.nomor}`
+            }
+        })
+    }
+    return []
 }
 
 export const checkSkNumber = async (

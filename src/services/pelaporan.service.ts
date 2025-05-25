@@ -14,45 +14,82 @@ import {
 	DeleteLaporanInput
 } from '@/interfaces'
 
-export const downloadLaporanRentangTanggal = (
-	startDate: Date,
-	endDate: Date,
-	organization: string
-): ServiceResponse => {
-	const validate = downloadRentangTanggalValidator(startDate, endDate)
-	if (!validate.pass) {
-		return {
-			success: false,
-			message: validate.message
-		}
-	}
-	// console.log(organization)
-
-	// Prepare Download URL
-	if (organization) {
-		const url = `${apiV2URL}/karhutla/downloadrange?start=${formatYYYYMMDD(
-			startDate
-		)}&end=${formatYYYYMMDD(endDate)}&org=${organization}`
-		window.open(url)
-	} else {
-		const url = `${apiV2URL}/karhutla/downloadrange?start=${formatYYYYMMDD(
-			startDate
-		)}&end=${formatYYYYMMDD(endDate)}`
-		window.open(url)
-	}
-
-	// // Open URL in new tab
-	return {
-		success: true,
-		message: ''
-	}
+export const downloadLaporanRentangTanggal = async (
+    startDate: Date,
+    endDate: Date,
+    organization: string
+): Promise<ServiceResponse> => {
+    const validate = downloadRentangTanggalValidator(startDate, endDate)
+    if (!validate.pass) {
+        return {
+            success: false,
+            message: validate.message
+        }
+    }
+    
+    try {
+        let url;
+        if (organization) {
+            url = `${apiV2URL}/karhutla/downloadrange?start=${formatYYYYMMDD(
+                startDate
+            )}&end=${formatYYYYMMDD(endDate)}&org=${organization}`;
+        } else {
+            url = `${apiV2URL}/karhutla/downloadrange?start=${formatYYYYMMDD(
+                startDate
+            )}&end=${formatYYYYMMDD(endDate)}`;
+        }
+         
+        const response = await fetch(url, {
+            method: 'GET',
+            credentials: 'include',  
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to download file');
+        }
+         
+        const blob = await response.blob();
+         
+        let filename = `Laporan-Rentang-Tanggal-${formatYYYYMMDD(startDate)}-${formatYYYYMMDD(endDate)}.xlsx`;
+        const contentDisposition = response.headers.get('Content-Disposition');
+        if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(/filename="(.+)"|filename=([^;]+)/i);
+            if (filenameMatch) {
+                filename = filenameMatch[1] || filenameMatch[2];
+            }
+        }
+         
+        const downloadUrl = window.URL.createObjectURL(blob);
+         
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = downloadUrl;
+        a.download = filename;
+         
+        document.body.appendChild(a);
+         
+        a.click();
+         
+        window.URL.revokeObjectURL(downloadUrl);
+        document.body.removeChild(a);
+        
+        return {
+            success: true,
+            message: ''
+        };
+    } catch (error) {
+        console.error('Download error:', error);
+        return {
+            success: false,
+            message: 'Error downloading file: ' + (error instanceof Error ? error.message : String(error))
+        };
+    }
 }
-
-export const downloadLaporanRingkasan = (
+export const downloadLaporanRingkasan = async (
 	startDate: Date,
 	endDate: Date,
 	organization: string
-): ServiceResponse => {
+): Promise<ServiceResponse> => {
 	const validate = downloadRentangTanggalRingkasanValidator(
 		startDate,
 		endDate
@@ -62,27 +99,74 @@ export const downloadLaporanRingkasan = (
 			success: false,
 			message: validate.message
 		}
-	}
-	// console.log(organization)
-
-	// Prepare Download URL
-	if (organization) {
-		const url = `${apiV2URL}/simadu/downloadRingkasan?start=${formatYYYYMMDD(
-			startDate
-		)}&end=${formatYYYYMMDD(endDate)}&org=${organization}`
-		window.open(url)
-	} else {
-		const url = `${apiV2URL}/simadu/downloadRingkasan?start=${formatYYYYMMDD(
-			startDate
-		)}&end=${formatYYYYMMDD(endDate)}`
-		window.open(url)
-	}
-
-	// // Open URL in new tab
-	return {
-		success: true,
-		message: ''
-	}
+	} 
+    
+    try {
+        let url;
+        if (organization) {
+            url = `${apiV2URL}/simadu/downloadRingkasan?start=${formatYYYYMMDD(
+                startDate
+            )}&end=${formatYYYYMMDD(endDate)}&org=${organization}`;
+        } else {
+            url = `${apiV2URL}/simadu/downloadRingkasan?start=${formatYYYYMMDD(
+                startDate
+            )}&end=${formatYYYYMMDD(endDate)}`;
+        }
+        
+        // Fetch the file
+        const response = await fetch(url, {
+            method: 'GET',
+            credentials: 'include', // Include cookies for authentication if needed
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to download file');
+        }
+        
+        // Get the blob from the response
+        const blob = await response.blob();
+        
+        // Get the filename from Content-Disposition header if available
+        // If not available, create a name in the same format as the API would
+        let filename = `Laporan-Ringkasan-${formatYYYYMMDD(startDate)}-${formatYYYYMMDD(endDate)}.xlsx`;
+        const contentDisposition = response.headers.get('Content-Disposition');
+        if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(/filename="(.+)"|filename=([^;]+)/i);
+            if (filenameMatch) {
+                filename = filenameMatch[1] || filenameMatch[2];
+            }
+        }
+        
+        // Create a URL for the blob
+        const downloadUrl = window.URL.createObjectURL(blob);
+        
+        // Create a temporary anchor element
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = downloadUrl;
+        a.download = filename;
+        
+        // Append to the DOM
+        document.body.appendChild(a);
+        
+        // Trigger the download
+        a.click();
+        
+        // Clean up
+        window.URL.revokeObjectURL(downloadUrl);
+        document.body.removeChild(a);
+        
+        return {
+            success: true,
+            message: ''
+        };
+    } catch (error) {
+        console.error('Download error:', error);
+        return {
+            success: false,
+            message: 'Error downloading file: ' + (error instanceof Error ? error.message : String(error))
+        };
+    }
 }
 
 export const getLaporanDetail = async (
