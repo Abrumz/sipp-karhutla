@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useAuth, { ProtectRoute } from '@/context/auth';
 import Loader from '@/components/loader/Loader';
-import { CloudDownload, AlertCircle, X, FileText, Calendar, Info, Clock } from 'lucide-react';
+import { CloudDownload, AlertCircle, X, Calendar, Info, Clock } from 'lucide-react';
 import { downloadLaporanRentangTanggal } from '@/services';
 
 const DateInputComponent: React.FC<{
@@ -37,31 +37,6 @@ const DateInputComponent: React.FC<{
         );
     };
 
-const InfoCard: React.FC<{
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-    color: string;
-}> = ({ icon, title, description, color }) => {
-    const colorClasses = {
-        blue: 'text-blue-600 bg-blue-50',
-        indigo: 'text-indigo-600 bg-indigo-50',
-        purple: 'text-purple-600 bg-purple-50'
-    };
-
-    return (
-        <div className="flex items-start gap-4 p-6 bg-white rounded-xl shadow hover:shadow-md hover:-translate-y-0.5 transition-all">
-            <div className={`p-3 rounded-lg flex items-center justify-center ${colorClasses[color as keyof typeof colorClasses]}`}>
-                {icon}
-            </div>
-            <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-                <p className="text-l text-gray-500 leading-relaxed">{description}</p>
-            </div>
-        </div>
-    );
-};
-
 const PelaporanRentangTanggal: React.FC = () => {
     const { isAuthenticated, user } = useAuth();
     const [startDate, setStartDate] = useState(formatDateForInput(new Date()));
@@ -70,7 +45,6 @@ const PelaporanRentangTanggal: React.FC = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    // Helper function to format date for input type="date"
     function formatDateForInput(date: Date): string {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -78,7 +52,6 @@ const PelaporanRentangTanggal: React.FC = () => {
         return `${year}-${month}-${day}`;
     }
 
-    // Helper function to parse input date string to Date object
     function parseInputDate(dateString: string): Date {
         return new Date(dateString);
     }
@@ -87,7 +60,6 @@ const PelaporanRentangTanggal: React.FC = () => {
         const newStartDate = e.target.value;
         setStartDate(newStartDate);
 
-        // If endDate is earlier than startDate, update endDate
         if (newStartDate > endDate) {
             setEndDate(newStartDate);
         }
@@ -129,7 +101,6 @@ const PelaporanRentangTanggal: React.FC = () => {
                 setShow(true);
             }
 
-            // Reset dates after successful download
             setStartDate(formatDateForInput(new Date()));
             setEndDate(formatDateForInput(new Date()));
         } catch (error) {
@@ -145,8 +116,7 @@ const PelaporanRentangTanggal: React.FC = () => {
 
     return (
         <div className="bg-gray-50 min-h-full p-6">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-8 rounded-xl mb-8 shadow-md">
+            <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-4xl mx-auto text-center">
                     <h1 className="text-3xl font-bold mb-2">Rekapitulasi Laporan Per Rentang Tanggal</h1>
                     <p className="text-lg opacity-90">
@@ -155,41 +125,43 @@ const PelaporanRentangTanggal: React.FC = () => {
                 </div>
             </div>
 
-            {/* Info Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 max-w-4xl mx-auto">
-                <InfoCard
-                    icon={<FileText size={20} />}
-                    title="Data Komprehensif"
-                    description="Laporan lengkap dengan data kebakaran, lokasi, dan status penanganan"
-                    color="blue"
-                />
-                <InfoCard
-                    icon={<Calendar size={20} />}
-                    title="Periode Kustom"
-                    description="Pilih rentang tanggal spesifik (maksimal 7 hari) untuk analisis mendalam"
-                    color="indigo"
-                />
-                <InfoCard
-                    icon={<FileText size={20} />}
-                    title="Format Terstruktur"
-                    description="Data disajikan dalam format yang mudah dibaca dan dianalisis"
-                    color="purple"
-                />
+            <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow mb-8">
+                <h3 className="text-xl font-semibold text-gray-800 mb-6 text-center">Cara Penggunaan Laporan</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="flex flex-col items-center text-center">
+                        <div className="w-10 h-10 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">1</div>
+                        <div>
+                            <h4 className="font-semibold text-base text-gray-700 mb-2">Pilih Rentang Tanggal</h4>
+                            <p className="text-l text-gray-500">Tentukan periode waktu laporan yang ingin diunduh</p>
+                        </div>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                        <div className="w-10 h-10 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">2</div>
+                        <div>
+                            <h4 className="font-semibold text-base text-gray-700 mb-2">Download Laporan</h4>
+                            <p className="text-l text-gray-500">Klik tombol Download Laporan dan tunggu proses selesai</p>
+                        </div>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                        <div className="w-10 h-10 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">3</div>
+                        <div>
+                            <h4 className="font-semibold text-base text-gray-700 mb-2">Analisis Data</h4>
+                            <p className="text-l text-gray-500">Buka file laporan untuk melihat data dan statistik lengkap</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* Main Card */}
-            <div className="bg-white rounded-xl shadow max-w-4xl mx-auto mb-8">
+            <div className="bg-white rounded-xl shadow max-w-4xl mx-auto">
                 <div className="p-8">
-                    {/* Download Section Header */}
                     <div className="flex items-center gap-4 mb-6">
-                        <Clock className="h-8 w-8 text-blue-500 bg-blue-50 p-1.5 rounded-lg" />
+                        <Clock className="h-8 w-8 text-green-500 bg-green-50 p-1.5 rounded-lg" />
                         <div>
                             <h2 className="text-xl font-bold text-gray-800 mb-1">Pilih Rentang Tanggal</h2>
                             <p className="text-gray-500">Tentukan periode waktu untuk rekapitulasi laporan Anda</p>
                         </div>
                     </div>
 
-                    {/* Alert */}
                     {show && (
                         <div className="mb-6 bg-red-50 border border-red-100 p-4 rounded-lg text-red-700 animate-fade-in">
                             <div className="flex items-start">
@@ -206,7 +178,6 @@ const PelaporanRentangTanggal: React.FC = () => {
                         </div>
                     )}
 
-                    {/* Date Inputs */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <DateInputComponent
                             id="start-date"
@@ -226,7 +197,6 @@ const PelaporanRentangTanggal: React.FC = () => {
                         />
                     </div>
 
-                    {/* Note */}
                     <div className="flex items-start gap-3 p-4 bg-gray-100 rounded-lg mb-6">
                         <Info size={18} className="text-gray-600 flex-shrink-0 mt-0.5" />
                         <p className="text-l text-gray-600 leading-relaxed">
@@ -234,12 +204,11 @@ const PelaporanRentangTanggal: React.FC = () => {
                         </p>
                     </div>
 
-                    {/* Button */}
                     <div className="flex justify-center">
                         <button
                             onClick={handleDownload}
                             disabled={isLoading}
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-lg shadow hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-30 transition-all w-full md:w-auto flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+                            className="bg-gradient-primary text-white font-medium px-8 py-3 rounded-lg shadow hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-30 transition-all w-full md:w-auto flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
                         >
                             {isLoading ? (
                                 <>
@@ -256,34 +225,6 @@ const PelaporanRentangTanggal: React.FC = () => {
                                 </>
                             )}
                         </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Usage Guide */}
-            <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow">
-                <h3 className="text-xl font-semibold text-gray-800 mb-6 text-center">Cara Penggunaan Laporan</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="flex flex-col items-center text-center">
-                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">1</div>
-                        <div>
-                            <h4 className="font-semibold text-base text-gray-700 mb-2">Pilih Rentang Tanggal</h4>
-                            <p className="text-l text-gray-500">Tentukan periode waktu laporan yang ingin diunduh</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-col items-center text-center">
-                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">2</div>
-                        <div>
-                            <h4 className="font-semibold text-base text-gray-700 mb-2">Download Laporan</h4>
-                            <p className="text-l text-gray-500">Klik tombol Download Laporan dan tunggu proses selesai</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-col items-center text-center">
-                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">3</div>
-                        <div>
-                            <h4 className="font-semibold text-base text-gray-700 mb-2">Analisis Data</h4>
-                            <p className="text-l text-gray-500">Buka file laporan untuk melihat data dan statistik lengkap</p>
-                        </div>
                     </div>
                 </div>
             </div>

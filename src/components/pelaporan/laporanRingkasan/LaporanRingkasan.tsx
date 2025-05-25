@@ -3,6 +3,7 @@ import Loader from '@/components/loader/Loader';
 import useAuth, { ProtectRoute } from '@/context/auth';
 import { CloudDownload, AlertCircle, X, FileText, BarChart2, Calendar, Info, Clock } from 'lucide-react';
 import { downloadLaporanRingkasan } from '@/services';
+import Swal from 'sweetalert2';
 
 const DateInputComponent: React.FC<{
     id: string;
@@ -46,7 +47,8 @@ const InfoCard: React.FC<{
     const colorClasses = {
         blue: 'text-blue-600 bg-blue-50',
         indigo: 'text-indigo-600 bg-indigo-50',
-        purple: 'text-purple-600 bg-purple-50'
+        purple: 'text-purple-600 bg-purple-50',
+        green: 'text-green-600 bg-green-50',
     };
 
     return (
@@ -57,6 +59,34 @@ const InfoCard: React.FC<{
             <div className="flex-1">
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
                 <p className="text-l text-gray-500 leading-relaxed">{description}</p>
+            </div>
+        </div>
+    );
+};
+
+const StepGuide: React.FC = () => {
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="flex flex-col items-center text-center">
+                <div className="w-12 h-12 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">1</div>
+                <div>
+                    <h4 className="font-semibold text-lg text-gray-800 mb-2">Pilih Rentang Tanggal</h4>
+                    <p className="text-l text-gray-600">Tentukan periode waktu laporan yang ingin diunduh</p>
+                </div>
+            </div>
+            <div className="flex flex-col items-center text-center">
+                <div className="w-12 h-12 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">2</div>
+                <div>
+                    <h4 className="font-semibold text-lg text-gray-800 mb-2">Download Laporan</h4>
+                    <p className="text-l text-gray-600">Klik tombol Download Laporan dan tunggu proses selesai</p>
+                </div>
+            </div>
+            <div className="flex flex-col items-center text-center">
+                <div className="w-12 h-12 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">3</div>
+                <div>
+                    <h4 className="font-semibold text-lg text-gray-800 mb-2">Analisis Data</h4>
+                    <p className="text-l text-gray-600">Buka file laporan untuk melihat data dan statistik lengkap</p>
+                </div>
             </div>
         </div>
     );
@@ -124,7 +154,17 @@ const LaporanRingkasan = () => {
                 organizationCode
             );
 
-            if (!result.success) {
+            if (result.success) {
+                // Tampilkan SweetAlert yang otomatis menutup tanpa tombol
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Laporan telah berhasil diunduh.',
+                    showConfirmButton: false,
+                    timer: 2000, // Menutup otomatis setelah 2 detik
+                    timerProgressBar: true
+                });
+            } else {
                 setAlertMessage(Array.isArray(result.message) ? result.message.join(', ') : result.message || 'Terjadi kesalahan saat mengunduh laporan');
                 setShow(true);
             }
@@ -142,7 +182,7 @@ const LaporanRingkasan = () => {
     return (
         <div className="bg-gray-50 min-h-full p-6">
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-8 rounded-xl mb-8 shadow-md">
+            <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-4xl mx-auto text-center">
                     <h1 className="text-3xl font-bold mb-2">Laporan Ringkasan</h1>
                     <p className="text-lg opacity-90">
@@ -151,34 +191,16 @@ const LaporanRingkasan = () => {
                 </div>
             </div>
 
-            {/* Info Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 max-w-4xl mx-auto">
-                <InfoCard
-                    icon={<FileText size={20} />}
-                    title="Dokumentasi Komprehensif"
-                    description="Laporan lengkap dengan data kebakaran, lokasi, luas area, dan status penanganan"
-                    color="blue"
-                />
-                <InfoCard
-                    icon={<Calendar size={20} />}
-                    title="Analisis Periode Spesifik"
-                    description="Pilih rentang tanggal khusus untuk mendapatkan wawasan yang lebih mendalam"
-                    color="indigo"
-                />
-                <InfoCard
-                    icon={<BarChart2 size={20} />}
-                    title="Statistik & Tren"
-                    description="Visualisasi data terstruktur untuk memudahkan pengambilan keputusan"
-                    color="purple"
-                />
+            {/* Step Guide */}
+            <div className="max-w-4xl mx-auto mb-8">
+                <StepGuide />
             </div>
 
-            {/* Main Card */}
             <div className="bg-white rounded-xl shadow max-w-4xl mx-auto mb-8">
                 <div className="p-8">
                     {/* Download Section Header */}
                     <div className="flex items-center gap-4 mb-6">
-                        <Clock className="h-8 w-8 text-blue-500 bg-blue-50 p-1.5 rounded-lg" />
+                        <Clock className="h-8 w-8 text-green-500 bg-green-50 p-1.5 rounded-lg" />
                         <div>
                             <h2 className="text-xl font-bold text-gray-800 mb-1">Rentang Tanggal Laporan</h2>
                             <p className="text-gray-500">Pilih rentang tanggal untuk mengunduh laporan ringkasan data</p>
@@ -235,7 +257,7 @@ const LaporanRingkasan = () => {
                         <button
                             onClick={handleDownload}
                             disabled={isLoading}
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-lg shadow hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-30 transition-all w-full md:w-auto flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+                            className="bg-gradient-primary text-white font-medium px-8 py-3 rounded-lg shadow hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-30 transition-all w-full md:w-auto flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
                         >
                             {isLoading ? (
                                 <>
@@ -252,34 +274,6 @@ const LaporanRingkasan = () => {
                                 </>
                             )}
                         </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Usage Guide */}
-            <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow">
-                <h3 className="text-xl font-semibold text-gray-800 mb-6 text-center">Cara Penggunaan Laporan</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="flex flex-col items-center text-center">
-                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">1</div>
-                        <div>
-                            <h4 className="font-semibold text-base text-gray-700 mb-2">Pilih Rentang Tanggal</h4>
-                            <p className="text-l text-gray-500">Tentukan periode waktu laporan yang ingin diunduh</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-col items-center text-center">
-                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">2</div>
-                        <div>
-                            <h4 className="font-semibold text-base text-gray-700 mb-2">Download Laporan</h4>
-                            <p className="text-l text-gray-500">Klik tombol Download Laporan dan tunggu proses selesai</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-col items-center text-center">
-                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">3</div>
-                        <div>
-                            <h4 className="font-semibold text-base text-gray-700 mb-2">Analisis Data</h4>
-                            <p className="text-l text-gray-500">Buka file laporan untuk melihat data dan statistik lengkap</p>
-                        </div>
                     </div>
                 </div>
             </div>

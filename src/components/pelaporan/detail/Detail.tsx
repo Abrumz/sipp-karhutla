@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useAuth from '@/context/auth'
 import { getSKLaporanDetail, deleteLaporan } from '@/services'
-import { CloudDownload, ExternalLink, FileText, Info, Trash2, Search, ChevronLeft, ChevronRight } from 'lucide-react'
+import { CloudDownload, ExternalLink, Info, Trash2, Search, ChevronLeft, ChevronRight } from 'lucide-react'
 import { apiV2URL } from '@/api'
 import Loader from '@/components/loader/Loader'
+import Swal from 'sweetalert2'
 
 interface SuratTugasLaporanData {
     id_laporan_header: string;
@@ -14,33 +15,6 @@ interface SuratTugasLaporanData {
     tanggal_patroli: string;
     tableData?: any;
 }
-
-interface InfoCardProps {
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-    color: 'blue' | 'indigo' | 'purple';
-}
-
-const InfoCard: React.FC<InfoCardProps> = ({ icon, title, description, color }) => {
-    const colorClasses = {
-        blue: 'text-blue-600 bg-blue-50',
-        indigo: 'text-indigo-600 bg-indigo-50',
-        purple: 'text-purple-600 bg-purple-50'
-    };
-
-    return (
-        <div className="flex items-start gap-4 p-6 bg-white rounded-xl shadow hover:shadow-md hover:-translate-y-0.5 transition-all">
-            <div className={`p-3 rounded-lg flex items-center justify-center ${colorClasses[color]}`}>
-                {icon}
-            </div>
-            <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-                <p className="text-l text-gray-500 leading-relaxed">{description}</p>
-            </div>
-        </div>
-    );
-};
 
 const DetailLaporan: React.FC = () => {
     const { isAuthenticated, user } = useAuth()
@@ -75,40 +49,97 @@ const DetailLaporan: React.FC = () => {
     }, [isAuthenticated, noSK, user])
 
     const handleDelete = async (rowData: SuratTugasLaporanData): Promise<void> => {
-        if (window.confirm('Apakah Anda yakin ingin menghapus laporan tersebut?')) {
-            try {
-                const result = await deleteLaporan(rowData)
-                if (result.success) {
-                    const dataDelete = [...laporan]
-                    const index = laporan.findIndex(item => item.id_laporan_header === rowData.id_laporan_header)
-                    if (index !== -1) {
-                        dataDelete.splice(index, 1)
-                        setLaporan(dataDelete)
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah Anda yakin ingin menghapus laporan tersebut?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#ef4444',
+            confirmButtonText: 'Ya, Hapus',
+            cancelButtonText: 'Batal'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const result = await deleteLaporan(rowData)
+                    if (result.success) {
+                        const dataDelete = [...laporan]
+                        const index = laporan.findIndex(item => item.id_laporan_header === rowData.id_laporan_header)
+                        if (index !== -1) {
+                            dataDelete.splice(index, 1)
+                            setLaporan(dataDelete)
+                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Hapus data Laporan berhasil',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: result.message as string,
+                            confirmButtonText: 'Tutup',
+                            confirmButtonColor: '#10b981'
+                        })
                     }
-                    setAlertSuccess(true)
-                    setAlertMessage('Hapus data Laporan berhasil')
-                    setShowAlert(true)
-                } else {
-                    setAlertType('error')
-                    setAlertSuccess(false)
-                    setAlertMessage(result.message as string)
-                    setShowAlert(true)
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Terjadi kesalahan saat menghapus laporan',
+                        confirmButtonText: 'Tutup',
+                        confirmButtonColor: '#10b981'
+                    })
                 }
-            } catch (error) {
-                setAlertType('error')
-                setAlertSuccess(false)
-                setAlertMessage('Terjadi kesalahan saat menghapus laporan')
-                setShowAlert(true)
             }
-        }
+        })
     }
 
     const handleEdit = (rowData: SuratTugasLaporanData): void => {
         router.push(`/pelaporan/ubah/${rowData.id_laporan_header}`)
     }
 
-    const handleDownload = (rowData: SuratTugasLaporanData): void => {
-        window.open(apiV2URL + `/karhutla/download/${rowData.id_laporan_header}`)
+    const handleDownload = async (rowData: SuratTugasLaporanData): Promise<void> => {
+        try {
+            Swal.fire({
+                title: 'Memproses...',
+                text: 'Sedang menyiapkan laporan untuk diunduh',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = apiV2URL + `/karhutla/download/${rowData.id_laporan_header}`;
+            document.body.appendChild(iframe);
+
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Laporan telah berhasil diunduh.',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true
+                });
+            }, 1500);
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Terjadi kesalahan saat mengunduh laporan.',
+                confirmButtonText: 'Tutup',
+                confirmButtonColor: '#10b981'
+            });
+        }
     }
 
     const filteredData = laporan.filter(item => {
@@ -137,7 +168,7 @@ const DetailLaporan: React.FC = () => {
 
     return (
         <div className="bg-gray-50 min-h-full p-6">
-            <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-8 rounded-xl mb-8 shadow-md">
+            <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-5xl mx-auto text-center">
                     <h1 className="text-3xl font-bold mb-2">Detail Laporan: {noSK}</h1>
                     <p className="text-lg opacity-90">
@@ -146,25 +177,22 @@ const DetailLaporan: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 max-w-5xl mx-auto">
-                <InfoCard
-                    icon={<FileText size={20} />}
-                    title="Laporan Terstruktur"
-                    description="Data laporan lengkap dari patroli berdasarkan surat tugas"
-                    color="blue"
-                />
-                <InfoCard
-                    icon={<CloudDownload size={20} />}
-                    title="Unduh Laporan"
-                    description="Unduh laporan lengkap dengan format yang terstruktur dan mudah dibaca"
-                    color="indigo"
-                />
-                <InfoCard
-                    icon={<ExternalLink size={20} />}
-                    title="Akses Detail"
-                    description="Ubah atau lihat detail dari setiap laporan yang tersedia"
-                    color="purple"
-                />
+            <div className="max-w-5xl mx-auto p-6 bg-white rounded-xl shadow mb-8">
+                <div className="flex items-start gap-3">
+                    <Info size={20} className="text-green-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                        <h3 className="font-semibold text-gray-800 mb-2">Informasi Penggunaan</h3>
+                        <p className="text-l text-gray-600 leading-relaxed">
+                            Halaman ini menampilkan seluruh laporan dari surat tugas dengan nomor {noSK}.
+                            Anda dapat mencari laporan spesifik menggunakan kolom pencarian.
+                            Untuk mengubah data laporan, klik ikon <span className="inline-flex items-center"><ExternalLink className="h-3 w-3 mx-1" /></span>,
+                            dan untuk mengunduh laporan, klik ikon <span className="inline-flex items-center"><CloudDownload className="h-3 w-3 mx-1" /></span>.
+                            {canDelete && (
+                                <span> Untuk menghapus laporan, klik ikon <span className="inline-flex items-center"><Trash2 className="h-3 w-3 mx-1" /></span>.</span>
+                            )}
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <div className="max-w-5xl mx-auto mb-8">
@@ -198,7 +226,7 @@ const DetailLaporan: React.FC = () => {
                 {loading ? (
                     <div className="bg-white p-8 rounded-xl shadow flex justify-center items-center">
                         <div className="flex flex-col items-center">
-                            <div className="w-12 h-12 border-4 border-t-blue-500 border-blue-200 rounded-full animate-spin mb-4"></div>
+                            <div className="w-12 h-12 border-4 border-t-green-500 border-green-200 rounded-full animate-spin mb-4"></div>
                             <p className="text-gray-600">Memuat data laporan...</p>
                         </div>
                     </div>
@@ -214,7 +242,7 @@ const DetailLaporan: React.FC = () => {
                                         placeholder="Cari laporan..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="pl-10 pr-4 py-2 w-full md:w-64 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="pl-10 pr-4 py-2 w-full md:w-64 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                     />
                                 </div>
                             </div>
@@ -243,14 +271,14 @@ const DetailLaporan: React.FC = () => {
                                                     <div className="flex justify-end items-center space-x-2">
                                                         <button
                                                             onClick={() => handleEdit(row)}
-                                                            className="p-1.5 text-indigo-600 hover:text-indigo-900 hover:bg-indigo-50 rounded-md transition-colors"
+                                                            className="p-1.5 text-green-600 hover:text-green-900 hover:bg-green-50 rounded-md transition-colors"
                                                             title="Ubah Data Laporan"
                                                         >
                                                             <ExternalLink className="h-4 w-4" />
                                                         </button>
                                                         <button
                                                             onClick={() => handleDownload(row)}
-                                                            className="p-1.5 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-md transition-colors"
+                                                            className="p-1.5 text-green-600 hover:text-green-900 hover:bg-green-50 rounded-md transition-colors"
                                                             title="Download Laporan"
                                                         >
                                                             <CloudDownload className="h-4 w-4" />
@@ -313,24 +341,6 @@ const DetailLaporan: React.FC = () => {
                         )}
                     </div>
                 )}
-            </div>
-
-            <div className="max-w-5xl mx-auto p-6 bg-white rounded-xl shadow mb-8">
-                <div className="flex items-start gap-3">
-                    <Info size={20} className="text-blue-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                        <h3 className="font-semibold text-gray-800 mb-2">Informasi Penggunaan</h3>
-                        <p className="text-l text-gray-600 leading-relaxed">
-                            Halaman ini menampilkan seluruh laporan dari surat tugas dengan nomor {noSK}.
-                            Anda dapat mencari laporan spesifik menggunakan kolom pencarian.
-                            Untuk mengubah data laporan, klik ikon <span className="inline-flex items-center"><ExternalLink className="h-3 w-3 mx-1" /></span>,
-                            dan untuk mengunduh laporan, klik ikon <span className="inline-flex items-center"><CloudDownload className="h-3 w-3 mx-1" /></span>.
-                            {canDelete && (
-                                <span> Untuk menghapus laporan, klik ikon <span className="inline-flex items-center"><Trash2 className="h-3 w-3 mx-1" /></span>.</span>
-                            )}
-                        </p>
-                    </div>
-                </div>
             </div>
         </div>
     )

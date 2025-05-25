@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import useAuth, { ProtectRoute } from '@/context/auth';
 import Loader from '@/components/loader/Loader';
 import { getAllPenugasan } from '@/services';
-import { CloudDownload, ExternalLink, FileText, Calendar, Info, Clipboard, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { CloudDownload, ExternalLink, Search, ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import Swal from 'sweetalert2';
 
 interface SuratTugasData {
     id: string;
@@ -13,31 +14,6 @@ interface SuratTugasData {
     finishDate: string;
     reportLink: string;
 }
-
-const InfoCard: React.FC<{
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-    color: string;
-}> = ({ icon, title, description, color }) => {
-    const colorClasses = {
-        blue: 'text-blue-600 bg-blue-50',
-        indigo: 'text-indigo-600 bg-indigo-50',
-        purple: 'text-purple-600 bg-purple-50'
-    };
-
-    return (
-        <div className="flex items-start gap-4 p-6 bg-white rounded-xl shadow hover:shadow-md hover:-translate-y-0.5 transition-all">
-            <div className={`p-3 rounded-lg flex items-center justify-center ${colorClasses[color as keyof typeof colorClasses]}`}>
-                {icon}
-            </div>
-            <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-                <p className="text-l text-gray-500 leading-relaxed">{description}</p>
-            </div>
-        </div>
-    );
-};
 
 const SuratTugasTable: React.FC<{
     data: SuratTugasData[];
@@ -87,7 +63,7 @@ const SuratTugasTable: React.FC<{
                             placeholder="Cari surat tugas..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 pr-4 py-2 w-full md:w-64 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="pl-10 pr-4 py-2 w-full md:w-64 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                         />
                     </div>
                 </div>
@@ -116,14 +92,14 @@ const SuratTugasTable: React.FC<{
                                         <div className="flex justify-end items-center space-x-2">
                                             <button
                                                 onClick={() => onDetail(item)}
-                                                className="p-1.5 text-indigo-600 hover:text-indigo-900 hover:bg-indigo-50 rounded-md transition-colors"
+                                                className="p-1.5 text-green-600 hover:text-green-900 hover:bg-green-50 rounded-md transition-colors"
                                                 title="Buka Detail Laporan"
                                             >
                                                 <ExternalLink className="h-4 w-4" />
                                             </button>
                                             <button
                                                 onClick={() => onDownload(item)}
-                                                className="p-1.5 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-md transition-colors"
+                                                className="p-1.5 text-green-600 hover:text-green-900 hover:bg-green-50 rounded-md transition-colors"
                                                 title="Download Laporan"
                                             >
                                                 <CloudDownload className="h-4 w-4" />
@@ -152,7 +128,7 @@ const SuratTugasTable: React.FC<{
                             <select
                                 value={itemsPerPage}
                                 onChange={handleItemsPerPageChange}
-                                className="border border-gray-300 rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="border border-gray-300 rounded-md py-1 px-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                             >
                                 <option value="5">5</option>
                                 <option value="10">10</option>
@@ -222,9 +198,71 @@ const PelaporanSuratTugas: React.FC = () => {
         }
     };
 
-    const handleDownload = (suratTugas: SuratTugasData) => {
-        if (suratTugas && suratTugas.reportLink) {
-            window.open(suratTugas.reportLink);
+    const handleDownload = async (suratTugas: SuratTugasData) => {
+        if (!suratTugas || !suratTugas.reportLink) return;
+
+        try {
+            // Show loading indicator
+            Swal.fire({
+                title: 'Memproses...',
+                text: 'Sedang menyiapkan laporan untuk diunduh',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const response = await fetch(suratTugas.reportLink, {
+                method: 'GET',
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to download file');
+            }
+
+            const blob = await response.blob();
+
+            let filename = `Laporan-${suratTugas.number}.xlsx`;
+            const contentDisposition = response.headers.get('Content-Disposition');
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename="(.+)"|filename=([^;]+)/i);
+                if (filenameMatch) {
+                    filename = filenameMatch[1] || filenameMatch[2];
+                }
+            }
+
+            const downloadUrl = window.URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = downloadUrl;
+            a.download = filename;
+
+            document.body.appendChild(a);
+            a.click();
+
+            window.URL.revokeObjectURL(downloadUrl);
+            document.body.removeChild(a);
+
+            // Show success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Laporan telah berhasil diunduh.',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true
+            });
+        } catch (error) {
+            console.error("Download error:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Terjadi kesalahan saat mengunduh laporan.',
+                confirmButtonText: 'Tutup',
+                confirmButtonColor: '#10b981'
+            });
         }
     };
 
@@ -232,7 +270,7 @@ const PelaporanSuratTugas: React.FC = () => {
 
     return (
         <div className="bg-gray-50 min-h-full p-6">
-            <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-8 rounded-xl mb-8 shadow-md">
+            <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-3xl font-bold mb-2">Rekapitulasi Laporan Per Surat Tugas</h1>
                     <p className="text-lg opacity-90">
@@ -241,47 +279,9 @@ const PelaporanSuratTugas: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 max-w-7xl mx-auto">
-                <InfoCard
-                    icon={<Clipboard size={20} />}
-                    title="Dokumentasi Surat Tugas"
-                    description="Akses seluruh laporan berdasarkan surat tugas yang telah diterbitkan"
-                    color="blue"
-                />
-                <InfoCard
-                    icon={<FileText size={20} />}
-                    title="Laporan Terstruktur"
-                    description="Unduh laporan lengkap dengan format yang terstruktur dan mudah dibaca"
-                    color="indigo"
-                />
-                <InfoCard
-                    icon={<Calendar size={20} />}
-                    title="Riwayat Penugasan"
-                    description="Lihat detail setiap penugasan berdasarkan periode waktu pelaksanaan"
-                    color="purple"
-                />
-            </div>
-
-            <div className="max-w-7xl mx-auto mb-8">
-                {loading ? (
-                    <div className="bg-white p-8 rounded-xl shadow flex justify-center items-center">
-                        <div className="flex flex-col items-center">
-                            <div className="w-12 h-12 border-4 border-t-blue-500 border-blue-200 rounded-full animate-spin mb-4"></div>
-                            <p className="text-gray-600">Memuat data surat tugas...</p>
-                        </div>
-                    </div>
-                ) : (
-                    <SuratTugasTable
-                        data={penugasan}
-                        onDetail={handleDetail}
-                        onDownload={handleDownload}
-                    />
-                )}
-            </div>
-
             <div className="max-w-7xl mx-auto p-6 bg-white rounded-xl shadow mb-8">
                 <div className="flex items-start gap-3">
-                    <Info size={20} className="text-blue-500 flex-shrink-0 mt-0.5" />
+                    <Info size={20} className="text-green-500 flex-shrink-0 mt-0.5" />
                     <div>
                         <h3 className="font-semibold text-gray-800 mb-2">Informasi Penggunaan</h3>
                         <p className="text-l text-gray-600 leading-relaxed">
@@ -292,6 +292,23 @@ const PelaporanSuratTugas: React.FC = () => {
                         </p>
                     </div>
                 </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto mb-8">
+                {loading ? (
+                    <div className="bg-white p-8 rounded-xl shadow flex justify-center items-center">
+                        <div className="flex flex-col items-center">
+                            <div className="w-12 h-12 border-4 border-t-green-500 border-green-200 rounded-full animate-spin mb-4"></div>
+                            <p className="text-gray-600">Memuat data surat tugas...</p>
+                        </div>
+                    </div>
+                ) : (
+                    <SuratTugasTable
+                        data={penugasan}
+                        onDetail={handleDetail}
+                        onDownload={handleDownload}
+                    />
+                )}
             </div>
         </div>
     );

@@ -26,7 +26,6 @@ import {
 } from 'lucide-react'
 import Loader from '@/components/loader/Loader'
 
-// Define interfaces for our data types
 interface LaporanDetail {
     id_laporan_header: string
     id_daerah_patroli: string
@@ -95,7 +94,7 @@ const FormCard: React.FC<CardProps> = ({ title, icon, children }) => {
     return (
         <div className="border border-gray-200 rounded-xl p-6 my-4 shadow-sm hover:shadow-md transition-shadow duration-200">
             <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <span className="text-blue-600 mr-2">{icon}</span>
+                <span className="text-green-600 mr-2">{icon}</span>
                 {title}
             </h3>
             <div className="space-y-4">
@@ -120,7 +119,7 @@ const CheckboxGroup: React.FC<{
                             <input
                                 type="checkbox"
                                 id={`option-${title}-${index}`}
-                                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                className="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
                                 checked={option.checked || false}
                                 onChange={() => onChange(index)}
                             />
@@ -788,7 +787,6 @@ function UbahLaporanId() {
                     }
                     setDailyActivity(newDaily)
                 } else {
-                    // Set notFound to true if data not found
                     setValues({
                         ...values,
                         notFound: true
@@ -807,7 +805,7 @@ function UbahLaporanId() {
             </label>
             <input
                 type={type}
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm transition duration-150 ease-in-out"
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-sm transition duration-150 ease-in-out"
                 value={value}
                 onChange={onChange}
             />
@@ -820,7 +818,7 @@ function UbahLaporanId() {
                 {label}
             </label>
             <select
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm transition duration-150 ease-in-out"
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-sm transition duration-150 ease-in-out"
                 value={value}
                 onChange={onChange}
             >
@@ -840,22 +838,20 @@ function UbahLaporanId() {
         <ErrorPage statusCode={404} />
     ) : (
         <div className="bg-gray-50 min-h-screen">
-            {/* Header Section with Gradient Background */}
-            <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-8 shadow-md">
+            <div className="header-primary text-white p-8 shadow-md">
                 <div className="max-w-7xl mx-auto">
                     <button
                         onClick={() => router.back()}
-                        className="inline-flex items-center px-3 py-1 rounded-md bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 mb-4 transition duration-150 ease-in-out"
+                        className="inline-flex items-center px-3 py-1 rounded-md bg-green-600 text-sm font-medium text-white hover:bg-green-700 mb-4 transition duration-150 ease-in-out"
                     >
                         <ArrowLeft size={16} className="mr-1" /> Kembali
                     </button>
                     <h1 className="text-3xl font-bold">Ubah Data Laporan</h1>
-                    <p className="text-lg text-blue-100 mt-2">{nomor_sk}</p>
+                    <p className="text-lg text-green-100 mt-2">{nomor_sk}</p>
                 </div>
             </div>
 
             <div className="max-w-7xl mx-auto px-4 py-8">
-                {/* Alert Section */}
                 {values.showAlert && (
                     <div className={`mb-8 p-4 rounded-lg shadow-sm ${alertSuccess ? 'bg-green-50 border-l-4 border-green-500 text-green-800' : 'bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800'}`}>
                         <div className="flex items-center justify-between">
@@ -884,13 +880,25 @@ function UbahLaporanId() {
                     </div>
                 )}
 
-                {/* Tabs */}
+                <div className="bg-white rounded-xl shadow-sm p-6 text-gray-800 mb-8">
+                    <div className="flex items-start gap-3">
+                        <Info size={24} className="text-green-500 flex-shrink-0 mt-0.5" />
+                        <div>
+                            <h3 className="font-semibold text-lg mb-2">Informasi Penggunaan</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Formulir ini digunakan untuk mengubah data laporan. Pastikan Anda mengisi semua bagian yang diperlukan untuk memastikan data yang akurat.
+                                Anda dapat beralih antar tab untuk mengisi berbagai bagian dari laporan. Setelah selesai melakukan perubahan, klik tombol "Simpan Perubahan" untuk menyimpan data.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="bg-white rounded-xl shadow-sm mb-6 overflow-hidden">
                     <div className="border-b border-gray-200">
                         <nav className="-mb-px flex space-x-6 px-6">
                             <button
                                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === '1'
-                                    ? 'border-blue-500 text-blue-600'
+                                    ? 'border-green-500 text-green-600'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                     }`}
                                 onClick={() => handleChangeTab('1')}
@@ -902,7 +910,7 @@ function UbahLaporanId() {
                             </button>
                             <button
                                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === '2'
-                                    ? 'border-blue-500 text-blue-600'
+                                    ? 'border-green-500 text-green-600'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                     }`}
                                 onClick={() => handleChangeTab('2')}
@@ -914,7 +922,7 @@ function UbahLaporanId() {
                             </button>
                             <button
                                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === '3'
-                                    ? 'border-blue-500 text-blue-600'
+                                    ? 'border-green-500 text-green-600'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                     }`}
                                 onClick={() => handleChangeTab('3')}
@@ -927,9 +935,7 @@ function UbahLaporanId() {
                         </nav>
                     </div>
 
-                    {/* Tab Content */}
                     <div className="p-6">
-                        {/* Data Umum Tab */}
                         {activeTab === '1' && (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
@@ -966,7 +972,6 @@ function UbahLaporanId() {
                             </div>
                         )}
 
-                        {/* Data Darat Tab */}
                         {activeTab === '2' && (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
@@ -1022,7 +1027,6 @@ function UbahLaporanId() {
                             </div>
                         )}
 
-                        {/* Observasi Tab */}
                         {activeTab === '3' && (
                             <div>
                                 {observasiNull ? (
@@ -1035,15 +1039,15 @@ function UbahLaporanId() {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {dataObservasi.map((option, index) => (
                                             <div key={index} className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
-                                                <div className="bg-blue-50 p-4 border-b border-gray-200">
+                                                <div className="bg-green-50 p-4 border-b border-gray-200">
                                                     <div className="grid grid-cols-2 gap-2">
                                                         <div className="flex items-center space-x-2">
-                                                            <MapPin size={16} className="text-blue-600" />
+                                                            <MapPin size={16} className="text-green-600" />
                                                             <span className="font-medium text-gray-700">Latitude:</span>
                                                             <span className="text-gray-800">{option.latitude}</span>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <MapPin size={16} className="text-blue-600" />
+                                                            <MapPin size={16} className="text-green-600" />
                                                             <span className="font-medium text-gray-700">Longitude:</span>
                                                             <span className="text-gray-800">{option.longitude}</span>
                                                         </div>
@@ -1053,7 +1057,7 @@ function UbahLaporanId() {
                                                 <div className="p-4">
                                                     {option.observasi.map((option1: { nama: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; atribut: any[]; dokumen: any[] }, index1: React.Key | null | undefined) => (
                                                         <div key={index1} className="mb-6 last:mb-0">
-                                                            <h4 className="text-lg font-semibold text-blue-700 mb-3 pb-2 border-b border-blue-100">
+                                                            <h4 className="text-lg font-semibold text-green-700 mb-3 pb-2 border-b border-green-100">
                                                                 {option1.nama}
                                                             </h4>
 
@@ -1095,14 +1099,13 @@ function UbahLaporanId() {
                     </div>
                 </div>
 
-                {/* Submit button */}
                 {update_condition && (
                     <div className="flex justify-center mb-12">
                         <button
                             type="button"
                             className={`inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm ${loading
                                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                : 'bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'}`}
+                                : 'bg-gradient-primary text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'}`}
                             onClick={handleFormSubmit}
                             disabled={loading}
                         >
@@ -1123,20 +1126,6 @@ function UbahLaporanId() {
                         </button>
                     </div>
                 )}
-
-                {/* Info Panel */}
-                <div className="bg-white rounded-xl shadow-sm p-6 text-gray-800">
-                    <div className="flex items-start gap-3">
-                        <Info size={24} className="text-blue-500 flex-shrink-0 mt-0.5" />
-                        <div>
-                            <h3 className="font-semibold text-lg mb-2">Informasi Penggunaan</h3>
-                            <p className="text-gray-600 leading-relaxed">
-                                Formulir ini digunakan untuk mengubah data laporan. Pastikan Anda mengisi semua bagian yang diperlukan untuk memastikan data yang akurat.
-                                Anda dapat beralih antar tab untuk mengisi berbagai bagian dari laporan. Setelah selesai melakukan perubahan, klik tombol "Simpan Perubahan" untuk menyimpan data.
-                            </p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );
