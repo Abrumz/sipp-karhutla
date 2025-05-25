@@ -1,7 +1,8 @@
-export type ColorType = 'primary' | 'info' | 'success' | 'warning' | 'danger' | 'transparent' | 'white' | 'rose' | 'dark';
+export type ColorType = 'primary' | 'info' | 'success' | 'warning' | 'danger' | 'transparent' | 'white' | 'rose' | 'dark' | 'header-primary';
  
 export const getColorClass = (colorValue: string): string[] => {
   switch (colorValue) {
+    case 'header-primary': return ['header-primary']; 
     case 'primary': return ['bg-blue-600', 'text-white'];
     case 'info': return ['bg-gradient-to-r', 'from-blue-600', 'to-indigo-700', 'text-white'];
     case 'success': return ['bg-green-500', 'text-white'];
@@ -17,6 +18,7 @@ export const getColorClass = (colorValue: string): string[] => {
  
 export const getBorderColorClass = (colorValue: string): string => {
   switch (colorValue) {
+    case 'header-primary': return 'border-green-600'; 
     case 'primary': return 'border-blue-600';
     case 'info': return 'border-blue-600';
     case 'success': return 'border-green-500';
@@ -32,6 +34,7 @@ export const getBorderColorClass = (colorValue: string): string => {
  
 export const getTextColorClass = (colorValue: string): string => {
   switch (colorValue) {
+    case 'header-primary': return 'text-green-600'; 
     case 'primary': return 'text-blue-600';
     case 'info': return 'text-blue-600';
     case 'success': return 'text-green-500';
@@ -47,6 +50,7 @@ export const getTextColorClass = (colorValue: string): string => {
  
 export const getHoverColorClass = (colorValue: string): string[] => {
   switch (colorValue) {
+    case 'header-primary': return ['hover:bg-green-700', 'hover:text-white', 'hover:shadow-md']; // Hover untuk header-primary
     case 'primary': return ['hover:bg-blue-700', 'hover:text-white', 'hover:shadow-md'];
     case 'info': return ['hover:from-blue-700', 'hover:to-indigo-800', 'hover:text-white', 'hover:shadow-md'];
     case 'success': return ['hover:bg-green-600', 'hover:text-white', 'hover:shadow-md'];
@@ -62,6 +66,7 @@ export const getHoverColorClass = (colorValue: string): string[] => {
  
 export const getGradientClass = (colorValue: string): string[] => {
   switch (colorValue) {
+    case 'header-primary': return ['bg-gradient-primary'];  
     case 'primary': return ['bg-gradient-to-r', 'from-blue-600', 'to-blue-700'];
     case 'info': return ['bg-gradient-to-r', 'from-blue-600', 'to-indigo-700'];
     case 'success': return ['bg-gradient-to-r', 'from-green-500', 'to-green-600'];
@@ -75,6 +80,7 @@ export const getGradientClass = (colorValue: string): string[] => {
  
 export const getSubtleTextColorClass = (colorValue: string): string => {
   switch (colorValue) {
+    case 'header-primary': return 'text-green-100';  
     case 'primary': return 'text-blue-100';
     case 'info': return 'text-blue-100';
     case 'success': return 'text-green-100';
@@ -103,6 +109,7 @@ export const getShadowClass = (intensity: 'sm' | 'md' | 'lg' | 'xl' = 'md'): str
  
 export const getFocusRingClass = (colorValue: string): string => {
   switch (colorValue) {
+    case 'header-primary': return 'focus:ring-green-600 focus:ring-2 focus:ring-offset-2 focus:outline-none'; 
     case 'primary': return 'focus:ring-blue-600 focus:ring-2 focus:ring-offset-2 focus:outline-none';
     case 'info': return 'focus:ring-blue-600 focus:ring-2 focus:ring-offset-2 focus:outline-none';
     case 'success': return 'focus:ring-green-500 focus:ring-2 focus:ring-offset-2 focus:outline-none';

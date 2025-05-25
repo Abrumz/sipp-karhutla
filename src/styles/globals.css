@@ -10,8 +10,10 @@
     font-size: 16px;
   }
 }
- 
-:root {
+  
+/* Tambahkan ini ke file CSS global Anda */
+
+:root { 
   --bs-primary: #0d6efd;
   --bs-info: #0dcaf0;
   --bs-warning: #ffc107;
@@ -20,6 +22,23 @@
   --bs-low: #0d6efd;
   --bs-medium: #ffc107;
   --bs-high: #dc3545;
+   
+  --color-primary: #63a91f;
+  --color-primary-dark: #1a512e;
+  --gradient-primary: linear-gradient(to right, var(--color-primary), var(--color-primary-dark));
+   
+  --bs-headerprimary: header-primary;
+}
+ 
+.header-primary {
+  background-color: var(--color-primary);
+  background-image: var(--gradient-primary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bg-gradient-primary {
+  background-color: var(--color-primary);
+  background-image: var(--gradient-primary);
 }
 
 @media (width >= 1536px) {
@@ -39,3 +58,16 @@
     max-width: calc(100vw - 8rem);
   }
 }
+
+.swal-large-text {
+                    font-size: 1.25rem !important;
+                }
+                .swal2-title {
+                    font-size: 1.75rem !important;
+                }
+                .swal2-content {
+                    font-size: 1.25rem !important;
+                }
+                .swal2-html-container {
+                    font-size: 1.25rem !important;
+                }
