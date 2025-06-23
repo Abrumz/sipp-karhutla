@@ -35,7 +35,7 @@ const UnauthorizedContent: React.FC = () => {
                         <div className="flex flex-col sm:flex-row gap-3 mt-6">
                             <button
                                 onClick={() => window.history.back()}
-                                className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 py-3 px-4 rounded-xl transition-colors duration-300"
+                                className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-100 text-black-700 hover:bg-gray-200 py-3 px-4 rounded-xl transition-colors duration-300"
                             >
                                 <ArrowLeft className="h-5 w-5" />
                                 <span>Kembali</span>
@@ -52,7 +52,7 @@ const UnauthorizedContent: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="mt-6 text-center text-gray-500 text-sm">
+                <div className="mt-6 text-center text-black-500 text-sm">
                     <p>Jika Anda yakin seharusnya memiliki akses, silakan <a href="mailto:karhutla.ipb@apps.ipb.ac.id" className="text-blue-600 hover:text-blue-800 font-medium">hubungi tim dukungan</a></p>
                 </div>
             </div>
