@@ -1,4 +1,4 @@
-import { API, apiV2 } from '@/api'
+import { API, apiV2, apiV2URL } from '@/api'
 import {
 	AddPatroliNonLoginUserInput,
 	AddUserInput,
@@ -53,11 +53,40 @@ export const getAllUsers = async (): Promise<UserData[]> => {
 				role: 0,
 				photo: '',
 				roleLevel: 0,
-				roleName: ''
+				roleName: '',
+				nama: user.nama,
+				no_registrasi: user.no_registrasi,
+				no_telepon: user.no_telepon
 			}
 		})
 	}
 	return []
+}
+
+export const getAllUsersPersonil = async (search: string = ''): Promise<UserData[]> => {
+    const r: APIResponse<UserDetailResponse[]> = await apiV2.get(`/user/list?page=1&limit=100&search=${encodeURIComponent(search)}`);
+    if (r.status === 200) {
+        return r.data.map((user) => {
+            return {
+				id: parseInt(user.id_user.toString()),
+                registrationNumber: user.no_registrasi,
+                name: user.nama,
+                email: user.email,
+                phoneNumber: user.no_hp,
+                accessId: 0,
+                nip: '',
+                organization: '',
+                role: 0,
+                photo: '',
+                roleLevel: 0,
+                roleName: '',
+                nama: user.nama,
+                no_registrasi: user.no_registrasi,
+                no_telepon: user.no_hp
+            }
+        })
+    }
+    return []
 }
 
 export const getUserDetail = async (
@@ -78,9 +107,11 @@ export const getUserDetail = async (
 			role: r.data.roles.length > 0 ? parseInt(r.data.roles[0].id) : 0,
 			organization: r.data.instansi,
 			photo: r.data.foto,
-			roleLevel:
-				r.data.roles.length > 0 ? parseInt(r.data.roles[0].level) : 0,
-			roleName: r.data.roles.length > 0 ? r.data.roles[0].nama : ''
+			roleLevel: r.data.roles.length > 0 ? parseInt(r.data.roles[0].level) : 0,
+			roleName: r.data.roles.length > 0 ? r.data.roles[0].nama : '',
+			nama: undefined,
+			no_registrasi: '',
+			no_telepon: ''
 		}
 		return { success: true, message: r.message, data: user }
 	}
@@ -215,7 +246,10 @@ export const getPatroliNonLoginUsers = async (): Promise<UserData[]> => {
 				role: parseInt(user.r_role_id),
 				photo: '',
 				roleLevel: parseInt(user.r_role.level),
-				roleName: user.r_role.nama
+				roleName: user.r_role.nama,
+				nama: user.nama,
+				no_registrasi: '',
+				no_telepon: ''
 			}
 		})
 		return users

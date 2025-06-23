@@ -14,7 +14,8 @@ import {
 	APIResponseUpload,
 	SkNumberData,
 	SkNumberResponse,
-	PenugasanData
+	PenugasanData,
+	ModifySkFormData
 } from '@/interfaces'
 import { splitAndTrim } from '@/utils'
 import { uploadPenugasanValidator, deletePenugasanValidator } from '@/validators'
@@ -205,25 +206,102 @@ export const uploadPenugasan = async (
 	}
 }
 
+// export const getPenugasanDetail = async (
+// 	noSK: string
+// ): Promise<SuratTugasTeamMemberData[]> => {
+// 	const r: APIResponse<SuratTugasTeamMemberResponse[]> = await apiV2.get(
+// 		`/simadu/listregu?nomor_sk=${noSK}`
+// 	)
+// 	if (r.status === 200) {
+// 		return r.data.map((teamMember) => {
+// 			return {
+// 				id: teamMember.id,
+// 				name: teamMember.nama,
+// 				registrationNumber: teamMember.no_registrasi,
+// 				organization: teamMember.instansi,
+// 				startDate: teamMember.tanggal_awal,
+// 				endDate: teamMember.tanggal_akhir,
+// 				posko: teamMember.posko,
+// 				daops: teamMember.daops
+// 			}
+// 		})
+// 	}
+// 	return []
+// }
+
 export const getPenugasanDetail = async (
-	noSK: string
-): Promise<SuratTugasTeamMemberData[]> => {
-	const r: APIResponse<SuratTugasTeamMemberResponse[]> = await apiV2.get(
-		`/simadu/listregu?nomor_sk=${noSK}`
-	)
-	if (r.status === 200) {
-		return r.data.map((teamMember) => {
-			return {
-				id: teamMember.id,
-				name: teamMember.nama,
-				registrationNumber: teamMember.no_registrasi,
-				organization: teamMember.instansi,
-				startDate: teamMember.tanggal_awal,
-				endDate: teamMember.tanggal_akhir,
-				posko: teamMember.posko,
-				daops: teamMember.daops
-			}
-		})
-	}
-	return []
-}
+  noSK: string
+): Promise<SuratTugasTeamMemberData[]> => { 
+  const r: APIResponse<SuratTugasTeamMemberResponse[][]> = await apiV2.get(
+    `/simadu/listregu?nomor_sk=${noSK}&grouping=true`
+  );
+
+  if (r.status !== 200 || !Array.isArray(r.data)) { 
+    return [];
+  }
+ 
+  const result: SuratTugasTeamMemberData[] = r.data
+    .map((group) => {  
+      const leader = group.find((member) => member.id_roles === "4");
+       
+      const representativeMember = leader || (group.length > 0 ? group[0] : null);
+
+      if (!representativeMember) { 
+        return null;
+      }
+
+      return {
+        id: representativeMember.id,
+        name: representativeMember.nama,
+        registrationNumber: representativeMember.no_registrasi,
+        organization: representativeMember.instansi,
+        phoneNumber: representativeMember.no_hp,
+        email: representativeMember.email,
+        startDate: representativeMember.tanggal_awal,
+        endDate: representativeMember.tanggal_akhir,
+        posko: representativeMember.posko,
+        daops: representativeMember.daops,
+        kode_wilayah: representativeMember.kode_wilayah,
+        r_role_id: representativeMember.id_roles,
+		id_daerah_patroli: representativeMember.id_daerah_patroli,
+		id_daops: representativeMember.id_daops,
+        isActive: representativeMember.is_active === "1", 
+        groupMembers: group
+          .filter(m => m.id !== representativeMember.id)
+          .map(member => ({
+            id: member.id,
+            name: member.nama,
+            registrationNumber: member.no_registrasi,
+            organization: member.instansi,
+            phoneNumber: member.no_hp,
+            email: member.email,
+            r_role_id: member.id_roles,
+            isActive: member.is_active === "1"
+          }))
+      };
+    })
+    .filter((x): x is SuratTugasTeamMemberData => x !== null);
+
+  return result;
+};
+
+export const modifySk = async (payload: ModifySkFormData): Promise<any> => {
+    try {
+        const formData = new FormData();
+ 
+        Object.keys(payload).forEach(key => {
+            const value = (payload as any)[key];
+            formData.append(key, String(value));  
+        }); 
+		const response: APIResponse<any> = await apiV2.post('/user/modify_sk', formData);
+
+        if (response.status === 200 && response.data) {
+            return response.data;
+        } else {
+            throw new Error(response.data?.message || 'Gagal memodifikasi data anggota');
+        }
+    } catch (error) {
+        console.error("Error dalam service modifySk:", error);
+        throw error;
+    }
+};

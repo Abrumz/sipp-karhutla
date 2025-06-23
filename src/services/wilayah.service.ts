@@ -1,5 +1,12 @@
 import { API } from '@/api'
 import { APIResponse, RegionData, RegionResponse } from '@/interfaces'
+ 
+export const REGION_TYPES = [
+  "Kelurahan/Desa",
+  "Kecamatan",
+  "Kabupaten",
+  "Provinsi"
+]
 
 export interface WilayahPagedResponse {
   data: {
@@ -23,14 +30,44 @@ export const getAllWilayah = async (): Promise<RegionData[]> => {
 				id: wilayah.id,
 				code: wilayah.kode,
 				name: wilayah.nama,
-				type: wilayah.tipe
+				type: wilayah.tipe,
+				tipe: wilayah.tipe
 			}
 		})
 	}
 	return []
 }
 
-export const getAllKecamatan = async (): Promise<RegionData[]> => {
+export const getAllWilayah2 = async (
+  page: number = 1,
+  per_page: number = 100000,
+  nama?: string
+): Promise<RegionData[]> => { 
+  const params: Record<string, string | number> = {
+    page,
+    per_page,
+  };
+  if (nama) {
+    params.nama = nama;
+  }
+ 
+  const queryString = new URLSearchParams(params as any).toString();
+ 
+  const r: APIResponse<any> = await API.get(`/wilayah/list2?${queryString}`);
+
+  if (r.status === 200 && r.data && r.data.data && Array.isArray(r.data.data)) {
+	return r.data.data.map((wilayah: { id: any; kode: any; nama: any; tipe: any; }) => ({
+	  id: wilayah.id,
+	  code: wilayah.kode,
+	  name: wilayah.nama,
+	  type: wilayah.tipe,
+	  tipe: wilayah.tipe,
+	}));
+  }
+  return [];
+};
+
+export const getAllKecamatan = async (p0: { page: number; limit: number; search: string; }): Promise<RegionData[]> => {
 	const r: APIResponse<RegionResponse[]> = await API.get('/wilayah/list')
 	if (r.status === 200) {
 		const kecamatan: RegionData[] = []
@@ -40,7 +77,8 @@ export const getAllKecamatan = async (): Promise<RegionData[]> => {
 					id: wilayah.id,
 					code: wilayah.kode,
 					name: wilayah.nama,
-					type: wilayah.tipe
+					type: wilayah.tipe,
+					tipe: ''
 				})
 			}
 		})
@@ -48,6 +86,46 @@ export const getAllKecamatan = async (): Promise<RegionData[]> => {
 	}
 	return []
 }
+
+export const getAllKelurahan2 = async (
+  page: number = 1,
+  per_page: number = 100000,
+  nama?: string
+): Promise<RegionData[]> => {
+  const params: Record<string, string | number> = {
+    page,
+    per_page,
+  };
+  
+  if (nama) {
+    params.nama = nama;
+  }
+
+  const queryString = new URLSearchParams(params as any).toString();
+  
+  try {
+    const r: APIResponse<any> = await API.get(`/wilayah/list2?${queryString}`);
+
+    if (r.status === 200 && r.data?.data && Array.isArray(r.data.data)) { 
+      return r.data.data
+        .filter((wilayah: any) => wilayah.tipe === "Kelurahan/Desa")
+        .map((wilayah: any) => ({
+          id: wilayah.id,
+          code: wilayah.kode,
+		  kode: wilayah.kode,
+          name: wilayah.nama,
+		  nama: wilayah.nama,
+          type: wilayah.tipe,
+          tipe: wilayah.tipe
+        }));
+    }
+    return [];
+  } catch (error) {
+    console.error("Error fetching kelurahan:", error);
+    return [];
+  }
+};
+
 
 export const getAllPulau = async (): Promise<RegionData[]> => {
 	const r: APIResponse<RegionResponse[]> = await API.get('/wilayah/list')
@@ -59,7 +137,8 @@ export const getAllPulau = async (): Promise<RegionData[]> => {
 					id: wilayah.id,
 					code: wilayah.kode,
 					name: wilayah.nama,
-					type: wilayah.tipe
+					type: wilayah.tipe,
+					tipe: ''
 				})
 			}
 		})
@@ -107,5 +186,35 @@ export const getWilayahList = async (
 	  totalCount: 0,
 	  loading: false
 	}));
+  }
+}; 
+
+export const addWilayah = async (data: { nama: string; kode: string; tipe: string }): Promise<boolean> => {
+  try {
+    const r: APIResponse<any> = await API.post('/wilayah/add', data);
+    return r.status === 200;
+  } catch (error) {
+    console.error("Error adding wilayah:", error);
+    return false;
+  }
+};
+ 
+export const updateWilayah = async (data: { id: string; nama: string }): Promise<boolean> => {
+  try {
+    const r: APIResponse<any> = await API.post('/wilayah/save', data);
+    return r.status === 200;
+  } catch (error) {
+    console.error("Error updating wilayah:", error);
+    return false;
+  }
+};
+ 
+export const deleteWilayah = async (id: string): Promise<boolean> => {
+  try {
+    const r: APIResponse<any> = await API.delete(`/wilayah/remove/${id}`);
+    return r.status === 200;
+  } catch (error) {
+    console.error("Error deleting wilayah:", error);
+    return false;
   }
 };
