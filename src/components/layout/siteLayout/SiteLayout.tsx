@@ -13,14 +13,13 @@ interface SiteLayoutProps {
 
 const SiteLayout: React.FC<SiteLayoutProps> = ({
     children,
-    headerColor = 'transparent'
+    headerColor = 'white'
 }) => {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
 
-        // Add CSS for mobile menu animations
         const style = document.createElement('style');
         style.textContent = `
             @keyframes fadeIn {
