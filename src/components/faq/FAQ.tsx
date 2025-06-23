@@ -9,7 +9,6 @@ import { faqData } from './FAQData';
 
 const FAQ: React.FC = () => {
     const { isAuthenticated } = useAuth();
-    const [date, setDate] = useState(moment());
     const [expanded, setExpanded] = useState('panel1');
     const [openSubItems, setOpenSubItems] = useState<Record<string, boolean>>({});
 
@@ -31,8 +30,8 @@ const FAQ: React.FC = () => {
     ) : (
         <SiteLayout >
             <div className="bg-gray-50 min-h-screen pb-8">
-                {/* Header Section */}
-                <div className="relative py-10 px-4 mb-8 overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-b-lg shadow-lg">
+                {/* Header Section with header-primary class */}
+                <div className="header-primary relative py-6 px-4 mb-6 overflow-hidden text-white rounded-b-lg">
                     {/* Background patterns */}
                     <div className="absolute top-0 right-0 w-40 h-40 bg-white opacity-5 rounded-full -mt-20 -mr-20"></div>
                     <div className="absolute bottom-0 left-0 w-40 h-40 bg-white opacity-5 rounded-full -mb-20 -ml-20"></div>
@@ -44,7 +43,7 @@ const FAQ: React.FC = () => {
                             <HelpCircle className="text-white w-10 h-10" />
                         </div>
                         <h1 className="text-3xl md:text-4xl font-bold mb-2">
-                            Pertanyaan yang Sering Diajukan
+                            Pertanyaan yang sering diajukan
                         </h1>
                         <p className="text-blue-100 text-lg max-w-2xl">
                             Panduan untuk mengatasi masalah umum pada Sistem Informasi Patroli Pencegahan Kebakaran Hutan dan Lahan
@@ -59,8 +58,8 @@ const FAQ: React.FC = () => {
                             <div key={item.id} className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
                                 <div
                                     className={`transition-all duration-300 ${expanded === item.id
-                                        ? 'bg-gradient-to-r from-blue-600 to-indigo-700 text-white'
-                                        : 'bg-white text-gray-800 hover:bg-blue-50'
+                                        ? 'bg-gradient-primary text-white'
+                                        : 'bg-white text-black-800 hover:bg-blue-50'
                                         }`}
                                 >
                                     <button
@@ -106,10 +105,10 @@ const FAQ: React.FC = () => {
                                                         aria-controls={`${item.id}-${idx}-content`}
                                                     >
                                                         <div className="flex items-center">
-                                                            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-full p-2 mr-3 text-white flex-shrink-0 shadow-l">
+                                                            <div className="bg-gradient-primary rounded-full p-2 mr-3 text-white flex-shrink-0 shadow-l">
                                                                 {answer.icon}
                                                             </div>
-                                                            <span className="font-medium text-gray-800">{answer.question}</span>
+                                                            <span className="font-medium text-black-800">{answer.question}</span>
                                                         </div>
                                                         <span className="text-blue-600 transition-transform duration-300 ml-2 flex-shrink-0">
                                                             {openSubItems[`${item.id}-${idx}`] ? (
@@ -128,7 +127,7 @@ const FAQ: React.FC = () => {
                                                         >
                                                             <div className="p-4 text-left border-t border-gray-200 bg-gradient-to-br from-blue-50 to-white">
                                                                 <div className="pl-4 border-l-2 border-blue-400">
-                                                                    <div dangerouslySetInnerHTML={{ __html: answer.answer }} className="text-gray-700 prose" />
+                                                                    <div dangerouslySetInnerHTML={{ __html: answer.answer }} className="text-black-700 prose" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -146,19 +145,19 @@ const FAQ: React.FC = () => {
                             <div className="p-6 md:p-8">
                                 <div className="flex flex-col md:flex-row items-center justify-between">
                                     <div className="flex items-center mb-6 md:mb-0">
-                                        <div className="h-14 w-14 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-full flex items-center justify-center mr-5 shadow-md">
+                                        <div className="h-14 w-14 bg-gradient-primary rounded-full flex items-center justify-center mr-5 shadow-md">
                                             <HelpCircle className="h-7 w-7 text-white" />
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-semibold text-gray-800">Ada Pertanyaan Lain?</h3>
-                                            <p className="text-gray-600 mt-1">Tim kami siap membantu Anda menyelesaikan masalah</p>
+                                            <h3 className="text-xl font-semibold text-black-800">Ada Pertanyaan Lain?</h3>
+                                            <p className="text-black-600 mt-1">Tim kami siap membantu Anda menyelesaikan masalah</p>
                                         </div>
                                     </div>
 
                                     <div className="flex space-x-3">
                                         <a
                                             href="mailto:karhutla.ipb@apps.ipb.ac.id"
-                                            className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center"
+                                            className="bg-gradient-primary text-white py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center"
                                         >
                                             <Mail className="h-5 w-5 mr-2" />
                                             Email Kami
