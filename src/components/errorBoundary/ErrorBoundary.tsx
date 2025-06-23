@@ -28,13 +28,10 @@ class ErrorBoundary extends Component<Props, State> {
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         this.setState({ errorInfo });
 
-        // Log ke monitoring system (opsional)
         console.error('[ErrorBoundary] Render failure:', error);
         console.error('[ErrorBoundary] Component stack:', errorInfo.componentStack);
 
-        // Recovery strategy untuk hydration errors
         if (error.message.includes('hydration') || error.message.includes('Hydration')) {
-            // Force client-side render jika terjadi hydration failure
             setTimeout(() => {
                 this.setState({ hasError: false });
             }, 100);
@@ -46,7 +43,7 @@ class ErrorBoundary extends Component<Props, State> {
             return this.props.fallback || (
                 <div className="error-recovery-container p-6 bg-white rounded-lg shadow-lg mx-auto my-8 max-w-lg text-center">
                     <h2 className="text-xl font-semibold text-red-600 mb-3">Aplikasi mengalami error teknis</h2>
-                    <p className="text-gray-700 mb-4">Silahkan coba refresh halaman</p>
+                    <p className="text-black-700 mb-4">Silahkan coba refresh halaman</p>
                     <button
                         onClick={() => {
                             try {
