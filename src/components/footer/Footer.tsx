@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import logoManggalaAgni from '@/assets/img/logo-manggala.png';
-import logoKifc from '@/assets/img/logo-kifc.png';
 import logoIPB from '@/assets/img/logo-ipb.png';
 import logoKLHK from '@/assets/img/logo-klhk2.png';
 import logoLPDP from '@/assets/img/logo-lpdp.png';
@@ -67,14 +66,14 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
         <footer
             className={`py-6 md:py-8 ${whiteFont
                 ? 'bg-gradient-to-br from-blue-800 via-blue-900 to-indigo-900 text-white'
-                : 'bg-white text-gray-700'
+                : 'bg-white text-black-700'
                 }`}
         >
             <div className="container mx-auto px-4">
                 <div className="flex flex-col items-center">
                     {/* Heading */}
                     <div className="text-center mb-6">
-                        <h3 className={`text-lg font-semibold ${whiteFont ? 'text-white' : 'text-gray-800'}`}>Kerjasama dengan</h3>
+                        <h3 className={`text-lg font-semibold ${whiteFont ? 'text-white' : 'text-black-800'}`}>Kerjasama dengan</h3>
                         <div className="h-0.5 w-20 mx-auto mt-2 bg-blue-500"></div>
                     </div>
 
@@ -169,9 +168,9 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
                             </svg>
                         </summary>
 
-                        <div className={`mt-3 text-l ${whiteFont ? 'text-blue-100' : 'text-gray-600'}`}>
+                        <div className={`mt-3 text-l ${whiteFont ? 'text-blue-100' : 'text-black-600'}`}>
                             <p className="text-center md:text-justify">
-                                Sistem ini dikembangkan oleh Departemen Ilmu Komputer FMIPA
+                                Sistem ini dikembangkan pada tahun 2022 oleh Departemen Ilmu Komputer FMIPA
                                 IPB, bekerja sama dengan Balai Pengendalian
                                 Perubahan Iklim dan Kebakaran Hutan dan Lahan
                                 (PPIKHL) Wilayah Sumatra, Direktorat Jenderal
@@ -185,7 +184,7 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
 
                     <div className={`mt-6 pt-4 border-t ${whiteFont ? 'border-white/10' : 'border-gray-200'} w-full`}>
                         <div className="flex flex-col sm:flex-row justify-between items-center">
-                            <p className={`text-l ${whiteFont ? 'text-white/80' : 'text-gray-600'}`}>
+                            <p className={`text-l ${whiteFont ? 'text-white/80' : 'text-black-600'}`}>
                                 © {new Date().getFullYear()} SIPP Karhutla
                             </p>
                         </div>
