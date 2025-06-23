@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useState, useEffect, FormEvent } from 'react'
+import { ChangeEvent, useState, useEffect, FormEvent } from 'react'
 import { useRouter } from 'next/router'
 import { sendEmail } from '@/services'
 import { sendEmailValidator } from '@/validators'
@@ -154,7 +154,7 @@ const ForgotPassword = ({ customClass }: ForgotPasswordProps) => {
 
     return (
         <div className={`bg-white backdrop-blur-lg bg-opacity-95 rounded-2xl shadow-2xl ${cardAnimation} ${customClass} overflow-hidden w-full max-w-md`}>
-            <Link href="/login" className="absolute top-4 left-4 z-20 flex items-center px-3 py-1.5 bg-white/80 backdrop-blur-l rounded-full shadow-l text-gray-700 hover:text-blue-600 hover:bg-white/90 transition-all duration-300 transform hover:scale-105">
+            <Link href="/login" className="absolute top-4 left-4 z-20 flex items-center px-3 py-1.5 bg-white/80 backdrop-blur-l rounded-full shadow-l text-black-700 hover:text-blue-600 hover:bg-white/90 transition-all duration-300 transform hover:scale-105">
                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -179,26 +179,26 @@ const ForgotPassword = ({ customClass }: ForgotPasswordProps) => {
                             />
                         </div>
                     </div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1">Lupa Kata Sandi</h2>
-                    <p className="text-gray-600">Masukkan email Anda untuk menerima instruksi</p>
+                    <h2 className="text-xl sm:text-2xl font-bold text-black-800 mb-1">Lupa Kata Sandi</h2>
+                    <p className="text-black-600">Masukkan email Anda untuk menerima instruksi</p>
                 </div>
 
                 {/* Card Body */}
                 <div className="space-y-5 sm:space-y-6">
                     <div className="space-y-1 sm:space-y-2">
-                        <label htmlFor="email" className="block text-gray-700 text-l font-semibold mb-1">
+                        <label htmlFor="email" className="block text-black-700 text-l font-semibold mb-1">
                             Email
                         </label>
                         <div className="relative group">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg className="h-5 w-5 text-black-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                                 </svg>
                             </div>
                             <input
                                 id="email"
                                 type="email"
-                                className={`pl-10 w-full py-2.5 sm:py-3 px-4 bg-gray-50 text-gray-700 border ${values.emailError ? 'border-red-500' : 'border-gray-300'} rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
+                                className={`pl-10 w-full py-2.5 sm:py-3 px-4 bg-gray-50 text-black-700 border ${values.emailError ? 'border-red-500' : 'border-gray-300'} rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
                                 onChange={handleChange('email')}
                                 value={values.email}
                                 onKeyPress={handleKeyPress}
