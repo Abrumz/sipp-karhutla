@@ -51,7 +51,7 @@ const Parallax: React.FC<ParallaxProps> = ({
             className={parallaxClasses.trim()}
             style={{
                 ...style,
-                backgroundImage: `url(/sipp-karhutla${image})`,
+                backgroundImage: `url(${image})`,
                 transform: transform
             }}
         >
