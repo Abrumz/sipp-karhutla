@@ -1,16 +1,12 @@
-import React, { useState, useRef, useCallback, useMemo } from 'react';
-import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps/api';
-import { apiV2URL } from '@/api';
-import { GOOGLE_MAPS_API_KEY } from '@/config/keys';
-import InfoWindowContent from './InfoWindowContent';
-import { PatroliData, SpotData } from '@/interfaces';
+'use client';
 
-interface MarkerPosition {
-	position: {
-		lat: number;
-		lng: number;
-	};
-}
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import dynamic from 'next/dynamic';
+import { apiV2URL } from '@/api';
+import InfoWindowContent from './InfoWindowContent';
+import { TileLayer, Marker, Popup, useMap, useMapEvent, MapContainer } from 'react-leaflet';
+import L from 'leaflet';
+
 
 interface MapContainerProps {
 	center: {
@@ -22,188 +18,452 @@ interface MapContainerProps {
 	isLoggedin: boolean;
 }
 
-const mapOptions = {
-	streetViewControl: true,
-	zoomControl: true,
-	mapTypeControl: true,
-	fullscreenControl: true,
-	gestureHandling: 'cooperative',
-	zoomControlOptions: {
-		position: 9 // google.maps.ControlPosition.LEFT_TOP
-	},
-	styles: [
-		{
-			featureType: "poi",
-			elementType: "labels",
-			stylers: [{ visibility: "off" }]
-		}
-	]
-};
+const MapLoading = () => (
+	<div className="flex items-center justify-center bg-gray-50 rounded-xl">
+		<div className="text-center">
+			<div className="w-16 h-16 mx-auto border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+			<p className="mt-4 text-black-600">Loading map...</p>
+		</div>
+	</div>
+);
 
-const MapContainer: React.FC<MapContainerProps> = ({ center, zoom, spots, isLoggedin }) => {
-	const [showingInfoWindow, setShowingInfoWindow] = useState<boolean>(false);
-	const [activeMarker, setActiveMarker] = useState<MarkerPosition | null>(null);
-	const [selectedPlace, setSelectedPlace] = useState<{ patroli?: PatroliData }>({});
+const LeafletMap = ({ center, zoom, spots, isLoggedin }: MapContainerProps) => {
+
+	const [selectedSpot, setSelectedSpot] = useState<any | null>(null);
+	const [mapCenter, setMapCenter] = useState<[number, number]>([center.lat, center.lng]);
 	const [currentZoom, setCurrentZoom] = useState<number>(zoom);
-	const [mapCenter, setMapCenter] = useState(center);
+	const [activeBaseMap, setActiveBaseMap] = useState<string>("street");
+	const [isInitialLoad, setIsInitialLoad] = useState(true);
+	const mapRef = useRef<any>(null);
+	const markerRefs = useRef<any[]>([]);
+	const mapContainerRef = useRef<HTMLDivElement>(null);
 
-	const mapRef = useRef<google.maps.Map | null>(null);
+	useEffect(() => {
+		delete (L.Icon.Default.prototype as any)._getIconUrl;
+		L.Icon.Default.mergeOptions({
+			iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+			shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+			iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png'
+		});
+	}, [L]);
 
-	const { isLoaded, loadError } = useLoadScript({
-		googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-		language: 'id',
-		region: 'ID'
-	});
-
-	const getCustomMarkerOptions = useCallback((spot: SpotData) => {
-		return {
-			url: spot.marker,
-			anchor: new window.google.maps.Point(10, 34),
-			labelOrigin: new window.google.maps.Point(10, -10)
-		};
-	}, []);
-
-	const onMapLoad = useCallback((map: google.maps.Map) => {
-		mapRef.current = map;
-		setCurrentZoom(map.getZoom() || zoom);
-	}, [zoom]);
-
-	const onZoomChanged = useCallback(() => {
-		if (mapRef.current) {
-			const newZoom = mapRef.current.getZoom() || zoom;
-			setCurrentZoom(newZoom);
-		}
-	}, [zoom]);
-
-	const panToMarker = useCallback((position: { lat: number, lng: number }) => {
-		if (mapRef.current) {
-			const targetZoom = 15;
-
-			setCurrentZoom(targetZoom);
-			mapRef.current.panTo(position);
-
-			setTimeout(() => {
-				const startZoom = mapRef.current?.getZoom() || currentZoom;
-				const zoomSteps = 10;
-				const zoomIncrement = (targetZoom - startZoom) / zoomSteps;
-				let step = 0;
-
-				const smoothZoom = () => {
-					if (!mapRef.current) return;
-
-					step++;
-					if (step <= zoomSteps) {
-						const nextZoom = startZoom + (zoomIncrement * step);
-						mapRef.current.setZoom(nextZoom);
-						mapRef.current.panTo(position);
-						setTimeout(smoothZoom, 50);
-					}
-				};
-
-				if (startZoom !== targetZoom) {
-					smoothZoom();
+	useEffect(() => {
+		if (typeof document !== 'undefined') {
+			const handleFullScreenChange = () => {
+				if (mapRef.current) {
+					setTimeout(() => {
+						mapRef.current.invalidateSize();
+					}, 100);
 				}
-			}, 100);
+			};
+
+			document.addEventListener('fullscreenchange', handleFullScreenChange);
+
+			const style = document.createElement('style');
+			style.innerHTML = `
+                .leaflet-popup-content-wrapper {
+                    max-height: 80vh;
+                    overflow-y: auto;
+                }
+                .leaflet-popup {
+                    margin-bottom: 0px;
+                }
+                .spot-popup .leaflet-popup-content {
+                    margin: 8px;
+                    padding: 0;
+                }
+                .custom-marker {
+                    display: block !important;
+                }
+                .leaflet-div-icon {
+                    background: transparent !important;
+                    border: none !important;
+                }
+                .leaflet-marker-icon {
+                    margin-left: 0 !important;
+                    margin-top: 0 !important;
+                }
+				.nav-to-marker-btn {
+					display: block;
+					width: 100%;
+					padding: 8px 12px;
+					margin-top: 10px;
+					background-color: #3b82f6;
+					color: white;
+					border: none;
+					border-radius: 4px;
+					font-weight: 500;
+					cursor: pointer;
+					transition: background-color 0.2s;
+				}
+				.nav-to-marker-btn:hover {
+					background-color: #2563eb;
+				}
+            `;
+			document.head.appendChild(style);
+
+			return () => {
+				document.removeEventListener('fullscreenchange', handleFullScreenChange);
+				document.head.removeChild(style);
+			};
 		}
-	}, [currentZoom]);
-
-	const onMarkerClick = useCallback((props: { patroli: PatroliData }, position: { lat: number, lng: number }): void => {
-		setSelectedPlace(props);
-		setActiveMarker({ position });
-		setShowingInfoWindow(true);
-		setMapCenter(position);
-		panToMarker(position);
-	}, [panToMarker]);
-
-	const onMapClick = useCallback((): void => {
-		if (showingInfoWindow) {
-			setShowingInfoWindow(false);
-			setActiveMarker(null);
-		}
-	}, [showingInfoWindow]);
-
-	const onInfoWindowClose = useCallback((): void => {
-		setShowingInfoWindow(false);
-		setActiveMarker(null);
 	}, []);
 
-	const mapContainerStyle = useMemo(() => ({
-		width: '100%',
-		height: '100vh',
-		borderRadius: '12px',
-		overflow: 'hidden',
-		boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
-	}), []);
+	const MapController = () => {
+		const map = useMap();
+		mapRef.current = map;
 
-	if (loadError) return (
-		<div className="flex items-center justify-center h-75vh bg-gray-100 rounded-xl">
-			<div className="text-center p-8">
-				<svg className="w-16 h-16 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-				</svg>
-				<h2 className="mt-4 text-xl font-semibold text-gray-700">Error loading maps</h2>
-				<p className="mt-2 text-gray-500">Please check your internet connection and try again.</p>
-			</div>
-		</div>
-	);
+		useEffect(() => {
+			map.on('zoom', () => {
+				setCurrentZoom(map.getZoom());
+			});
 
-	if (!isLoaded) return (
-		<div className="flex items-center justify-center h-75vh bg-gray-50 rounded-xl">
-			<div className="text-center">
-				<div className="w-16 h-16 mx-auto border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
-				<p className="mt-4 text-gray-600">Loading map...</p>
-			</div>
-		</div>
-	);
+			setIsInitialLoad(false);
 
-	return (
-		<GoogleMap
-			mapContainerStyle={mapContainerStyle}
-			center={mapCenter}
-			zoom={zoom}
-			onClick={onMapClick}
-			onLoad={onMapLoad}
-			onZoomChanged={onZoomChanged}
-			options={mapOptions}
-		>
-			{spots?.map((spot, i) => (
-				<Marker
-					key={i}
-					position={{
-						lat: parseFloat(spot.latitude),
-						lng: parseFloat(spot.longitude)
-					}}
-					icon={getCustomMarkerOptions(spot)}
-					onClick={() => {
-						onMarkerClick(
-							{ patroli: spot.patroli },
-							{
-								lat: parseFloat(spot.latitude),
-								lng: parseFloat(spot.longitude)
-							}
-						);
-					}}
-					zIndex={1000}
+			return () => {
+				map.off('zoom');
+			};
+		}, [map]);
+
+		return null;
+	};
+
+	const MapClickHandler = ({ onMapClick }: { onMapClick: () => void }) => {
+		useMapEvent('click', onMapClick);
+		return null;
+	};
+
+	const handleMarkerClick = useCallback((spot: any) => {
+		setSelectedSpot(spot);
+	}, []);
+
+	const navigateToMarker = useCallback((spot: any) => {
+		const lat = parseFloat(spot.latitude || spot.lat);
+		const lng = parseFloat(spot.longitude || spot.lon);
+
+		if (!isNaN(lat) && !isNaN(lng) && mapRef.current) {
+			const targetZoom = Math.max(15, mapRef.current.getZoom());
+
+			// Apply a slight offset to the latitude for better popup positioning
+			const offsetLat = lat - 0.0005;
+
+			mapRef.current.setView([offsetLat, lng], targetZoom, {
+				animate: true,
+				duration: 1.2,
+				easeLinearity: 0.25
+			});
+		}
+	}, []);
+
+	const handleMapClick = useCallback(() => {
+		setSelectedSpot(null);
+	}, []);
+
+	const zoomIn = () => {
+		if (mapRef.current) {
+			const newZoom = mapRef.current.getZoom() + 1;
+			mapRef.current.setZoom(newZoom, {
+				animate: true,
+				duration: 1
+			});
+		}
+	};
+
+	const zoomOut = () => {
+		if (mapRef.current) {
+			const newZoom = mapRef.current.getZoom() - 1;
+			mapRef.current.setZoom(newZoom, {
+				animate: true,
+				duration: 1
+			});
+		}
+	};
+
+	const resetMapView = () => {
+		if (mapRef.current) {
+			const initialCenter: [number, number] = [center.lat, center.lng];
+			const initialZoom = zoom;
+
+			mapRef.current.setView(initialCenter, initialZoom, {
+				animate: true,
+				duration: 1.2,
+				easeLinearity: 0.25
+			});
+
+			setMapCenter(initialCenter);
+			setCurrentZoom(initialZoom);
+			setSelectedSpot(null);
+		}
+	};
+
+	const createCustomIcon = useCallback((spot: any) => {
+		let color = '';
+		const kategori = spot.patroli?.kategori_patroli || spot.kategori || '';
+
+		if (kategori.indexOf("Mandiri") >= 0) color = 'var(--bs-primary)';
+		else if (kategori.indexOf("Rutin") >= 0) color = 'var(--bs-warning)';
+		else if (kategori.indexOf("Terpadu") >= 0) color = 'var(--bs-success)';
+		else if (kategori.indexOf("Pemadaman") >= 0) color = 'var(--bs-danger)';
+		else color = 'var(--bs-primary)';
+
+		return L.divIcon({
+			className: 'custom-marker',
+			html: `<div style="
+                background-color: ${color};
+                width: 20px;
+                height: 20px;
+                border-radius: 3rem 3rem 0;
+                transform: rotate(45deg);
+                border: 1px solid white;
+                box-shadow: 0 0 3px rgba(0,0,0,0.4);
+            "></div>`,
+			iconSize: [20, 20],
+			iconAnchor: [0, 0],
+			popupAnchor: [10, -10]
+		});
+	}, [L]);
+
+	const tileLayerOptions = {
+		street: {
+			url: 'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+			attribution: 'Map &copy; <a href="https://maps.google.com/">Google</a>',
+			maxZoom: 20,
+			subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+		},
+		hybrid: {
+			url: 'http://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+			attribution: 'Map &copy; <a href="https://maps.google.com/">Google</a>',
+			maxZoom: 20,
+			subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+		},
+		terrain: {
+			url: 'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
+			attribution: 'Map &copy; <a href="https://maps.google.com/">Google</a>',
+			maxZoom: 20,
+			subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+		},
+		esritopo: {
+			url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+			attribution: 'Map &copy; <a href="https://arcgisonline.com/">Esri</a>',
+			maxZoom: 20
+		},
+		esrisatelite: {
+			url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+			attribution: 'Map &copy; <a href="https://arcgisonline.com/">Esri</a>',
+			maxZoom: 20
+		}
+	};
+
+	const referenceLayer = {
+		url: 'https://server.arcgisonline.com/arcgis/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+		attribution: ''
+	};
+
+	const changeBaseMap = (mapType: string) => {
+		setActiveBaseMap(mapType);
+	};
+
+	const toggleFullscreen = () => {
+		if (!document.fullscreenElement) {
+			mapContainerRef.current?.requestFullscreen().catch(err => {
+				console.error(`Error attempting to enable fullscreen: ${err.message}`);
+			});
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			}
+		}
+	};
+
+	const CustomPopupContent = ({ spot }: { spot: any }) => {
+		return (
+			<div>
+				<InfoWindowContent
+					patroli={spot.patroli || spot}
+					isLoggedin={isLoggedin}
+					apiV2URL={apiV2URL}
+					onClose={() => setSelectedSpot(null)}
 				/>
-			))}
-
-			{showingInfoWindow && activeMarker && (
-				<InfoWindow
-					position={activeMarker.position}
-					onCloseClick={onInfoWindowClose}
-					options={{
-						pixelOffset: new window.google.maps.Size(0, -35),
+				<button
+					className="nav-to-marker-btn"
+					onClick={(e) => {
+						e.stopPropagation();
+						navigateToMarker(spot);
 					}}
 				>
-					<InfoWindowContent
-						patroli={selectedPlace.patroli}
-						isLoggedin={isLoggedin}
-						apiV2URL={apiV2URL}
+					Perbesar ke titik ini
+				</button>
+			</div>
+		);
+	};
+
+	return (
+		<div
+			ref={mapContainerRef}
+			className="rounded-xl overflow-hidden relative shadow-lg mx-auto z-10"
+			style={{
+				height: '100%'
+			}}
+		>
+			<MapContainer
+				ref={mapRef}
+				center={mapCenter}
+				zoom={currentZoom}
+				className="h-full w-full"
+				zoomControl={false}
+				preferCanvas={true}
+				zoomSnap={0.25}
+				zoomDelta={0.25}
+				attributionControl={false}
+				fadeAnimation={true}
+				markerZoomAnimation={false}
+				worldCopyJump={true}
+			>
+				<MapController />
+				<MapClickHandler onMapClick={handleMapClick} />
+
+				<TileLayer
+					url={tileLayerOptions[activeBaseMap as keyof typeof tileLayerOptions].url}
+					attribution={tileLayerOptions[activeBaseMap as keyof typeof tileLayerOptions].attribution}
+					maxZoom={tileLayerOptions[activeBaseMap as keyof typeof tileLayerOptions].maxZoom}
+					{...'subdomains' in tileLayerOptions[activeBaseMap as keyof typeof tileLayerOptions]
+						? { subdomains: (tileLayerOptions[activeBaseMap as keyof typeof tileLayerOptions] as { subdomains: string[] }).subdomains }
+						: {}}
+				/>
+
+				{activeBaseMap === 'esrisatelite' && (
+					<TileLayer
+						url={referenceLayer.url}
+						attribution={referenceLayer.attribution}
 					/>
-				</InfoWindow>
-			)}
-		</GoogleMap>
+				)}
+
+				{spots?.map((spot, index) => {
+					try {
+						const lat = parseFloat(spot.latitude || spot.lat);
+						const lng = parseFloat(spot.longitude || spot.lon);
+
+						if (isNaN(lat) || isNaN(lng)) {
+							return null;
+						}
+
+						return (
+							<Marker
+								key={index}
+								ref={(ref: any) => {
+									if (ref) {
+										markerRefs.current[spot.index || index] = ref;
+									}
+								}}
+								position={[lat, lng]}
+								icon={createCustomIcon(spot)}
+								eventHandlers={{
+									click: (e: any) => {
+										if (e.originalEvent && typeof e.originalEvent.preventDefault === 'function') {
+											e.originalEvent.preventDefault();
+										}
+										L.DomEvent.stopPropagation(e);
+										handleMarkerClick(spot);
+									}
+								}}
+								bubblingMouseEvents={false}
+								zIndexOffset={1000}
+							/>
+						);
+					} catch (error) {
+						return null;
+					}
+				})}
+
+				{selectedSpot && (
+					<Popup
+						position={[
+							parseFloat(selectedSpot.latitude || selectedSpot.lat),
+							parseFloat(selectedSpot.longitude || selectedSpot.lon)
+						]}
+						closeButton={true}
+						autoPan={false}
+						closeOnClick={false}
+						closeOnEscapeKey={true}
+						autoClose={false}
+						offset={[0, -5]}
+						className="spot-popup"
+						eventHandlers={{
+							remove: () => setSelectedSpot(null)
+						}}
+					>
+						<CustomPopupContent spot={selectedSpot} />
+					</Popup>
+				)}
+			</MapContainer>
+
+			<div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
+				<button
+					onClick={toggleFullscreen}
+					className="bg-white w-8 h-8 flex items-center justify-center rounded-md shadow-md hover:bg-gray-100 transition-colors"
+					aria-label="Toggle fullscreen"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
+					</svg>
+				</button>
+			</div>
+
+			<div className="absolute top-4 right-4 z-[1000]">
+				<div className="bg-white rounded-md shadow-md p-2">
+					<select
+						className="form-select w-full text-sm"
+						onChange={(e) => changeBaseMap(e.target.value)}
+						value={activeBaseMap}
+					>
+						<option value="street">Google Streets</option>
+						<option value="hybrid">Google Hybrid</option>
+						<option value="terrain">Google Terrain</option>
+						<option value="esritopo">Esri Topographic</option>
+						<option value="esrisatelite">Esri Imagery</option>
+					</select>
+				</div>
+			</div>
+
+			<div className="absolute bottom-8 left-4 z-[1000]">
+				<button
+					onClick={resetMapView}
+					className="bg-white w-8 h-8 flex items-center justify-center rounded-md shadow-md hover:bg-gray-100 transition-colors"
+					aria-label="Reset map view"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+					</svg>
+				</button>
+			</div>
+
+			<div className="absolute bottom-8 right-4 z-[1000] flex flex-col gap-2">
+				<button
+					onClick={zoomIn}
+					className="bg-white w-8 h-8 flex items-center justify-center rounded-md shadow-md hover:bg-gray-100 transition-colors"
+					aria-label="Zoom in"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+					</svg>
+				</button>
+				<button
+					onClick={zoomOut}
+					className="bg-white w-8 h-8 flex items-center justify-center rounded-md shadow-md hover:bg-gray-100 transition-colors"
+					aria-label="Zoom out"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" />
+					</svg>
+				</button>
+			</div>
+		</div>
 	);
 };
 
-export default MapContainer;
+const MapPatroliContainer = dynamic(() => Promise.resolve(LeafletMap), {
+	ssr: false,
+	loading: () => <MapLoading />
+});
+
+export default MapPatroliContainer;
