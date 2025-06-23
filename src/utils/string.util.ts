@@ -29,9 +29,9 @@ export const isEmail = (value: string): boolean =>
 
 /**
  * Check string is a valid phone number or not
- * Phone number format : +62xxxxxxxxxx
+ * Phone number format : +62xxxxxxxxxx (minimal 10 digits after +62)
  * @param {string} value input string
  * @returns {boolean} true if string in a valid phone number and vice versa
  */
 export const isPhoneNumber = (value: string): boolean =>
-	/^(^\+62)\d{11,12}$/.test(value)
+    /^(^\+62)\d{10,15}$/.test(value)

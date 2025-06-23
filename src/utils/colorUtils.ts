@@ -9,10 +9,10 @@ export const getColorClass = (colorValue: string): string[] => {
     case 'warning': return ['bg-yellow-500', 'text-white'];
     case 'danger': return ['bg-red-500', 'text-white'];
     case 'transparent': return ['bg-transparent'];
-    case 'white': return ['bg-white', 'text-gray-800'];
+    case 'white': return ['bg-white', 'text-black-800'];
     case 'rose': return ['bg-pink-500', 'text-white'];
     case 'dark': return ['bg-gray-800', 'text-white'];
-    default: return ['bg-white', 'text-gray-800'];
+    default: return ['bg-white', 'text-black-800'];
   }
 };
  
@@ -43,8 +43,8 @@ export const getTextColorClass = (colorValue: string): string => {
     case 'transparent': return 'text-transparent';
     case 'white': return 'text-white';
     case 'rose': return 'text-pink-500';
-    case 'dark': return 'text-gray-800';
-    default: return 'text-gray-800';
+    case 'dark': return 'text-black-800';
+    default: return 'text-black-800';
   }
 };
  
@@ -57,10 +57,10 @@ export const getHoverColorClass = (colorValue: string): string[] => {
     case 'warning': return ['hover:bg-yellow-600', 'hover:text-white', 'hover:shadow-md'];
     case 'danger': return ['hover:bg-red-600', 'hover:text-white', 'hover:shadow-md'];
     case 'transparent': return ['hover:bg-gray-100'];
-    case 'white': return ['hover:bg-gray-100', 'hover:text-gray-900'];
+    case 'white': return ['hover:bg-gray-100', 'hover:text-black-900'];
     case 'rose': return ['hover:bg-pink-600', 'hover:text-white', 'hover:shadow-md'];
     case 'dark': return ['hover:bg-gray-900', 'hover:text-white', 'hover:shadow-md'];
-    default: return ['hover:bg-gray-100', 'hover:text-gray-900'];
+    default: return ['hover:bg-gray-100', 'hover:text-black-900'];
   }
 };
  
@@ -87,9 +87,9 @@ export const getSubtleTextColorClass = (colorValue: string): string => {
     case 'warning': return 'text-yellow-100';
     case 'danger': return 'text-red-100';
     case 'rose': return 'text-pink-100';
-    case 'dark': return 'text-gray-300';
-    case 'white': return 'text-gray-600';
-    default: return 'text-gray-600';
+    case 'dark': return 'text-black-300';
+    case 'white': return 'text-black-600';
+    default: return 'text-black-600';
   }
 };
  
