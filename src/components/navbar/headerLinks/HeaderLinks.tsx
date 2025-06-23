@@ -47,8 +47,8 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ buttonText, children, d
 
     // Determine text color based on header color
     const textColorClass = headerColor === 'white' || headerColor === 'transparent'
-        ? "text-gray-800 hover:text-gray-600"
-        : "text-black hover:text-gray-200";
+        ? "text-black-800 hover:text-black-600"
+        : "text-black hover:text-black-200";
 
     return (
         <div className="relative group" ref={dropdownRef}>
@@ -96,7 +96,7 @@ const MobileDropdown: React.FC<{ buttonText: string; children: React.ReactNode }
         <div className="w-full">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between px-4 py-3 text-left text-gray-800 hover:bg-gray-100 transition-colors"
+                className="w-full flex items-center justify-between px-4 py-3 text-left text-black-800 hover:bg-gray-100 transition-colors"
             >
                 <span>{buttonText}</span>
                 <svg
@@ -159,30 +159,30 @@ const AuthenticatedMenu: React.FC<AuthenticatedMenuProps> = ({
     const showUserManagementDropdown = showPenggunaMenu || showAksesMenu || showPenugasanMenu || showWilayahMenu;
 
     const textColorClass = headerColor === 'white' || headerColor === 'transparent'
-        ? "text-gray-800 hover:text-gray-600"
-        : "text-black hover:text-gray-200";
+        ? "text-black-800 hover:text-black-600"
+        : "text-black hover:text-black-200";
 
     // Mobile menu rendering
     if (isMobile) {
         return (
             <div className="flex flex-col w-full">
-                <Link href="/" className="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors border-b border-gray-100">
+                <Link href="/" className="block px-4 py-3 text-black-800 hover:bg-gray-100 transition-colors border-b border-gray-100">
                     Beranda
                 </Link>
 
-                <Link href="/patroli" className="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors border-b border-gray-100">
+                <Link href="/patroli" className="block px-4 py-3 text-black-800 hover:bg-gray-100 transition-colors border-b border-gray-100">
                     Kegiatan
                 </Link>
 
                 <MobileDropdown buttonText="Pelaporan">
                     <div className="py-1 border-b border-gray-100" role="none">
-                        <Link href="/pelaporan/laporan-ringkasan" className="block pl-8 pr-4 py-3 text-gray-700 hover:bg-gray-100" role="menuitem">
+                        <Link href="/pelaporan/laporan-ringkasan" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
                             Laporan Ringkasan
                         </Link>
-                        <Link href="/pelaporan/rentang-tanggal" className="block pl-8 pr-4 py-3 text-gray-700 hover:bg-gray-100" role="menuitem">
+                        <Link href="/pelaporan/rentang-tanggal" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
                             Rentang Tanggal
                         </Link>
-                        <Link href="/pelaporan/surat-tugas" className="block pl-8 pr-4 py-3 text-gray-700 hover:bg-gray-100" role="menuitem">
+                        <Link href="/pelaporan/surat-tugas" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
                             Surat Tugas
                         </Link>
                     </div>
@@ -192,22 +192,22 @@ const AuthenticatedMenu: React.FC<AuthenticatedMenuProps> = ({
                     <MobileDropdown buttonText="Manajemen Pengguna">
                         <div className="py-1" role="none">
                             {showPenggunaMenu && (
-                                <Link href="/pengguna" className="block pl-8 pr-4 py-3 text-gray-700 hover:bg-gray-100" role="menuitem">
+                                <Link href="/pengguna" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
                                     Data Pengguna
                                 </Link>
                             )}
                             {showAksesMenu && (
-                                <Link href="/pengguna/hak-akses" className="block pl-8 pr-4 py-3 text-gray-700 hover:bg-gray-100" role="menuitem">
+                                <Link href="/pengguna/hak-akses" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
                                     Hak Akses
                                 </Link>
                             )}
                             {showPenugasanMenu && (
-                                <Link href="/penugasan" className="block pl-8 pr-4 py-3 text-gray-700 hover:bg-gray-100" role="menuitem">
+                                <Link href="/penugasan" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
                                     Penugasan
                                 </Link>
                             )}
                             {showWilayahMenu && (
-                                <Link href="/wilayah" className="block pl-8 pr-4 py-3 text-gray-700 hover:bg-gray-100" role="menuitem">
+                                <Link href="/wilayah" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
                                     Wilayah Kerja
                                 </Link>
                             )}
@@ -215,29 +215,29 @@ const AuthenticatedMenu: React.FC<AuthenticatedMenuProps> = ({
                     </MobileDropdown>
                 )}
 
-                <Link href="/hotspot" className="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors">
+                <Link href="/hotspot" className="block px-4 py-3 text-black-800 hover:bg-gray-100 transition-colors">
                     Hotspot
                 </Link>
 
                 <Link
                     href="https://sipongi.menlhk.go.id/sipp-karhutla/api_v2/analisis/map/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF91c2VyIjoiNzQiLCJpbnN0YW5zaSI6Ii0iLCJuYW1hIjoiTXVoYW1tYWQgRmFraHJpIiwiZW1haWwiOiJzaXBwLWthcmh1dGxhQGdtYWlsLmNvbSIsIm5vX3JlZ2lzdHJhc2kiOiIzMjcxMDYxMTExMDAwMDEwMTAxMDEwIiwiaW5pdGlhbCI6MTY4MDU3NzUzMiwiZXhwaXJlZCI6MTY4MDU5NTUzMn0.yhC7Awezgm4V99WbU0pZeQRbkilAHHjXThXSjpcdr1Y"
-                    className="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors"
+                    className="block px-4 py-3 text-black-800 hover:bg-gray-100 transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
                     Analisis
                 </Link>
 
-                <Link href="/about" className="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors">
+                <Link href="/about" className="block px-4 py-3 text-black-800 hover:bg-gray-100 transition-colors">
                     Tentang Sistem
                 </Link>
 
-                <Link href="/faq" className="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors">
+                <Link href="/faq" className="block px-4 py-3 text-black-800 hover:bg-gray-100 transition-colors">
                     FAQ
                 </Link>
 
                 <div className="border-t border-gray-200 mt-2 pt-2">
-                    <Link href="/profile" className="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors">
+                    <Link href="/profile" className="block px-4 py-3 text-black-800 hover:bg-gray-100 transition-colors">
                         Profil
                     </Link>
                     <button
@@ -264,13 +264,13 @@ const AuthenticatedMenu: React.FC<AuthenticatedMenuProps> = ({
 
             <CustomDropdown buttonText="Pelaporan" headerColor={headerColor}>
                 <div className="py-1" role="none">
-                    <Link href="/pelaporan/laporan-ringkasan" className="block px-4 py-2 text-l text-gray-700 hover:bg-gray-100" role="menuitem">
+                    <Link href="/pelaporan/laporan-ringkasan" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
                         Laporan Ringkasan
                     </Link>
-                    <Link href="/pelaporan/rentang-tanggal" className="block px-4 py-2 text-l text-gray-700 hover:bg-gray-100" role="menuitem">
+                    <Link href="/pelaporan/rentang-tanggal" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
                         Rentang Tanggal
                     </Link>
-                    <Link href="/pelaporan/surat-tugas" className="block px-4 py-2 text-l text-gray-700 hover:bg-gray-100" role="menuitem">
+                    <Link href="/pelaporan/surat-tugas" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
                         Surat Tugas
                     </Link>
                 </div>
@@ -280,25 +280,25 @@ const AuthenticatedMenu: React.FC<AuthenticatedMenuProps> = ({
                 <CustomDropdown buttonText="Manajemen Pengguna" headerColor={headerColor}>
                     <div className="py-1" role="none">
                         {showPenggunaMenu && (
-                            <Link href="/pengguna" className="block px-4 py-2 text-l text-gray-700 hover:bg-gray-100" role="menuitem">
+                            <Link href="/pengguna" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
                                 Data Pengguna
                             </Link>
                         )}
 
                         {showAksesMenu && (
-                            <Link href="/pengguna/hak-akses" className="block px-4 py-2 text-l text-gray-700 hover:bg-gray-100" role="menuitem">
+                            <Link href="/pengguna/hak-akses" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
                                 Hak Akses
                             </Link>
                         )}
 
                         {showPenugasanMenu && (
-                            <Link href="/penugasan" className="block px-4 py-2 text-l text-gray-700 hover:bg-gray-100" role="menuitem">
+                            <Link href="/penugasan" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
                                 Penugasan
                             </Link>
                         )}
 
                         {showWilayahMenu && (
-                            <Link href="/wilayah" className="block px-4 py-2 text-l text-gray-700 hover:bg-gray-100" role="menuitem">
+                            <Link href="/wilayah" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
                                 Wilayah Kerja
                             </Link>
                         )}
@@ -329,14 +329,14 @@ const AuthenticatedMenu: React.FC<AuthenticatedMenuProps> = ({
 
             <CustomDropdown buttonText="Akun" headerColor={headerColor}>
                 <div className="py-1" role="none">
-                    <Link href="/profile" className="block px-4 py-2 text-l text-gray-700 hover:bg-gray-100" role="menuitem">
+                    <Link href="/profile" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
                         Profil
                     </Link>
                     <hr className="my-1 border-gray-200" />
-                    <Link href="/about" className="block md:hidden px-4 py-2 text-l text-gray-700 hover:bg-gray-100" role="menuitem">
+                    <Link href="/about" className="block md:hidden px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
                         Tentang Sistem
                     </Link>
-                    <Link href="/faq" className="block md:hidden px-4 py-2 text-l text-gray-700 hover:bg-gray-100" role="menuitem">
+                    <Link href="/faq" className="block md:hidden px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
                         FAQ
                     </Link>
                     <hr className="my-1 border-gray-200 md:hidden" />
@@ -359,13 +359,13 @@ const UnauthenticatedMenu: React.FC<{ darkMode?: boolean; headerColor?: string; 
     isMobile = false
 }) => {
     const textColorClass = headerColor === 'white' || headerColor === 'transparent'
-        ? "text-gray-800 hover:text-gray-600"
-        : "text-black hover:text-gray-200";
+        ? "text-black-800 hover:text-black-600"
+        : "text-black hover:text-black-200";
 
     if (isMobile) {
         return (
             <div className="mt-auto border-t border-gray-200 py-2">
-                <Link href="/login" className="block px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors items-center">
+                <Link href="/login" className="block px-4 py-3 text-black-800 hover:bg-gray-100 transition-colors items-center">
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
                     </svg>
