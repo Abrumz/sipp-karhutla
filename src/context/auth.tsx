@@ -72,7 +72,10 @@ const DefaultUser: UserData = {
 	organization: '',
 	photo: '',
 	roleLevel: 100,
-	roleName: ''
+	roleName: '',
+	nama: undefined,
+	no_registrasi: '',
+	no_telepon: ''
 }
 
 type AuthContextType = {
@@ -198,14 +201,15 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 				phoneNumber: data.detail.no_telepon,
 				organization: data.detail.instansi,
 				photo: data.detail.foto,
-				roleLevel:
-					data.detail.roles.length > 0
-						? parseInt(data.detail.roles[0].level, 10)
-						: 100,
-				roleName:
-					data.detail.roles.length > 0
-						? data.detail.roles[0].nama
-						: ''
+				roleLevel: data.detail.roles.length > 0
+					? parseInt(data.detail.roles[0].level, 10)
+					: 100,
+				roleName: data.detail.roles.length > 0
+					? data.detail.roles[0].nama
+					: '',
+				nama: undefined,
+				no_registrasi: '',
+				no_telepon: ''
 			}
 
 			const token: string = data.token || ''
