@@ -102,10 +102,36 @@ export default function SplashDemo() {
     const [counter, setCounter] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
+    const [colors, setColors] = useState({
+        primary: '#63a91f',
+        primaryDark: '#1a512e',
+        background: '#1a2f94' // Default blue background
+    });
 
     // Tandai bahwa komponen sudah di-mount di client
     useEffect(() => {
         setIsMounted(true);
+
+        // Membaca variabel CSS untuk konsistensi warna
+        try {
+            const primaryColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--color-primary')
+                .trim();
+
+            const primaryDarkColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--color-primary-dark')
+                .trim();
+
+            if (primaryColor && primaryDarkColor) {
+                setColors({
+                    primary: primaryColor,
+                    primaryDark: primaryDarkColor,
+                    background: '#1a2f94' // Tetap biru untuk kontras dengan logo hijau
+                });
+            }
+        } catch (error) {
+            console.error('Error reading CSS variables:', error);
+        }
     }, []);
 
     // Efek hanya dijalankan ketika komponen sudah di-mount di client
@@ -156,7 +182,7 @@ export default function SplashDemo() {
                                 <div className="w-24 h-24 bg-gray-200 rounded-full"></div>
                             </div>
                         </div>
-                        <div className="text-3xl font-bold text-white mb-2">SIPP Kathutla</div>
+                        <div className="text-3xl font-bold text-white mb-2">SIPP Karhutla</div>
                         <div className="text-l text-blue-100 mb-8">
                             Sistem Informasi Patroli Pencegahan Kebakaran Hutan dan Lahan
                         </div>
@@ -166,7 +192,12 @@ export default function SplashDemo() {
                 </div>
             ) : isLoading ? (
                 // Tampilan dengan animasi lengkap hanya di client
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-b from-blue-800 via-blue-900 to-indigo-900">
+                <div
+                    className="fixed inset-0 flex items-center justify-center z-50"
+                    style={{
+                        background: `linear-gradient(to bottom, ${colors.background}, #1c2b6f, #1a2857)`
+                    }}
+                >
                     {/* Particle background */}
                     <div className="absolute inset-0 overflow-hidden">
                         {backgroundParticlesData.map((particle, i) => (
@@ -216,8 +247,11 @@ export default function SplashDemo() {
                                         repeat: Infinity,
                                         ease: "easeInOut"
                                     }}
-                                    className="absolute inset-0 rounded-full bg-orange-500 blur-xl opacity-30"
-                                    style={{ transform: 'scale(0.7)' }}
+                                    className="absolute inset-0 rounded-full blur-xl opacity-30"
+                                    style={{
+                                        background: 'rgba(255,106,0,0.8)',
+                                        transform: 'scale(0.7)'
+                                    }}
                                 />
 
                                 {/* Logo container with 3D rotation */}
@@ -307,7 +341,10 @@ export default function SplashDemo() {
                                 initial={{ width: "0%" }}
                                 animate={{ width: `${counter}%` }}
                                 transition={{ duration: 0.1 }}
-                                className="h-full bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 rounded-full relative"
+                                className="h-full rounded-full relative"
+                                style={{
+                                    background: `linear-gradient(to right, ${colors.primary}, ${colors.primaryDark})`
+                                }}
                             >
                                 {/* Shine effect on progress bar */}
                                 <motion.div
@@ -350,15 +387,16 @@ export default function SplashDemo() {
                 </div>
             ) : (
                 <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-8">Splash Screen Selesai</h1>
+                    <h1 className="text-3xl font-bold text-black-800 mb-8">Splash Screen Selesai</h1>
 
-                    <p className="text-gray-600 mb-8 text-center max-w-md">
+                    <p className="text-black-600 mb-8 text-center max-w-md">
                         Animasi splash screen telah selesai. Anda dapat melihat kembali animasi dengan menekan tombol di bawah ini.
                     </p>
 
                     <button
                         onClick={restartLoader}
-                        className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition-colors"
+                        className="px-6 py-3 text-white font-medium rounded-lg shadow-md transition-colors"
+                        style={{ background: colors.primary, color: 'white' }}
                     >
                         Putar Ulang Animasi
                     </button>
