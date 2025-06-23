@@ -17,6 +17,7 @@ import {
     updateNonPatroliUser,
     updatePatroliNonLoginUser
 } from '@/services';
+import Swal from 'sweetalert2';
 
 type RolesType = {
     [name: number]: string
@@ -45,8 +46,8 @@ const InfoCard: React.FC<{
                 {icon}
             </div>
             <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-                <p className="text-l text-gray-500 leading-relaxed">{description}</p>
+                <h3 className="text-lg font-semibold text-black-800 mb-2">{title}</h3>
+                <p className="text-l text-black-500 leading-relaxed">{description}</p>
             </div>
         </div>
     );
@@ -509,7 +510,7 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                             setShowAlert(false);
                             setAlertMessage('');
                         }}
-                        className="ml-4 text-gray-500 hover:text-gray-700"
+                        className="ml-4 text-black-500 hover:text-black-700"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -522,10 +523,10 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
                     <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-semibold text-gray-800">Edit Hak Akses</h3>
+                            <h3 className="text-lg font-semibold text-black-800">Edit Hak Akses</h3>
                             <button
                                 onClick={closeEditModal}
-                                className="text-gray-500 hover:text-gray-700"
+                                className="text-black-500 hover:text-black-700"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -535,42 +536,42 @@ const HakAkses: React.FC<HakAksesProps> = () => {
 
                         <form className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Nama</label>
+                                <label className="block text-sm font-medium text-black-700 mb-1">Nama</label>
                                 <input
                                     type="text"
                                     value={editingItem.name}
                                     disabled
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 bg-gray-100"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-black-700 bg-gray-100"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">No Registrasi/NIP</label>
+                                <label className="block text-sm font-medium text-black-700 mb-1">No Registrasi/NIP</label>
                                 <input
                                     type="text"
                                     value={editingItem.registrationNumber}
                                     disabled
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 bg-gray-100"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-black-700 bg-gray-100"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <label className="block text-sm font-medium text-black-700 mb-1">Email</label>
                                 <input
                                     type="email"
                                     value={editingItem.email}
                                     disabled
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 bg-gray-100"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-black-700 bg-gray-100"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Organisasi</label>
+                                <label className="block text-sm font-medium text-black-700 mb-1">Organisasi</label>
                                 <select
                                     name="organization"
                                     value={editFormData.organization || editingItem.organization}
                                     onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-black-700"
                                 >
                                     {Object.entries(getCurrentLookup().organization).map(([key, value]) => (
                                         <option key={key} value={key}>{value}</option>
@@ -579,12 +580,12 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Hak Akses</label>
+                                <label className="block text-sm font-medium text-black-700 mb-1">Hak Akses</label>
                                 <select
                                     name="role"
                                     value={editFormData.role || editingItem.role}
                                     onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-black-700"
                                 >
                                     {Object.entries(getCurrentLookup().role).map(([key, value]) => (
                                         <option key={key} value={key}>{value}</option>
@@ -596,7 +597,7 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                                 <button
                                     type="button"
                                     onClick={closeEditModal}
-                                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                                    className="px-4 py-2 border border-gray-300 rounded-md text-black-700 bg-white hover:bg-gray-50"
                                 >
                                     Batal
                                 </button>
@@ -613,7 +614,7 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                 </div>
             )}
 
-            <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-8 rounded-xl mb-8 shadow-md">
+            <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-3xl font-bold mb-2">Manajemen Hak Akses</h1>
                     <p className="text-lg opacity-90">
@@ -622,37 +623,21 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 max-w-7xl mx-auto">
-                <InfoCard
-                    icon={
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                    }
-                    title="Akses Daerah Operasi"
-                    description="Kelola hak akses pengguna tingkat Daops sesuai dengan wilayah operasional"
-                    color="blue"
-                />
-                <InfoCard
-                    icon={
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    }
-                    title="Akses Koordinator Wilayah"
-                    description="Atur tingkat akses untuk koordinator wilayah yang mengelola beberapa Daops"
-                    color="indigo"
-                />
-                <InfoCard
-                    icon={
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                        </svg>
-                    }
-                    title="Akses Balai dan Pusat"
-                    description="Kelola hak akses tingkat tinggi untuk administrator balai dan pusat"
-                    color="purple"
-                />
+            <div className="max-w-7xl mx-auto p-6 bg-white rounded-xl shadow mb-8">
+                <div className="flex items-start gap-3">
+                    <svg className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div>
+                        <h3 className="font-semibold text-black-800 mb-2">Informasi Penggunaan</h3>
+                        <p className="text-l text-black-600 leading-relaxed">
+                            Halaman ini menampilkan seluruh hak akses pengguna yang terdaftar dalam sistem berdasarkan kategori.
+                            Anda dapat mencari pengguna spesifik menggunakan kolom pencarian.
+                            Untuk mengedit data hak akses, klik ikon <span className="inline-flex items-center"><svg className="h-3 w-3 mx-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></span>,
+                            dan untuk menghapus data, klik ikon <span className="inline-flex items-center"><svg className="h-3 w-3 mx-1 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></span>.
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <div className="max-w-7xl mx-auto mb-8">
@@ -660,7 +645,7 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                     <div className="bg-white p-8 rounded-xl shadow flex justify-center items-center">
                         <div className="flex flex-col items-center">
                             <div className="w-12 h-12 border-4 border-t-blue-500 border-blue-200 rounded-full animate-spin mb-4"></div>
-                            <p className="text-gray-600">Memuat data hak akses...</p>
+                            <p className="text-black-600">Memuat data hak akses...</p>
                         </div>
                     </div>
                 ) : (
@@ -672,7 +657,7 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                                         key={index}
                                         className={`inline-block py-4 px-6 font-medium text-center border-b-2 text-sm ${activeTab === index
                                             ? 'border-blue-500 text-blue-600'
-                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                            : 'border-transparent text-black-500 hover:text-black-700 hover:border-gray-300'
                                             }`}
                                         onClick={() => handleTabChange(index)}
                                     >
@@ -684,11 +669,11 @@ const HakAkses: React.FC<HakAksesProps> = () => {
 
                         <div className="p-4 border-b">
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                <h3 className="text-lg font-semibold text-gray-800">
+                                <h3 className="text-lg font-semibold text-black-800">
                                     Hak Akses {tabTitles[activeTab]}
                                 </h3>
                                 <div className="relative">
-                                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                     </svg>
                                     <input
@@ -707,11 +692,11 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                                 <thead className="bg-gray-50">
                                     <tr>
                                         {getCurrentColumns().map((column, index) => (
-                                            <th key={index} scope="col" className="px-6 py-3 text-left text-l font-medium text-gray-500 uppercase tracking-wider">
+                                            <th key={index} scope="col" className="px-6 py-3 text-left text-l font-medium text-black-500 uppercase tracking-wider">
                                                 {column.title}
                                             </th>
                                         ))}
-                                        <th scope="col" className="px-6 py-3 text-right text-l font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                        <th scope="col" className="px-6 py-3 text-right text-l font-medium text-black-500 uppercase tracking-wider">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
@@ -719,7 +704,7 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                                         paginatedData.map((item, index) => (
                                             <tr key={item.id} className="hover:bg-gray-50">
                                                 {getCurrentColumns().map((column, colIndex) => (
-                                                    <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-l text-gray-800">
+                                                    <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-l text-black-800">
                                                         {column.lookup && column.field in item
                                                             ? column.lookup[item[column.field as keyof typeof item] as string] || item[column.field as keyof typeof item] || '-'
                                                             : item[column.field as keyof typeof item] || '-'}
@@ -738,9 +723,38 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                                                         </button>
                                                         <button
                                                             onClick={() => {
-                                                                if (window.confirm('Yakin hapus data ini ?')) {
-                                                                    handleDelete(item);
-                                                                }
+                                                                Swal.fire({
+                                                                    title: 'Konfirmasi',
+                                                                    text: 'Yakin hapus data ini?',
+                                                                    icon: 'warning',
+                                                                    showCancelButton: true,
+                                                                    confirmButtonColor: '#3085d6',
+                                                                    cancelButtonColor: '#d33',
+                                                                    confirmButtonText: 'Ya, hapus!',
+                                                                    cancelButtonText: 'Batal',
+                                                                    customClass: {
+                                                                        confirmButton: 'swal2-confirm bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mr-2',
+                                                                        cancelButton: 'swal2-cancel bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded'
+                                                                    },
+                                                                    buttonsStyling: false
+                                                                }).then(async (result) => {
+                                                                    if (result.isConfirmed) {
+                                                                        const response = await handleDelete(item);
+                                                                        if (response) {
+                                                                            Swal.fire({
+                                                                                title: 'Berhasil!',
+                                                                                text: 'Data berhasil di hapus',
+                                                                                icon: 'success',
+                                                                                confirmButtonColor: '#3085d6',
+                                                                                confirmButtonText: 'OK',
+                                                                                customClass: {
+                                                                                    confirmButton: 'swal2-confirm bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded'
+                                                                                },
+                                                                                buttonsStyling: false
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                });
                                                             }}
                                                             className="p-1.5 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-md transition-colors"
                                                             title="Hapus Hak Akses"
@@ -755,7 +769,7 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan={getCurrentColumns().length + 1} className="px-6 py-4 text-center text-l text-gray-500">
+                                            <td colSpan={getCurrentColumns().length + 1} className="px-6 py-4 text-center text-l text-black-500">
                                                 {searchTerm ? 'Tidak ada data yang sesuai dengan pencarian' : `Tidak ada data ${tabTitles[activeTab]}`}
                                             </td>
                                         </tr>
@@ -766,10 +780,10 @@ const HakAkses: React.FC<HakAksesProps> = () => {
 
                         {filteredData.length > 0 && (
                             <div className="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center">
-                                <div className="text-l text-gray-500 mb-2 sm:mb-0 flex items-center gap-2">
+                                <div className="text-l text-black-500 mb-2 sm:mb-0 flex items-center gap-2">
                                     <span>Menampilkan {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredData.length)} dari {filteredData.length} data</span>
                                     <div className="flex items-center ml-4">
-                                        <span className="text-gray-600 mr-2">Tampilkan:</span>
+                                        <span className="text-black-600 mr-2">Tampilkan:</span>
                                         <select
                                             value={itemsPerPage}
                                             onChange={handleItemsPerPageChange}
@@ -788,25 +802,25 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                                     <button
                                         onClick={handlePrevPage}
                                         disabled={currentPage === 1}
-                                        className="p-2 rounded-md border border-gray-300 bg-white text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                                        className="p-2 rounded-md border border-gray-300 bg-white text-black-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                                     >
                                         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
                                         </svg>
                                     </button>
                                     <div className="flex items-center">
-                                        <span className="px-3 py-1 text-gray-700 bg-gray-100 rounded-md">
+                                        <span className="px-3 py-1 text-black-700 bg-gray-100 rounded-md">
                                             {currentPage}
                                         </span>
-                                        <span className="mx-2 text-gray-600">dari</span>
-                                        <span className="px-3 py-1 text-gray-700 bg-gray-100 rounded-md">
+                                        <span className="mx-2 text-black-600">dari</span>
+                                        <span className="px-3 py-1 text-black-700 bg-gray-100 rounded-md">
                                             {totalPages || 1}
                                         </span>
                                     </div>
                                     <button
                                         onClick={handleNextPage}
                                         disabled={currentPage === totalPages || totalPages === 0}
-                                        className="p-2 rounded-md border border-gray-300 bg-white text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                                        className="p-2 rounded-md border border-gray-300 bg-white text-black-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                                     >
                                         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
@@ -817,23 +831,6 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                         )}
                     </div>
                 )}
-            </div>
-
-            <div className="max-w-7xl mx-auto p-6 bg-white rounded-xl shadow mb-8">
-                <div className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <div>
-                        <h3 className="font-semibold text-gray-800 mb-2">Informasi Penggunaan</h3>
-                        <p className="text-l text-gray-600 leading-relaxed">
-                            Halaman ini menampilkan seluruh hak akses pengguna yang terdaftar dalam sistem berdasarkan kategori.
-                            Anda dapat mencari pengguna spesifik menggunakan kolom pencarian.
-                            Untuk mengedit data hak akses, klik ikon <span className="inline-flex items-center"><svg className="h-3 w-3 mx-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></span>,
-                            dan untuk menghapus data, klik ikon <span className="inline-flex items-center"><svg className="h-3 w-3 mx-1 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></span>.
-                        </p>
-                    </div>
-                </div>
             </div>
         </div>
     );
