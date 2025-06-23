@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapPin, AlertCircle, Trash, Edit, Plus } from 'lucide-react';
+import { AlertCircle, Trash, Edit, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { deletePosko, getAllPosko } from '@/services';
 import NavBtnGroup from '@/components/wilayah/NavBtnGroup';
@@ -19,31 +19,6 @@ interface TableState {
     loading: boolean;
     search: string;
 }
-
-const InfoCard: React.FC<{
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-    color: string;
-}> = ({ icon, title, description, color }) => {
-    const colorClasses = {
-        blue: 'text-blue-600 bg-blue-50',
-        indigo: 'text-indigo-600 bg-indigo-50',
-        purple: 'text-purple-600 bg-purple-50'
-    };
-
-    return (
-        <div className="flex items-start gap-4 p-6 bg-white rounded-xl shadow hover:shadow-md hover:-translate-y-0.5 transition-all">
-            <div className={`p-3 rounded-lg flex items-center justify-center ${colorClasses[color as keyof typeof colorClasses]}`}>
-                {icon}
-            </div>
-            <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-                <p className="text-gray-500 leading-relaxed">{description}</p>
-            </div>
-        </div>
-    );
-};
 
 const Posko: React.FC = () => {
     const router = useRouter();
@@ -165,12 +140,12 @@ const Posko: React.FC = () => {
                     ? 'bg-green-50 text-green-800 border-l-4 border-green-500'
                     : 'bg-red-50 text-red-800 border-l-4 border-red-500'
                     }`}>
-                    <p>{alertMessage}</p>
+                    <p className="text-base">{alertMessage}</p>
                     <button
                         onClick={closeAlert}
-                        className="ml-4 text-gray-500 hover:text-gray-700"
+                        className="ml-4 text-black-500 hover:text-black-700"
                     >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
@@ -178,48 +153,48 @@ const Posko: React.FC = () => {
             )}
 
             {/* Header Banner */}
-            <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-8 rounded-xl mb-8 shadow-md">
+            <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-7xl mx-auto text-center">
-                    <h1 className="text-3xl font-bold mb-2">Data Posko</h1>
-                    <p className="text-lg opacity-90">
+                    <h1 className="text-4xl font-bold mb-2">Data Posko</h1>
+                    <p className="text-xl opacity-90">
                         Kelola data posko pengendalian kebakaran hutan dan lahan
                     </p>
                 </div>
             </div>
 
             <div className="max-w-7xl mx-auto p-4">
+                {/* Informasi yang dipindahkan ke atas */}
+                <div className="bg-white rounded-xl shadow p-6 mb-6">
+                    <div className="flex items-start gap-3">
+                        <AlertCircle className="w-6 h-6 text-blue-500 flex-shrink-0 mt-1" />
+                        <div>
+                            <h3 className="font-semibold text-black-800 text-xl mb-3">Informasi Penggunaan</h3>
+                            <p className="text-base text-black-700 leading-relaxed">
+                                Halaman ini menampilkan seluruh data posko yang terdaftar dalam sistem. Anda dapat mencari posko spesifik menggunakan kolom pencarian.
+                                Data posko mencakup nama posko, daops yang bertanggung jawab, dan kecamatan tempat posko berada.
+                            </p>
+                            <p className="text-base text-black-700 mt-2 leading-relaxed">
+                                Fungsi posko penting dalam pengendalian kebakaran:
+                            </p>
+                            <ul className="mt-2 text-base text-black-700 space-y-1 list-disc list-inside">
+                                <li>Posko adalah pusat komando dan koordinasi untuk pengendalian kebakaran</li>
+                                <li>Pilih kecamatan sesuai dengan area operasional posko</li>
+                                <li>Tentukan daops yang bertanggung jawab terhadap posko</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Navigation Tabs */}
                 <div className="mb-6">
                     <NavBtnGroup page="posko" />
-                </div>
-
-                {/* Info Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                    <InfoCard
-                        icon={<MapPin className="w-5 h-5" />}
-                        title="Data Posko"
-                        description="Posko adalah pusat komando dan koordinasi untuk pengendalian kebakaran"
-                        color="blue"
-                    />
-                    <InfoCard
-                        icon={<MapPin className="w-5 h-5" />}
-                        title="Pemilihan Area"
-                        description="Pilih kecamatan sesuai dengan area operasional posko"
-                        color="indigo"
-                    />
-                    <InfoCard
-                        icon={<MapPin className="w-5 h-5" />}
-                        title="Operasional Daops"
-                        description="Tentukan daops yang bertanggung jawab terhadap posko"
-                        color="purple"
-                    />
                 </div>
 
                 {/* Search and Table */}
                 <div className="bg-white rounded-xl shadow p-6 mb-8">
                     <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
                         <div className="relative w-full sm:w-64">
-                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-black-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                             <input
@@ -227,31 +202,31 @@ const Posko: React.FC = () => {
                                 placeholder="Pencarian"
                                 value={tableState.search}
                                 onChange={handleSearch}
-                                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="pl-10 pr-4 py-3 text-base w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
                         </div>
 
                         <div className="flex items-center space-x-4">
                             <div className="flex items-center">
-                                <span className="text-gray-600 mr-2">Tampilkan:</span>
+                                <span className="text-base text-black-600 mr-2">Tampilkan:</span>
                                 <select
                                     value={tableState.pageSize}
                                     onChange={handlePageSizeChange}
-                                    className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="border border-gray-300 rounded-md py-2 px-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="10">10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </select>
-                                <span className="text-gray-600 ml-2">Baris</span>
+                                <span className="text-base text-black-600 ml-2">Baris</span>
                             </div>
 
                             <button
                                 onClick={() => router.push('/wilayah/posko/tambah')}
-                                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                                className="flex items-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-base"
                             >
-                                <Plus className="w-4 h-4" />
+                                <Plus className="w-5 h-5" />
                                 <span>Tambah Posko</span>
                             </button>
                         </div>
@@ -262,7 +237,7 @@ const Posko: React.FC = () => {
                             <div className="flex justify-center items-center p-8">
                                 <div className="flex flex-col items-center">
                                     <div className="w-12 h-12 border-4 border-t-blue-500 border-blue-200 rounded-full animate-spin mb-4"></div>
-                                    <p className="text-gray-600">Memuat data posko...</p>
+                                    <p className="text-base text-black-600">Memuat data posko...</p>
                                 </div>
                             </div>
                         ) : (
@@ -270,34 +245,34 @@ const Posko: React.FC = () => {
                                 <table className="min-w-full divide-y divide-gray-200">
                                     <thead className="bg-gray-50">
                                         <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posko</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Daops</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kecamatan</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                            <th className="px-6 py-3 text-left text-sm font-medium text-black-500 uppercase tracking-wider">Posko</th>
+                                            <th className="px-6 py-3 text-left text-sm font-medium text-black-500 uppercase tracking-wider">Daops</th>
+                                            <th className="px-6 py-3 text-left text-sm font-medium text-black-500 uppercase tracking-wider">Kecamatan</th>
+                                            <th className="px-6 py-3 text-left text-sm font-medium text-black-500 uppercase tracking-wider">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white divide-y divide-gray-200">
                                         {paginatedData.length > 0 ? (
                                             paginatedData.map((posko) => (
                                                 <tr key={posko.id} className="hover:bg-gray-50">
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{posko.name}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{posko.daops}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{posko.kecamatan}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                                                    <td className="px-6 py-4 whitespace-nowrap text-base text-black-800">{posko.name}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-base text-black-800">{posko.daops}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-base text-black-800">{posko.kecamatan}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-base text-black-800">
                                                         <div className="flex space-x-2">
                                                             <button
                                                                 onClick={() => router.push(`/wilayah/posko/ubah/${posko.id}`)}
                                                                 className="p-1 text-blue-600 hover:text-blue-800 transition-colors"
                                                                 title="Edit"
                                                             >
-                                                                <Edit className="w-5 h-5" />
+                                                                <Edit className="w-6 h-6" />
                                                             </button>
                                                             <button
                                                                 onClick={() => handleDelete(posko)}
                                                                 className="p-1 text-red-600 hover:text-red-800 transition-colors"
                                                                 title="Hapus"
                                                             >
-                                                                <Trash className="w-5 h-5" />
+                                                                <Trash className="w-6 h-6" />
                                                             </button>
                                                         </div>
                                                     </td>
@@ -305,7 +280,7 @@ const Posko: React.FC = () => {
                                             ))
                                         ) : (
                                             <tr>
-                                                <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                                                <td colSpan={4} className="px-6 py-4 text-center text-base text-black-500">
                                                     {tableState.search ? 'Tidak ada data yang sesuai dengan pencarian' : 'Tidak ada data posko'}
                                                 </td>
                                             </tr>
@@ -314,14 +289,14 @@ const Posko: React.FC = () => {
                                 </table>
 
                                 <div className="px-4 py-3 bg-white border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center mt-4">
-                                    <div className="text-sm text-gray-700 mb-2 sm:mb-0">
+                                    <div className="text-base text-black-700 mb-2 sm:mb-0">
                                         Menampilkan {fromRecord}-{toRecord} dari {filteredData.length} hasil
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <button
                                             onClick={() => handlePageChange(tableState.page - 1)}
                                             disabled={tableState.page === 0}
-                                            className="p-2 rounded-md border border-gray-300 bg-white text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                                            className="p-2 rounded-md border border-gray-300 bg-white text-black-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                                         >
                                             &laquo;
                                         </button>
@@ -329,12 +304,12 @@ const Posko: React.FC = () => {
                                             type="text"
                                             value={tableState.page + 1}
                                             readOnly
-                                            className="w-12 border-t border-b border-gray-300 text-center py-2 text-sm text-gray-700"
+                                            className="w-12 border-t border-b border-gray-300 text-center py-2 text-base text-black-700"
                                         />
                                         <button
                                             onClick={() => handlePageChange(tableState.page + 1)}
                                             disabled={tableState.page >= totalPages - 1}
-                                            className="p-2 rounded-md border border-gray-300 bg-white text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                                            className="p-2 rounded-md border border-gray-300 bg-white text-black-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                                         >
                                             &raquo;
                                         </button>
@@ -342,21 +317,6 @@ const Posko: React.FC = () => {
                                 </div>
                             </div>
                         )}
-                    </div>
-                </div>
-
-                {/* Info Box */}
-                <div className="bg-white rounded-xl p-6 shadow mb-8">
-                    <div className="flex items-start gap-3">
-                        <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                        <div>
-                            <h3 className="font-semibold text-gray-800 mb-2">Informasi Penggunaan</h3>
-                            <p className="text-sm text-gray-600 leading-relaxed">
-                                Halaman ini menampilkan seluruh data posko yang terdaftar dalam sistem. Anda dapat mencari posko spesifik menggunakan kolom pencarian.
-                                Data posko mencakup nama posko, daops yang bertanggung jawab, dan kecamatan tempat posko berada. Gunakan tombol aksi untuk mengedit atau
-                                menghapus data posko, atau tombol "Tambah Posko" untuk menambahkan posko baru.
-                            </p>
-                        </div>
                     </div>
                 </div>
             </div>
