@@ -10,8 +10,6 @@
     font-size: 16px;
   }
 }
-  
-/* Tambahkan ini ke file CSS global Anda */
 
 :root { 
   --bs-primary: #0d6efd;
@@ -59,15 +57,42 @@
   }
 }
 
-.swal-large-text {
-                    font-size: 1.25rem !important;
-                }
-                .swal2-title {
-                    font-size: 1.75rem !important;
-                }
-                .swal2-content {
-                    font-size: 1.25rem !important;
-                }
-                .swal2-html-container {
-                    font-size: 1.25rem !important;
-                }
+.swal-large-text 
+{
+  font-size: 1.25rem !important;
+}
+.swal2-title {
+  font-size: 1.75rem !important;
+}
+.swal2-content {
+  font-size: 1.25rem !important;
+}
+.swal2-html-container {
+  font-size: 1.25rem !important;
+}
+    .swal2-container .swal2-actions .swal2-cancel {
+        background-color: #3085d6 !important;
+        border-color: #3085d6 !important;
+        color: white !important;
+    }
+    .swal2-container button.swal2-styled.swal2-cancel {
+        background-color: #3085d6 !important;
+        border-color: #3085d6 !important;
+        color: white !important;
+    } 
+    button.swal2-cancel.swal2-styled {
+        background-color: #3085d6 !important;
+    } 
+.swal2-container .swal2-actions .swal2-confirm {
+    background-color: #d33 !important;
+    border-color: #d33 !important;
+    color: white !important;
+}
+.swal2-container button.swal2-styled.swal2-confirm {
+    background-color: #d33 !important;
+    border-color: #d33 !important;
+    color: white !important;
+} 
+button.swal2-confirm.swal2-styled {
+    background-color: #d33 !important;
+}
