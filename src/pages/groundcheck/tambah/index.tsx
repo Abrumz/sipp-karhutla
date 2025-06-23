@@ -14,7 +14,7 @@ const TambahPenggunaGroundcheckPage: React.FC<TambahPenggunaGroundcheckPageProps
     return !isAuthenticated ? (
         <Loader />
     ) : (
-        <SiteLayout>
+        <SiteLayout >
             <CustomHead
                 title='Tambah Pengguna Ground Check'
                 description='Platform pengelolaan pengguna modul ground check titik panas kebakaran hutan dan lahan'

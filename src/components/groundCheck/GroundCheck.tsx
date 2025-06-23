@@ -35,8 +35,8 @@ const InfoCard: React.FC<{
                 {icon}
             </div>
             <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-                <p className="text-gray-500 leading-relaxed">{description}</p>
+                <h3 className="text-lg font-semibold text-black-800 mb-2">{title}</h3>
+                <p className="text-black-500 leading-relaxed">{description}</p>
             </div>
         </div>
     );
@@ -158,7 +158,7 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
                     <p>{alertMessage}</p>
                     <button
                         onClick={closeAlert}
-                        className="ml-4 text-gray-500 hover:text-gray-700"
+                        className="ml-4 text-black-500 hover:text-black-700"
                     >
                         <X className="w-5 h-5" />
                     </button>
@@ -169,12 +169,12 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
             {deleteConfirm.show && (
                 <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white rounded-lg p-6 max-w-md mx-4 md:mx-auto">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Hapus</h3>
-                        <p className="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus user tersebut?</p>
+                        <h3 className="text-lg font-semibold text-black-800 mb-4">Konfirmasi Hapus</h3>
+                        <p className="text-black-600 mb-6">Apakah Anda yakin ingin menghapus user tersebut?</p>
                         <div className="flex justify-end space-x-3">
                             <button
                                 onClick={() => setDeleteConfirm({ show: false, id: null })}
-                                className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors"
+                                className="px-4 py-2 bg-gray-200 text-black-800 rounded hover:bg-gray-300 transition-colors"
                             >
                                 Batal
                             </button>
@@ -190,7 +190,7 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
             )}
 
             {/* Header Banner */}
-            <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-8 rounded-xl mb-8 shadow-md">
+            <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-3xl font-bold mb-2">Pengguna Ground Check</h1>
                     <p className="text-lg opacity-90">
@@ -200,33 +200,23 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
             </div>
 
             <div className="max-w-7xl mx-auto px-4">
-                {/* Info Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                    <InfoCard
-                        icon={<AlertCircle className="w-5 h-5" />}
-                        title="Ground Check"
-                        description="Pengecekan lapangan terhadap titik panas yang terdeteksi satelit"
-                        color="blue"
-                    />
-                    <InfoCard
-                        icon={<AlertCircle className="w-5 h-5" />}
-                        title="Pengguna"
-                        description="Daftar petugas yang berwenang melakukan ground check titik panas"
-                        color="indigo"
-                    />
-                    <InfoCard
-                        icon={<AlertCircle className="w-5 h-5" />}
-                        title="Manajemen Akses"
-                        description="Atur akses petugas untuk modul pengecekan titik panas"
-                        color="purple"
-                    />
+                <div className="bg-white rounded-xl p-6 shadow mb-8">
+                    <div className="flex items-start gap-3">
+                        <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                        <div>
+                            <h3 className="font-semibold text-black-800 mb-2">Informasi Penggunaan</h3>
+                            <p className="text-sm text-black-600 leading-relaxed">
+                                Halaman ini menampilkan daftar pengguna yang memiliki akses ke modul ground check titik panas.
+                                Anda dapat menambahkan pengguna baru, melihat detail pengguna, atau menghapus akses pengguna yang sudah tidak aktif.
+                                Pengguna yang terdaftar akan memiliki akses untuk melaporkan hasil pengecekan lapangan terhadap titik panas yang terdeteksi satelit.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-
-                {/* Search and Table */}
                 <div className="bg-white rounded-xl shadow p-6 mb-8">
                     <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
                         <div className="relative w-full sm:w-64">
-                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                             <input
@@ -240,7 +230,7 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
 
                         <div className="flex items-center space-x-4">
                             <div className="flex items-center">
-                                <span className="text-gray-600 mr-2">Tampilkan:</span>
+                                <span className="text-black-600 mr-2">Tampilkan:</span>
                                 <select
                                     value={tableState.pageSize}
                                     onChange={handlePageSizeChange}
@@ -251,7 +241,7 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </select>
-                                <span className="text-gray-600 ml-2">Baris</span>
+                                <span className="text-black-600 ml-2">Baris</span>
                             </div>
 
                             <button
@@ -269,7 +259,7 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
                             <div className="flex justify-center items-center p-8">
                                 <div className="flex flex-col items-center">
                                     <div className="w-12 h-12 border-4 border-t-blue-500 border-blue-200 rounded-full animate-spin mb-4"></div>
-                                    <p className="text-gray-600">Memuat data pengguna...</p>
+                                    <p className="text-black-600">Memuat data pengguna...</p>
                                 </div>
                             </div>
                         ) : (
@@ -277,22 +267,22 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
                                 <table className="min-w-full divide-y divide-gray-200">
                                     <thead className="bg-gray-50">
                                         <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Daerah Operasi</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Nama</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Email</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Tanggal</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Daerah Operasi</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white divide-y divide-gray-200">
                                         {paginatedData.length > 0 ? (
                                             paginatedData.map((user) => (
                                                 <tr key={user.id} className="hover:bg-gray-50">
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{user.nama}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{user.email}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{user.tanggal}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{user.daops}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black-800">{user.nama}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black-800">{user.email}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black-800">{user.tanggal}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black-800">{user.daops}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black-800">
                                                         <div className="flex space-x-2">
                                                             <button
                                                                 onClick={() => router.push(`/groundcheck/ubah/${user.id}`)}
@@ -314,7 +304,7 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
                                             ))
                                         ) : (
                                             <tr>
-                                                <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">
+                                                <td colSpan={5} className="px-6 py-4 text-center text-sm text-black-500">
                                                     {tableState.search ? 'Tidak ada data yang sesuai dengan pencarian' : 'Tidak ada data pengguna'}
                                                 </td>
                                             </tr>
@@ -323,14 +313,14 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
                                 </table>
 
                                 <div className="px-4 py-3 bg-white border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center mt-4">
-                                    <div className="text-sm text-gray-700 mb-2 sm:mb-0">
+                                    <div className="text-sm text-black-700 mb-2 sm:mb-0">
                                         Menampilkan {fromRecord}-{toRecord} dari {filteredData.length} hasil
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <button
                                             onClick={() => handlePageChange(tableState.page - 1)}
                                             disabled={tableState.page === 0}
-                                            className="p-2 rounded-md border border-gray-300 bg-white text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                                            className="p-2 rounded-md border border-gray-300 bg-white text-black-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                                         >
                                             &laquo;
                                         </button>
@@ -338,12 +328,12 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
                                             type="text"
                                             value={tableState.page + 1}
                                             readOnly
-                                            className="w-12 border-t border-b border-gray-300 text-center py-2 text-sm text-gray-700"
+                                            className="w-12 border-t border-b border-gray-300 text-center py-2 text-sm text-black-700"
                                         />
                                         <button
                                             onClick={() => handlePageChange(tableState.page + 1)}
                                             disabled={tableState.page >= totalPages - 1}
-                                            className="p-2 rounded-md border border-gray-300 bg-white text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                                            className="p-2 rounded-md border border-gray-300 bg-white text-black-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                                         >
                                             &raquo;
                                         </button>
@@ -354,20 +344,7 @@ const GroundCheck: React.FC<GroundCheckProps> = ({ user }) => {
                     </div>
                 </div>
 
-                {/* Info Box */}
-                <div className="bg-white rounded-xl p-6 shadow mb-8">
-                    <div className="flex items-start gap-3">
-                        <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                        <div>
-                            <h3 className="font-semibold text-gray-800 mb-2">Informasi Penggunaan</h3>
-                            <p className="text-sm text-gray-600 leading-relaxed">
-                                Halaman ini menampilkan daftar pengguna yang memiliki akses ke modul ground check titik panas.
-                                Anda dapat menambahkan pengguna baru, melihat detail pengguna, atau menghapus akses pengguna yang sudah tidak aktif.
-                                Pengguna yang terdaftar akan memiliki akses untuk melaporkan hasil pengecekan lapangan terhadap titik panas yang terdeteksi satelit.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
     );

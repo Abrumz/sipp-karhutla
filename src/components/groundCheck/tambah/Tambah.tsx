@@ -37,8 +37,8 @@ const InfoCard: React.FC<{
                 {icon}
             </div>
             <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-                <p className="text-gray-500 leading-relaxed">{description}</p>
+                <h3 className="text-lg font-semibold text-black-800 mb-2">{title}</h3>
+                <p className="text-black-500 leading-relaxed">{description}</p>
             </div>
         </div>
     );
@@ -338,7 +338,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                     <p>{alertMessage}</p>
                     <button
                         onClick={closeAlert}
-                        className="ml-4 text-gray-500 hover:text-gray-700"
+                        className="ml-4 text-black-500 hover:text-black-700"
                     >
                         <X className="w-5 h-5" />
                     </button>
@@ -346,7 +346,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
             )}
 
             {/* Header Banner */}
-            <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-8 rounded-xl mb-8 shadow-md">
+            <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-3xl font-bold mb-2">Tambah Pengguna Ground Check</h1>
                     <p className="text-lg opacity-90">
@@ -364,34 +364,27 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                     <span>Batal dan Kembali</span>
                 </button>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                    <InfoCard
-                        icon={<AlertCircle className="w-5 h-5" />}
-                        title="Data Akun"
-                        description="Isi data akun pengguna termasuk password untuk akses sistem"
-                        color="blue"
-                    />
-                    <InfoCard
-                        icon={<AlertCircle className="w-5 h-5" />}
-                        title="Wilayah Kerja"
-                        description="Tentukan wilayah kerja petugas untuk melakukan ground check"
-                        color="indigo"
-                    />
-                    <InfoCard
-                        icon={<AlertCircle className="w-5 h-5" />}
-                        title="Tim Patroli"
-                        description="Tambahkan anggota tim yang akan membantu petugas utama"
-                        color="purple"
-                    />
+                <div className="mb-6 p-6 bg-white rounded-xl shadow">
+                    <div className="flex items-start gap-3">
+                        <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                        <div>
+                            <h3 className="font-semibold text-black-800 mb-2">Informasi Penggunaan</h3>
+                            <p className="text-sm text-black-600 leading-relaxed">
+                                Halaman ini digunakan untuk menambahkan pengguna baru yang memiliki akses ke modul ground check titik panas.
+                                Isi semua data yang diperlukan termasuk nama, email, dan password untuk akses sistem. Anda juga dapat menambahkan
+                                anggota tim yang akan membantu pengguna utama dalam melakukan ground check titik panas.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="bg-white rounded-xl shadow p-6">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-6">Form Tambah Pengguna</h2>
+                    <h2 className="text-xl font-semibold text-black-800 mb-6">Form Tambah Pengguna</h2>
 
                     <form className="space-y-6">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-black-700 mb-2">
                                     Nama Ketua <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -405,7 +398,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-black-700 mb-2">
                                     Email Ketua <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -421,7 +414,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-black-700 mb-2">
                                     Password <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative">
@@ -439,16 +432,16 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                         onClick={() => setValues({ ...values, showPassword: !values.showPassword })}
                                     >
                                         {values.showPassword ? (
-                                            <EyeOff className="h-5 w-5 text-gray-400" />
+                                            <EyeOff className="h-5 w-5 text-black-400" />
                                         ) : (
-                                            <Eye className="h-5 w-5 text-gray-400" />
+                                            <Eye className="h-5 w-5 text-black-400" />
                                         )}
                                     </button>
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-black-700 mb-2">
                                     Konfirmasi Password <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative">
@@ -466,9 +459,9 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                         onClick={() => setValues({ ...values, showPassword: !values.showPassword })}
                                     >
                                         {values.showPassword ? (
-                                            <EyeOff className="h-5 w-5 text-gray-400" />
+                                            <EyeOff className="h-5 w-5 text-black-400" />
                                         ) : (
-                                            <Eye className="h-5 w-5 text-gray-400" />
+                                            <Eye className="h-5 w-5 text-black-400" />
                                         )}
                                     </button>
                                 </div>
@@ -478,7 +471,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             {/* Provinsi Dropdown */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-black-700 mb-2">
                                     Provinsi <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative">
@@ -486,10 +479,10 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                         className="w-full px-4 py-2 border border-gray-300 rounded-lg flex justify-between items-center cursor-pointer"
                                         onClick={() => setShowProvinsiDropdown(!showProvinsiDropdown)}
                                     >
-                                        <span className={province ? "text-gray-900" : "text-gray-500"}>
+                                        <span className={province ? "text-black-900" : "text-black-500"}>
                                             {getSelectedProvinsiName()}
                                         </span>
-                                        <svg className={`h-5 w-5 text-gray-400 transition-transform ${showProvinsiDropdown ? "transform rotate-180" : ""}`}
+                                        <svg className={`h-5 w-5 text-black-400 transition-transform ${showProvinsiDropdown ? "transform rotate-180" : ""}`}
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                                         </svg>
@@ -507,7 +500,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                         className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                                                         onClick={(e) => e.stopPropagation()}
                                                     />
-                                                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black-400" />
                                                 </div>
                                             </div>
 
@@ -516,14 +509,14 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                     filteredProvinsi.map((option) => (
                                                         <li
                                                             key={option.kode_wilayah}
-                                                            className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm text-gray-700"
+                                                            className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm text-black-700"
                                                             onClick={() => handleProvinceChange(option.kode_wilayah, option.nama_wilayah)}
                                                         >
                                                             {toTitleCase(option.nama_wilayah)}
                                                         </li>
                                                     ))
                                                 ) : (
-                                                    <li className="px-4 py-2 text-sm text-gray-500 text-center">
+                                                    <li className="px-4 py-2 text-sm text-black-500 text-center">
                                                         {provinsiSearch ? 'Tidak ada data yang sesuai dengan pencarian' : 'Tidak ada data provinsi'}
                                                     </li>
                                                 )}
@@ -535,7 +528,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
 
                             {/* Kabupaten Dropdown */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-black-700 mb-2">
                                     Kabupaten <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative">
@@ -543,10 +536,10 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                         className={`w-full px-4 py-2 border border-gray-300 rounded-lg flex justify-between items-center ${province ? "cursor-pointer" : "bg-gray-100 cursor-not-allowed"}`}
                                         onClick={() => province && setShowKabupatenDropdown(!showKabupatenDropdown)}
                                     >
-                                        <span className={kabupaten ? "text-gray-900" : "text-gray-500"}>
+                                        <span className={kabupaten ? "text-black-900" : "text-black-500"}>
                                             {getSelectedKabupatenName()}
                                         </span>
-                                        <svg className={`h-5 w-5 text-gray-400 transition-transform ${showKabupatenDropdown ? "transform rotate-180" : ""}`}
+                                        <svg className={`h-5 w-5 text-black-400 transition-transform ${showKabupatenDropdown ? "transform rotate-180" : ""}`}
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                                         </svg>
@@ -564,7 +557,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                         className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                                                         onClick={(e) => e.stopPropagation()}
                                                     />
-                                                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black-400" />
                                                 </div>
                                             </div>
 
@@ -573,14 +566,14 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                     filteredKabupaten.map((option) => (
                                                         <li
                                                             key={option.kode_wilayah}
-                                                            className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm text-gray-700"
+                                                            className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm text-black-700"
                                                             onClick={() => handleKabupatenChange(option.kode_wilayah, option.nama_wilayah)}
                                                         >
                                                             {toTitleCase(option.nama_wilayah)}
                                                         </li>
                                                     ))
                                                 ) : (
-                                                    <li className="px-4 py-2 text-sm text-gray-500 text-center">
+                                                    <li className="px-4 py-2 text-sm text-black-500 text-center">
                                                         {kabupatenSearch ? 'Tidak ada data yang sesuai dengan pencarian' : 'Tidak ada data kabupaten'}
                                                     </li>
                                                 )}
@@ -594,7 +587,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             {/* Daops Dropdown */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-black-700 mb-2">
                                     Daops <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative">
@@ -602,10 +595,10 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                         className="w-full px-4 py-2 border border-gray-300 rounded-lg flex justify-between items-center cursor-pointer"
                                         onClick={() => setShowDaopsDropdown(!showDaopsDropdown)}
                                     >
-                                        <span className={daops ? "text-gray-900" : "text-gray-500"}>
+                                        <span className={daops ? "text-black-900" : "text-black-500"}>
                                             {daops || "Pilih Daops"}
                                         </span>
-                                        <svg className={`h-5 w-5 text-gray-400 transition-transform ${showDaopsDropdown ? "transform rotate-180" : ""}`}
+                                        <svg className={`h-5 w-5 text-black-400 transition-transform ${showDaopsDropdown ? "transform rotate-180" : ""}`}
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                                         </svg>
@@ -623,7 +616,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                         className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                                                         onClick={(e) => e.stopPropagation()}
                                                     />
-                                                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black-400" />
                                                 </div>
                                             </div>
 
@@ -632,14 +625,14 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                     filteredDaops.map((option) => (
                                                         <li
                                                             key={option.nama_daops}
-                                                            className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm text-gray-700"
+                                                            className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm text-black-700"
                                                             onClick={() => handleDaopsChange(option.nama_daops)}
                                                         >
                                                             {option.nama_daops}
                                                         </li>
                                                     ))
                                                 ) : (
-                                                    <li className="px-4 py-2 text-sm text-gray-500 text-center">
+                                                    <li className="px-4 py-2 text-sm text-black-500 text-center">
                                                         {daopsSearch ? 'Tidak ada data yang sesuai dengan pencarian' : 'Tidak ada data daops'}
                                                     </li>
                                                 )}
@@ -651,7 +644,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
 
                             {/* Daerah Patroli Dropdown */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-black-700 mb-2">
                                     Daerah Patroli <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative">
@@ -659,10 +652,10 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                         className={`w-full px-4 py-2 border border-gray-300 rounded-lg flex justify-between items-center ${kabupaten ? "cursor-pointer" : "bg-gray-100 cursor-not-allowed"}`}
                                         onClick={() => kabupaten && setShowKecamatanDropdown(!showKecamatanDropdown)}
                                     >
-                                        <span className={kecamatan ? "text-gray-900" : "text-gray-500"}>
+                                        <span className={kecamatan ? "text-black-900" : "text-black-500"}>
                                             {getSelectedKecamatanName()}
                                         </span>
-                                        <svg className={`h-5 w-5 text-gray-400 transition-transform ${showKecamatanDropdown ? "transform rotate-180" : ""}`}
+                                        <svg className={`h-5 w-5 text-black-400 transition-transform ${showKecamatanDropdown ? "transform rotate-180" : ""}`}
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                                         </svg>
@@ -680,7 +673,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                         className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                                                         onClick={(e) => e.stopPropagation()}
                                                     />
-                                                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black-400" />
                                                 </div>
                                             </div>
 
@@ -689,14 +682,14 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                     filteredKecamatan.map((option) => (
                                                         <li
                                                             key={option.kode_wilayah}
-                                                            className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm text-gray-700"
+                                                            className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm text-black-700"
                                                             onClick={() => handleKecamatanChange(option.kode_wilayah, option.nama_wilayah)}
                                                         >
                                                             {toTitleCase(option.nama_wilayah)}
                                                         </li>
                                                     ))
                                                 ) : (
-                                                    <li className="px-4 py-2 text-sm text-gray-500 text-center">
+                                                    <li className="px-4 py-2 text-sm text-black-500 text-center">
                                                         {kecamatanSearch ? 'Tidak ada data yang sesuai dengan pencarian' : 'Tidak ada data daerah patroli'}
                                                     </li>
                                                 )}
@@ -709,7 +702,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-black-700 mb-2">
                                     Tanggal <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -722,7 +715,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-black-700 mb-2">
                                     Tambah Anggota
                                 </label>
                                 <div className="flex gap-2">
@@ -748,15 +741,15 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                         <table className="min-w-full divide-y divide-gray-200">
                                             <thead className="bg-gray-50">
                                                 <tr>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Anggota</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                                    <th className="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Nama Anggota</th>
+                                                    <th className="px-6 py-3 text-left text-xs font-medium text-black-500 uppercase tracking-wider">Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
                                                 {tblData.map((row, index) => (
                                                     <tr key={index} className="hover:bg-gray-50">
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{row.name}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-black-800">{row.name}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-black-800">
                                                             <button
                                                                 type="button"
                                                                 onClick={() => deleteAnggota(index)}
@@ -793,20 +786,6 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                             </button>
                         </div>
                     </form>
-                </div>
-
-                <div className="mt-8 p-6 bg-white rounded-xl shadow">
-                    <div className="flex items-start gap-3">
-                        <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                        <div>
-                            <h3 className="font-semibold text-gray-800 mb-2">Informasi Penggunaan</h3>
-                            <p className="text-sm text-gray-600 leading-relaxed">
-                                Halaman ini digunakan untuk menambahkan pengguna baru yang memiliki akses ke modul ground check titik panas.
-                                Isi semua data yang diperlukan termasuk nama, email, dan password untuk akses sistem. Anda juga dapat menambahkan
-                                anggota tim yang akan membantu pengguna utama dalam melakukan ground check titik panas.
-                            </p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
