@@ -10,7 +10,7 @@ const MobileOnlyContent: React.FC = () => {
                     <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500 rounded-full opacity-10 blur-2xl"></div>
                     <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-indigo-500 rounded-full opacity-10 blur-2xl"></div>
 
-                    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white text-center relative overflow-hidden">
+                    <div className="header-primary p-6 text-white text-center relative overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-full opacity-10">
                             <div className="absolute top-0 right-0 w-20 h-20 bg-white rounded-full -mt-10 -mr-10"></div>
                             <div className="absolute bottom-0 left-0 w-20 h-20 bg-white rounded-full -mb-10 -ml-10"></div>
@@ -35,7 +35,7 @@ const MobileOnlyContent: React.FC = () => {
                         <div className="flex flex-col sm:flex-row gap-3 mt-6">
                             <button
                                 onClick={() => window.history.back()}
-                                className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 py-3 px-4 rounded-xl transition-colors duration-300"
+                                className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-100 text-black-700 hover:bg-gray-200 py-3 px-4 rounded-xl transition-colors duration-300"
                             >
                                 <ArrowLeft className="h-5 w-5" />
                                 <span>Kembali</span>
@@ -52,7 +52,7 @@ const MobileOnlyContent: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="mt-6 text-center text-gray-500 text-sm">
+                <div className="mt-6 text-center text-black-500 text-sm">
                     <p>Jika Anda yakin seharusnya memiliki akses web, silakan <a href="mailto:karhutla.ipb@apps.ipb.ac.id" className="text-blue-600 hover:text-blue-800 font-medium">hubungi tim dukungan</a></p>
                 </div>
             </div>

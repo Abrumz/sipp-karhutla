@@ -11,12 +11,6 @@ const MobileOnlyPage: React.FC = () => {
             title='Akses Mobile'
             description='Aplikasi ini hanya dapat diakses melalui perangkat mobile untuk peran Anda'
         >
-            <Header
-                brand="SIPP KARHUTLA"
-                color="white"
-                fixed
-                rightLinks={<HeaderLinks headerColor="white" />}
-            />
             <MobileOnlyContent />
         </CustomHead>
     );
