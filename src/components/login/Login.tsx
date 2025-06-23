@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useState, useEffect, FormEvent } from 'react'
+import { ChangeEvent, MouseEvent, useState, useEffect, FormEvent, useRef } from 'react'
 import { useRouter } from 'next/router'
 import useAuth from '@/context/auth'
 import { loginValidator } from '@/validators'
@@ -15,6 +15,8 @@ interface LoginValues {
     passwordError: boolean;
     showAlert: boolean;
     showPassword: boolean;
+    captchaToken: string | null;
+    captchaError: boolean;
 }
 
 interface LoginFormProps {
@@ -27,6 +29,10 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
     const { login } = useAuth()
     const [loading, setLoading] = useState(false)
     const [cardAnimation, setCardAnimation] = useState<string>('opacity-0 translate-y-4')
+    const [visualCaptcha, setVisualCaptcha] = useState({ question: '', answer: '' })
+    const [userAnswer, setUserAnswer] = useState('')
+    const canvasRef = useRef<HTMLCanvasElement>(null)
+
     const [values, setValues] = useState<LoginValues>({
         email: '',
         password: '',
@@ -34,16 +40,127 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
         emailError: false,
         passwordError: false,
         showAlert: false,
-        showPassword: false
+        showPassword: false,
+        captchaToken: null,
+        captchaError: false
     })
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setCardAnimation('opacity-100 translate-y-0 transition-all duration-500 ease-out')
         }, 100)
-
         return () => clearTimeout(timer)
     }, [])
+
+    useEffect(() => {
+        generateVisualCaptcha()
+    }, [])
+
+    const generateVisualCaptcha = () => {
+        // Generate random string
+        const chars = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789'; // Exclude confusing chars like O, 0, I, l
+        const captchaLength = 5;
+        let captchaText = '';
+
+        for (let i = 0; i < captchaLength; i++) {
+            captchaText += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+
+        setVisualCaptcha({
+            question: captchaText,
+            answer: captchaText
+        })
+        setUserAnswer('')
+
+        // Draw captcha on canvas
+        setTimeout(() => {
+            drawCaptcha(captchaText)
+        }, 100)
+    }
+
+    const drawCaptcha = (text: string) => {
+        const canvas = canvasRef.current
+        if (!canvas) return
+
+        const ctx = canvas.getContext('2d')
+        if (!ctx) return
+
+        // Set canvas size
+        canvas.width = 200
+        canvas.height = 60
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        // Background with subtle gradient
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
+        gradient.addColorStop(0, '#f8f9fa')
+        gradient.addColorStop(1, '#e9ecef')
+        ctx.fillStyle = gradient
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+        // Add random noise dots
+        for (let i = 0; i < 50; i++) {
+            ctx.fillStyle = `rgba(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100}, 0.3)`
+            ctx.beginPath()
+            ctx.arc(
+                Math.random() * canvas.width,
+                Math.random() * canvas.height,
+                Math.random() * 2 + 1,
+                0,
+                2 * Math.PI
+            )
+            ctx.fill()
+        }
+
+        // Add random lines for noise
+        for (let i = 0; i < 5; i++) {
+            ctx.strokeStyle = `rgba(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100}, 0.3)`
+            ctx.lineWidth = Math.random() * 2 + 1
+            ctx.beginPath()
+            ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height)
+            ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height)
+            ctx.stroke()
+        }
+
+        // Draw text with distortion
+        const colors = ['#8B4513', '#4B0082', '#2F4F4F', '#800000', '#2E8B57']
+        for (let i = 0; i < text.length; i++) {
+            const char = text[i]
+            const x = 25 + i * 28 + (Math.random() * 10 - 5) // Add random offset
+            const y = 35 + (Math.random() * 8 - 4) // Add random vertical offset
+            const rotation = (Math.random() * 0.5 - 0.25) // Random rotation
+
+            ctx.save()
+            ctx.translate(x, y)
+            ctx.rotate(rotation)
+
+            // Random color for each character
+            ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)]
+            ctx.font = 'bold 24px serif'
+            ctx.textAlign = 'center'
+            ctx.fillText(char, 0, 0)
+
+            // Add shadow effect
+            ctx.shadowColor = 'rgba(0,0,0,0.3)'
+            ctx.shadowOffsetX = 1
+            ctx.shadowOffsetY = 1
+            ctx.shadowBlur = 1
+
+            ctx.restore()
+        }
+
+        // Add more distortion with small random rectangles
+        for (let i = 0; i < 20; i++) {
+            ctx.fillStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.1)`
+            ctx.fillRect(
+                Math.random() * canvas.width,
+                Math.random() * canvas.height,
+                Math.random() * 4 + 1,
+                Math.random() * 4 + 1
+            )
+        }
+    }
 
     const handleClickShowPassword = () =>
         setValues({ ...values, showPassword: !values.showPassword })
@@ -71,12 +188,20 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
         }
     }
 
+    const onVisualCaptchaChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const userInput = e.target.value.toUpperCase(); // Convert to uppercase for comparison
+        setUserAnswer(userInput);
+        setValues({
+            ...values,
+            captchaToken: userInput === visualCaptcha.answer ? 'valid' : null,
+            captchaError: userInput !== visualCaptcha.answer && userInput !== ''
+        })
+    }
+
     const showSuccessAlert = (userData: any) => {
         const userName = userData?.name || userData?.full_name || getUserNameFromEmail(values.email);
-
         const hour = new Date().getHours();
         let greeting = "";
-
         if (hour < 12) {
             greeting = "Selamat pagi";
         } else if (hour < 15) {
@@ -86,7 +211,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
         } else {
             greeting = "Selamat malam";
         }
-
         Swal.fire({
             icon: 'success',
             title: `${greeting}, ${userName}!`,
@@ -96,8 +220,8 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
             timerProgressBar: true,
             customClass: {
                 popup: 'animate__animated animate__fadeInUp',
-                title: 'text-xl font-bold text-gray-800',
-                htmlContainer: 'text-gray-600'
+                title: 'text-xl font-bold text-black-800',
+                htmlContainer: 'text-black-600'
             },
             background: 'rgba(255, 255, 255, 0.95)',
             backdrop: 'rgba(0, 0, 123, 0.1)'
@@ -106,16 +230,13 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
 
     const getUserNameFromEmail = (email: string): string => {
         if (!email) return "Pengguna";
-
         const namePart = email.split('@')[0];
-
         if (namePart.includes('.') || namePart.includes('_')) {
             return namePart
                 .split(/[._]/)
                 .map(part => part.charAt(0).toUpperCase() + part.slice(1))
                 .join(' ');
         }
-
         return namePart.charAt(0).toUpperCase() + namePart.slice(1);
     }
 
@@ -137,9 +258,17 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
         if (e) {
             e.preventDefault()
         }
-
         const validate = loginValidator(values)
-
+        if (!values.captchaToken || userAnswer !== visualCaptcha.answer) {
+            setValues({
+                ...values,
+                captchaError: true,
+                alertMessage: 'Mohon masukkan kode verifikasi dengan benar',
+                showAlert: false
+            })
+            showErrorAlert('Mohon masukkan kode verifikasi dengan benar');
+            return;
+        }
         if (validate.pass) {
             setLoading(true)
             try {
@@ -147,18 +276,18 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                     values.email.trim(),
                     values.password.trim()
                 )
-
                 if (!result.success) {
                     setValues({
                         ...values,
                         alertMessage: result.message as string,
-                        showAlert: false
+                        showAlert: false,
+                        captchaToken: null,
+                        captchaError: true
                     })
-
+                    generateVisualCaptcha()
                     showErrorAlert(result.message as string);
                 } else {
                     showSuccessAlert(result.data);
-
                     setTimeout(() => {
                         if (redirectTo) {
                             router.push(redirectTo);
@@ -170,9 +299,11 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                 setValues({
                     ...values,
                     alertMessage: errorMessage,
-                    showAlert: false
+                    showAlert: false,
+                    captchaToken: null,
+                    captchaError: true
                 })
-
+                generateVisualCaptcha()
                 showErrorAlert(errorMessage);
             } finally {
                 setLoading(false)
@@ -185,7 +316,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                 alertMessage: validate.message,
                 showAlert: false
             })
-
             showErrorAlert(validate.message);
         }
     }
@@ -198,19 +328,15 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
 
     return (
         <div className={`bg-white backdrop-blur-lg bg-opacity-95 rounded-2xl shadow-2xl ${cardAnimation} ${customClass} overflow-hidden w-full`}>
-            <Link href="/" className="absolute top-4 left-4 z-20 flex items-center px-3 py-1.5 bg-white/80 backdrop-blur-l rounded-full shadow-l text-gray-700 hover:text-blue-600 hover:bg-white/90 transition-all duration-300 transform hover:scale-105">
+            <Link href="/" className="absolute top-4 left-4 z-20 flex items-center px-3 py-1.5 bg-white/80 backdrop-blur-l rounded-full shadow-l text-black-700 hover:text-blue-600 hover:bg-white/90 transition-all duration-300 transform hover:scale-105">
                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
                 <span className="text-l font-medium">Beranda</span>
             </Link>
-
-            {/* Decorative Elements */}
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-600 rounded-full opacity-20 blur-2xl"></div>
             <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-indigo-600 rounded-full opacity-20 blur-2xl"></div>
-
             <form className="relative px-6 sm:px-8 py-8 sm:py-10 z-10" onSubmit={handleSubmit}>
-                {/* Logo & Header */}
                 <div className="text-center mb-6 sm:mb-8">
                     <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#c5c3dd] mb-3 sm:mb-4 shadow-lg relative">
                         <div className="relative h-8 w-8 sm:h-10 sm:w-10">
@@ -223,32 +349,30 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                             />
                         </div>
                     </div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1">Login ke SIPP Karhutla</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold text-black-800 mb-1">Login ke SIPP Karhutla</h2>
                 </div>
-
-                {/* Card Body */}
                 <div className="space-y-5 sm:space-y-6">
+                    {/* Email Field */}
                     <div className="space-y-1 sm:space-y-2">
-                        <label htmlFor="email" className="block text-gray-700 text-l font-semibold mb-1">
+                        <label htmlFor="email" className="block text-black-700 text-l font-semibold mb-1">
                             Email
                         </label>
                         <div className="relative group">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg className="h-5 w-5 text-black-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                                 </svg>
                             </div>
                             <input
                                 id="email"
                                 type="email"
-                                className={`pl-10 w-full py-2.5 sm:py-3 px-4 bg-gray-50 text-gray-700 border ${values.emailError ? 'border-red-500' : 'border-gray-300'} rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
+                                className={`pl-10 w-full py-2.5 sm:py-3 px-4 bg-gray-50 text-black-700 border ${values.emailError ? 'border-red-500' : 'border-gray-300'} rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
                                 onChange={handleChange('email')}
                                 value={values.email}
                                 onKeyPress={handleKeyPress}
                                 autoComplete="username"
                                 placeholder="email@example.com"
                             />
-                            {/* Email Validation State Indicator */}
                             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                                 {values.email && !values.emailError && (
                                     <svg className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -272,20 +396,21 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                         )}
                     </div>
 
+                    {/* Password Field */}
                     <div className="space-y-1 sm:space-y-2">
-                        <label htmlFor="password" className="block text-gray-700 text-l font-semibold mb-1">
+                        <label htmlFor="password" className="block text-black-700 text-l font-semibold mb-1">
                             Password
                         </label>
                         <div className="relative group">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg className="h-5 w-5 text-black-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                 </svg>
                             </div>
                             <input
                                 id="password"
                                 type={values.showPassword ? 'text' : 'password'}
-                                className={`pl-10 w-full py-2.5 sm:py-3 px-4 bg-gray-50 text-gray-700 border ${values.passwordError ? 'border-red-500' : 'border-gray-300'} rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
+                                className={`pl-10 w-full py-2.5 sm:py-3 px-4 bg-gray-50 text-black-700 border ${values.passwordError ? 'border-red-500' : 'border-gray-300'} rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
                                 onChange={handleChange('password')}
                                 value={values.password}
                                 onKeyPress={handleKeyPress}
@@ -294,7 +419,7 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                             />
                             <button
                                 type="button"
-                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-700 transition-colors duration-200"
+                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-black-400 hover:text-black-700 transition-colors duration-200"
                                 onClick={handleClickShowPassword}
                                 onMouseDown={handleMouseDownPassword}
                                 aria-label={values.showPassword ? "Hide password" : "Show password"}
@@ -321,9 +446,75 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                             </p>
                         )}
                     </div>
+
+                    {/* Visual CAPTCHA */}
+                    <div className="space-y-1 sm:space-y-2">
+                        <label className="block text-black-700 text-l font-semibold mb-1">
+                            Kode Verifikasi
+                        </label>
+                        <div className="flex items-center space-x-3 mb-2">
+                            <div className="border-2 border-gray-300 rounded-lg p-2 bg-white">
+                                <canvas
+                                    ref={canvasRef}
+                                    className="block"
+                                    style={{ width: '200px', height: '60px' }}
+                                />
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    generateVisualCaptcha()
+                                    setValues({ ...values, captchaToken: null, captchaError: false })
+                                }}
+                                className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                                aria-label="Refresh kode"
+                            >
+                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg className="h-5 w-5 text-black-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
+                            <input
+                                type="text"
+                                className={`pl-10 w-full py-2.5 sm:py-3 px-4 bg-gray-50 text-black-700 border ${values.captchaError ? 'border-red-500' : 'border-gray-300'} rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 uppercase tracking-wider`}
+                                onChange={onVisualCaptchaChange}
+                                value={userAnswer}
+                                onKeyPress={handleKeyPress}
+                                placeholder="Masukkan CAPTCHA"
+                                autoComplete="off"
+                                maxLength={5}
+                            />
+                            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                                {userAnswer && !values.captchaError && values.captchaToken && (
+                                    <svg className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                )}
+                                {values.captchaError && (
+                                    <svg className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                )}
+                            </div>
+                        </div>
+                        {values.captchaError && (
+                            <p className="text-red-500 text-l mt-1 flex items-center">
+                                <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                                Kode verifikasi salah
+                            </p>
+                        )}
+                    </div>
                 </div>
 
-                {/* Card Footer */}
+                {/* Submit Button */}
                 <div className="mt-6 sm:mt-8 space-y-4">
                     <div className="w-full">
                         {loading ? (
@@ -347,7 +538,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                             </button>
                         )}
                     </div>
-
                     <div className="w-full text-center">
                         <button
                             type="button"
