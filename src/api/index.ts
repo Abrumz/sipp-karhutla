@@ -1,8 +1,7 @@
 import { getTokenCookie } from '@/services';
 import axios, {
   AxiosError,
-  AxiosInstance,
-  AxiosRequestConfig,
+  AxiosInstance, 
   AxiosResponse,
   InternalAxiosRequestConfig
 } from 'axios';
@@ -14,10 +13,13 @@ const baseAPIv2 = 'https://sipongi.menlhk.go.id/sipp-karhutla/api_v2';
 // const baseAPIv1 = 'http://203.99.108.16/api-sipp-mobile';
 // const baseAPIv2 = 'http://203.99.108.16/api-sipp-v2';
 
+// const baseAPIv1 = 'https://sipp-api.gusendra.site/api-sipp-mobile';
+// const baseAPIv2 = 'https://sipp-api.gusendra.site/api-sipp-v2';
+
 // Deklarasi endpoint spesifik untuk layanan terpisah
 export const simaduApiUrl = `${baseAPIv1}/simadu`;
 export const authApiUrl = `${baseAPIv1}/auth`;
-export const hotspotApiUrl = 'https://fwd.agricodex.id/hotspot.php';
+export const hotspotApiUrl = '/api/hotspot.php';
 export const apiV2URL = `${baseAPIv1}`;
 export const URLapiV2 = `${baseAPIv2}`;
  
