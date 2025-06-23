@@ -1,9 +1,11 @@
+'use client';
+
 import React, { useEffect, useState, useMemo, ReactNode } from 'react';
 import moment from 'moment';
 import 'moment/locale/id';
 import { useRouter } from 'next/navigation';
 import SiteLayout from '@/components/layout/siteLayout/SiteLayout';
-import MapContainer from '@/components/maps/MapPatroli';
+// import MapPatroliContainer from '@/components/maps/MapPatroli';
 import useAuth from '@/context/auth';
 import Loader from '@/components/loader/Loader';
 import { getPatroli } from '@/services';
@@ -20,6 +22,17 @@ import {
 } from 'lucide-react';
 
 import { PatrolData, PatrolListData } from '@/interfaces/data';
+import dynamic from 'next/dynamic';
+
+const MapPatroliContainer = dynamic(() => import('@/components/maps/MapPatroli'), {
+    ssr: false,
+    loading: () => (
+        <div className="flex justify-center items-center h-full">
+            <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+            <p className="text-blue-600 font-medium ml-4">Memuat Peta...</p>
+        </div>
+    )
+});
 
 interface TableColumn {
     title: string;
@@ -40,7 +53,8 @@ const DataTable: React.FC<{
     title: string;
     columns: TableColumn[];
     data: PatrolListData[];
-}> = ({ title, columns, data }) => {
+    loading: boolean;
+}> = ({ title, columns, data, loading }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -62,7 +76,7 @@ const DataTable: React.FC<{
         <div className="my-8">
             <div className="flex items-center mb-4">
                 <div className="w-1 h-6 bg-blue-600 rounded-full mr-3"></div>
-                <h3 className="text-xl font-bold text-gray-800">{title}</h3>
+                <h3 className="text-xl font-bold text-black-800">{title}</h3>
             </div>
 
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
@@ -83,42 +97,57 @@ const DataTable: React.FC<{
                                 {columns.map((column, index) => (
                                     <th
                                         key={index}
-                                        className="px-6 py-3 text-left text-l font-medium text-gray-500 uppercase tracking-wider"
+                                        className="px-6 py-3 text-left text-l font-medium text-black-500 uppercase tracking-wider"
                                     >
                                         {column.title}
                                     </th>
                                 ))}
-                                <th className="px-6 py-3 text-left text-l font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-l font-medium text-black-500 uppercase tracking-wider">
                                     Aksi
                                 </th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {paginatedData.map((row, rowIndex) => (
-                                <tr key={rowIndex} className="capitalize hover:bg-gray-50 transition-colors">
-                                    {columns.map((column, colIndex) => (
-                                        <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-l text-gray-500">
-                                            {row[column.field] !== null && row[column.field] !== undefined
-                                                ? String(row[column.field])
-                                                : ''}
+                            {loading ? (
+                                Array.from({ length: 5 }).map((_, index) => (
+                                    <tr key={`loading-row-${index}`}>
+                                        {columns.map((_, colIndex) => (
+                                            <td key={`loading-cell-${colIndex}`} className="px-6 py-4 whitespace-nowrap">
+                                                <div className="animate-pulse h-4 bg-gray-200 rounded w-3/4"></div>
+                                            </td>
+                                        ))}
+                                        <td className="px-6 py-4 whitespace-nowrap text-right">
+                                            <div className="animate-pulse h-4 bg-gray-200 rounded w-28 ml-auto"></div>
                                         </td>
-                                    ))}
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-l font-medium">
-                                        <button
-                                            onClick={() => window.open(row.reportLink)}
-                                            className="text-blue-600 hover:text-blue-900 flex items-center justify-center md:justify-end"
-                                        >
-                                            <CloudDownloadIcon className="h-5 w-5 mr-1" />
-                                            <span>Download</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            {paginatedData.length === 0 && (
+                                    </tr>
+                                ))
+                            ) : (
+                                paginatedData.map((row, rowIndex) => (
+                                    <tr key={rowIndex} className="capitalize hover:bg-gray-50 transition-colors">
+                                        {columns.map((column, colIndex) => (
+                                            <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-l text-black-500">
+                                                {row[column.field] !== null && row[column.field] !== undefined
+                                                    ? String(row[column.field])
+                                                    : ''}
+                                            </td>
+                                        ))}
+                                        <td className="px-6 py-4 whitespace-nowrap text-right text-l font-medium">
+                                            <button
+                                                onClick={() => window.open(row.reportLink)}
+                                                className="text-blue-600 hover:text-blue-900 flex items-center justify-center md:justify-end"
+                                            >
+                                                <CloudDownloadIcon className="h-5 w-5 mr-1" />
+                                                <span>Download</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                            {!loading && paginatedData.length === 0 && (
                                 <tr>
                                     <td
                                         colSpan={columns.length + 1}
-                                        className="px-6 py-4 text-center text-l text-gray-500"
+                                        className="px-6 py-4 text-center text-l text-black-500"
                                     >
                                         Tidak ada data
                                     </td>
@@ -144,11 +173,11 @@ const DataTable: React.FC<{
                                 </option>
                             ))}
                         </select>
-                        <span className="text-l text-gray-700">Baris</span>
+                        <span className="text-l text-black-700">Baris</span>
                     </div>
 
                     <div className="flex items-center">
-                        <span className="text-l text-gray-700 mr-4">
+                        <span className="text-l text-black-700 mr-4">
                             {filteredData.length > 0 ?
                                 `${currentPage * rowsPerPage + 1}-${Math.min((currentPage + 1) * rowsPerPage, filteredData.length)} dari ${filteredData.length}` :
                                 '0 data'}
@@ -219,7 +248,6 @@ const PatroliContent: React.FC = () => {
     const [padam, setPadam] = useState<PatrolListData[]>([]);
     const [spots, setSpots] = useState<PatrolData[]>([]);
 
-    // Hitung total patroli
     const totalPatrols = useMemo(() => {
         return mandiriCounter + rutinCounter + terpaduCounter + padamCounter;
     }, [mandiriCounter, rutinCounter, terpaduCounter, padamCounter]);
@@ -289,14 +317,12 @@ const PatroliContent: React.FC = () => {
         setDate(moment());
     };
 
-    if (!isAuthenticated) return null; // Loader akan ditampilkan oleh ProtectRoute
+    if (!isAuthenticated) return null;
 
     return (
         <SiteLayout>
             <div className="bg-gray-50 ">
-                {/* Header dengan animasi subtle */}
-                <div className="relative py-6 px-4 mb-6 overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-b-lg shadow-lg">
-                    {/* Background patterns */}
+                <div className="header-primary relative py-6 px-4 mb-6 overflow-hidden text-white rounded-b-lg shadow-lg">
                     <div className="absolute top-0 right-0 w-40 h-40 bg-white opacity-5 rounded-full -mt-20 -mr-20"></div>
                     <div className="absolute bottom-0 left-0 w-40 h-40 bg-white opacity-5 rounded-full -mb-20 -ml-20"></div>
 
@@ -314,7 +340,6 @@ const PatroliContent: React.FC = () => {
                 </div>
 
                 <div className="container mx-auto px-4">
-                    {/* Date selector & total counter */}
                     <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                         <div className="flex items-center space-x-2 bg-white rounded-xl shadow-md p-2 flex-grow md:flex-grow-0">
                             <button
@@ -322,7 +347,7 @@ const PatroliContent: React.FC = () => {
                                 className="p-2 rounded-lg hover:bg-gray-100 transition"
                                 aria-label="Previous day"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                 </svg>
                             </button>
@@ -333,7 +358,7 @@ const PatroliContent: React.FC = () => {
                                     className="flex items-center px-3 py-2 rounded-lg hover:bg-gray-100 transition"
                                 >
                                     <Calendar className="h-5 w-5 text-blue-600 mr-2" />
-                                    <span className="text-gray-800 font-medium">{formattedDate}</span>
+                                    <span className="text-black-800 font-medium">{formattedDate}</span>
                                 </button>
 
                                 {isDatePickerOpen && (
@@ -353,7 +378,7 @@ const PatroliContent: React.FC = () => {
                                 className="p-2 rounded-lg hover:bg-gray-100 transition"
                                 aria-label="Next day"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                 </svg>
                             </button>
@@ -366,7 +391,7 @@ const PatroliContent: React.FC = () => {
                             </button>
                         </div>
 
-                        <div className="flex items-center bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl shadow-md px-4 py-3">
+                        <div className="flex items-center text-white rounded-xl shadow-md px-4 py-3 bg-gradient-primary">
                             <div className="flex flex-col items-center">
                                 <span className="text-l text-blue-100">Total Aktivitas</span>
                                 <span className="font-bold text-2xl">
@@ -379,12 +404,10 @@ const PatroliContent: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Main content area with card styling */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                        {/* Map card */}
                         <div className="lg:col-span-2 bg-white rounded-xl shadow-md overflow-hidden">
                             <div className="relative h-[400px] md:h-[500px] w-full">
-                                <MapContainer
+                                <MapPatroliContainer
                                     center={{
                                         lat: -1.5,
                                         lng: 117.384
@@ -393,6 +416,13 @@ const PatroliContent: React.FC = () => {
                                     spots={spots}
                                     isLoggedin={isAuthenticated}
                                 />
+
+                                {loading && (
+                                    <div className="absolute inset-0 bg-white bg-opacity-70 z-20 flex flex-col items-center justify-center">
+                                        <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                                        <p className="text-blue-600 font-medium">Memuat data peta...</p>
+                                    </div>
+                                )}
 
                                 {isMobileView && (
                                     <div className="absolute bottom-4 right-4 z-10">
@@ -407,18 +437,16 @@ const PatroliContent: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Stats summary card */}
                         <div className={`
                           ${isMobileView && !isMobileStatsExpanded ? 'h-0 opacity-0 overflow-hidden' : 'h-auto opacity-100'}
                           transition-all duration-300 bg-white rounded-xl shadow-md overflow-hidden
                         `}>
-                            <div className="p-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+                            <div className="p-4 text-white bg-gradient-primary">
                                 <h2 className="text-xl font-bold">Statistik Data</h2>
                                 <p className="text-blue-100 text-l">Aktivitas {formattedDate}</p>
                             </div>
 
                             <div className="grid grid-cols-1 divide-y">
-                                {/* Patroli Mandiri */}
                                 <div className="p-4 hover:bg-blue-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
@@ -426,8 +454,8 @@ const PatroliContent: React.FC = () => {
                                                 <User className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
-                                                <h3 className="font-medium text-gray-800">Patroli Mandiri</h3>
-                                                <p className="text-l text-gray-500">Dilakukan oleh individu petugas</p>
+                                                <h3 className="font-medium text-black-800">Patroli Mandiri</h3>
+                                                <p className="text-l text-gray-700">Dilakukan oleh individu petugas</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -440,7 +468,6 @@ const PatroliContent: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* Patroli Rutin */}
                                 <div className="p-4 hover:bg-pink-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
@@ -448,8 +475,8 @@ const PatroliContent: React.FC = () => {
                                                 <Truck className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
-                                                <h3 className="font-medium text-gray-800">Patroli Rutin</h3>
-                                                <p className="text-l text-gray-500">Patroli terjadwal rutin</p>
+                                                <h3 className="font-medium text-black-800">Patroli Rutin</h3>
+                                                <p className="text-l text-gray-700">Patroli terjadwal rutin</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -462,7 +489,6 @@ const PatroliContent: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* Patroli Terpadu */}
                                 <div className="p-4 hover:bg-green-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
@@ -470,8 +496,8 @@ const PatroliContent: React.FC = () => {
                                                 <Users className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
-                                                <h3 className="font-medium text-gray-800">Patroli Terpadu</h3>
-                                                <p className="text-l text-gray-500">Kolaborasi antar instansi</p>
+                                                <h3 className="font-medium text-black-800">Patroli Terpadu</h3>
+                                                <p className="text-l text-gray-700">Kolaborasi antar instansi</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -484,7 +510,6 @@ const PatroliContent: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* Pemadaman */}
                                 <div className="p-4 hover:bg-red-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
@@ -492,8 +517,8 @@ const PatroliContent: React.FC = () => {
                                                 <Flame className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
-                                                <h3 className="font-medium text-gray-800">Pemadaman</h3>
-                                                <p className="text-l text-gray-500">Aktivitas pemadaman kebakaran</p>
+                                                <h3 className="font-medium text-black-800">Pemadaman</h3>
+                                                <p className="text-l text-gray-700">Aktivitas pemadaman kebakaran</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -509,26 +534,24 @@ const PatroliContent: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Info card */}
                     <div className="mb-8">
                         <div className="bg-white rounded-xl shadow-md p-4">
-                            <h3 className="text-lg font-semibold text-gray-800 mb-2">Tentang Data</h3>
-                            <p className="text-gray-600 text-l">
+                            <h3 className="text-lg font-semibold text-black-800 mb-2">Tentang Data</h3>
+                            <p className="text-black-600 text-l">
                                 Data patroli dan pemadaman kebakaran hutan dan lahan bersumber dari laporan petugas di lapangan.
                                 Visualisasi ini membantu memahami distribusi aktivitas pencegahan dan penanganan karhutla di seluruh Indonesia.
                             </p>
                         </div>
                     </div>
 
-                    {/* Tables section */}
                     <div className="mb-8">
                         <div className="bg-white rounded-xl shadow-md p-4 mb-6">
-                            <h2 className="text-xl font-bold text-gray-800 mb-4">Detail Data Aktivitas</h2>
+                            <h2 className="text-xl font-bold text-black-800 mb-4">Detail Data Aktivitas</h2>
                             <div className="border-t border-gray-200 pt-4">
-                                <DataTable title="Data Patroli Mandiri" columns={columns} data={mandiri} />
-                                <DataTable title="Data Patroli Rutin" columns={columns} data={rutin} />
-                                <DataTable title="Data Patroli Terpadu" columns={columns} data={terpadu} />
-                                <DataTable title="Data Pemadaman" columns={columns} data={padam} />
+                                <DataTable title="Data Patroli Mandiri" columns={columns} data={mandiri} loading={loading} />
+                                <DataTable title="Data Patroli Rutin" columns={columns} data={rutin} loading={loading} />
+                                <DataTable title="Data Patroli Terpadu" columns={columns} data={terpadu} loading={loading} />
+                                <DataTable title="Data Pemadaman" columns={columns} data={padam} loading={loading} />
                             </div>
                         </div>
                     </div>
