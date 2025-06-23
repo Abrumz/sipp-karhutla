@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    appDir: false,
-  },
-  output: 'export',
+  // experimental: {
+  //   appDir: true,
+  // },
+  // output: 'export',
   images: {
     unoptimized: true,
   },
@@ -14,6 +14,15 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-}
+ 
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*', 
+        destination: 'https://fwd.agricodex.id/:path*',  
+      },
+    ];
+  }, 
+};
 
 module.exports = nextConfig;
