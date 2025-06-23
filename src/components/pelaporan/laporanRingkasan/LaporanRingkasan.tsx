@@ -22,7 +22,7 @@ const DateInputComponent: React.FC<{
 }) => {
         return (
             <div className="space-y-2">
-                <label className="block text-gray-700 text-l font-medium" htmlFor={id}>
+                <label className="block text-black-700 text-l font-medium" htmlFor={id}>
                     {label}
                 </label>
                 <input
@@ -57,8 +57,8 @@ const InfoCard: React.FC<{
                 {icon}
             </div>
             <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-                <p className="text-l text-gray-500 leading-relaxed">{description}</p>
+                <h3 className="text-lg font-semibold text-black-800 mb-2">{title}</h3>
+                <p className="text-l text-black-500 leading-relaxed">{description}</p>
             </div>
         </div>
     );
@@ -70,22 +70,22 @@ const StepGuide: React.FC = () => {
             <div className="flex flex-col items-center text-center">
                 <div className="w-12 h-12 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">1</div>
                 <div>
-                    <h4 className="font-semibold text-lg text-gray-800 mb-2">Pilih Rentang Tanggal</h4>
-                    <p className="text-l text-gray-600">Tentukan periode waktu laporan yang ingin diunduh</p>
+                    <h4 className="font-semibold text-lg text-black-800 mb-2">Pilih Rentang Tanggal</h4>
+                    <p className="text-l text-black-600">Tentukan periode waktu laporan yang ingin diunduh</p>
                 </div>
             </div>
             <div className="flex flex-col items-center text-center">
                 <div className="w-12 h-12 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">2</div>
                 <div>
-                    <h4 className="font-semibold text-lg text-gray-800 mb-2">Download Laporan</h4>
-                    <p className="text-l text-gray-600">Klik tombol Download Laporan dan tunggu proses selesai</p>
+                    <h4 className="font-semibold text-lg text-black-800 mb-2">Download Laporan</h4>
+                    <p className="text-l text-black-600">Klik tombol Download Laporan dan tunggu proses selesai</p>
                 </div>
             </div>
             <div className="flex flex-col items-center text-center">
                 <div className="w-12 h-12 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">3</div>
                 <div>
-                    <h4 className="font-semibold text-lg text-gray-800 mb-2">Analisis Data</h4>
-                    <p className="text-l text-gray-600">Buka file laporan untuk melihat data dan statistik lengkap</p>
+                    <h4 className="font-semibold text-lg text-black-800 mb-2">Analisis Data</h4>
+                    <p className="text-l text-black-600">Buka file laporan untuk melihat data dan statistik lengkap</p>
                 </div>
             </div>
         </div>
@@ -202,8 +202,8 @@ const LaporanRingkasan = () => {
                     <div className="flex items-center gap-4 mb-6">
                         <Clock className="h-8 w-8 text-green-500 bg-green-50 p-1.5 rounded-lg" />
                         <div>
-                            <h2 className="text-xl font-bold text-gray-800 mb-1">Rentang Tanggal Laporan</h2>
-                            <p className="text-gray-500">Pilih rentang tanggal untuk mengunduh laporan ringkasan data</p>
+                            <h2 className="text-xl font-bold text-black-800 mb-1">Rentang Tanggal Laporan</h2>
+                            <p className="text-black-500">Pilih rentang tanggal untuk mengunduh laporan</p>
                         </div>
                     </div>
 
@@ -246,9 +246,9 @@ const LaporanRingkasan = () => {
 
                     {/* Note */}
                     <div className="flex items-start gap-3 p-4 bg-gray-100 rounded-lg mb-6">
-                        <Info size={18} className="text-gray-600 flex-shrink-0 mt-0.5" />
-                        <p className="text-l text-gray-600 leading-relaxed">
-                            Laporan akan berisi data kejadian kebakaran, titik hotspot, luas area terdampak, dan status penanganan dalam periode yang dipilih.
+                        <Info size={18} className="text-black-600 flex-shrink-0 mt-0.5" />
+                        <p className="text-l text-black-600 leading-relaxed">
+                            Laporan akan berisi data detail dan ringkasan kegiatan patroli. Pastikan tanggal yang dipilih sesuai dengan periode patroli yang telah dilakukan.
                         </p>
                     </div>
 

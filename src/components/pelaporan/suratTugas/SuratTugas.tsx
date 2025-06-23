@@ -55,9 +55,9 @@ const SuratTugasTable: React.FC<{
         <div className="bg-white rounded-xl shadow overflow-hidden">
             <div className="p-4 border-b">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <h3 className="text-lg font-semibold text-gray-800">Daftar Surat Tugas</h3>
+                    <h3 className="text-lg font-semibold text-black-800">Daftar Surat Tugas</h3>
                     <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black-400" />
                         <input
                             type="text"
                             placeholder="Cari surat tugas..."
@@ -73,21 +73,21 @@ const SuratTugasTable: React.FC<{
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
-                            <th scope="col" className="px-6 py-3 text-left text-l font-medium text-gray-500 uppercase tracking-wider">Jenis Patroli</th>
-                            <th scope="col" className="px-6 py-3 text-left text-l font-medium text-gray-500 uppercase tracking-wider">Nomor Surat Tugas</th>
-                            <th scope="col" className="px-6 py-3 text-left text-l font-medium text-gray-500 uppercase tracking-wider">Tanggal Mulai</th>
-                            <th scope="col" className="px-6 py-3 text-left text-l font-medium text-gray-500 uppercase tracking-wider">Tanggal Selesai</th>
-                            <th scope="col" className="px-6 py-3 text-right text-l font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            <th scope="col" className="px-6 py-3 text-left text-l font-medium text-black-500 uppercase tracking-wider">Jenis Patroli</th>
+                            <th scope="col" className="px-6 py-3 text-left text-l font-medium text-black-500 uppercase tracking-wider">Nomor Surat Tugas</th>
+                            <th scope="col" className="px-6 py-3 text-left text-l font-medium text-black-500 uppercase tracking-wider">Tanggal Mulai</th>
+                            <th scope="col" className="px-6 py-3 text-left text-l font-medium text-black-500 uppercase tracking-wider">Tanggal Selesai</th>
+                            <th scope="col" className="px-6 py-3 text-right text-l font-medium text-black-500 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {paginatedData.length > 0 ? (
                             paginatedData.map((item, index) => (
                                 <tr key={index} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 whitespace-nowrap text-l text-gray-800">{item.type || '-'}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-l text-gray-800">{item.number || '-'}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-l text-gray-800">{item.startDate || '-'}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-l text-gray-800">{item.finishDate || '-'}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-l text-black-800">{item.type || '-'}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-l text-black-800">{item.number || '-'}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-l text-black-800">{item.startDate || '-'}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-l text-black-800">{item.finishDate || '-'}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-l font-medium">
                                         <div className="flex justify-end items-center space-x-2">
                                             <button
@@ -110,7 +110,7 @@ const SuratTugasTable: React.FC<{
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={5} className="px-6 py-4 text-center text-l text-gray-500">
+                                <td colSpan={5} className="px-6 py-4 text-center text-l text-black-500">
                                     {searchTerm ? 'Tidak ada data yang sesuai dengan pencarian' : 'Tidak ada data surat tugas'}
                                 </td>
                             </tr>
@@ -121,10 +121,10 @@ const SuratTugasTable: React.FC<{
 
             {filteredData.length > 0 && (
                 <div className="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center">
-                    <div className="text-l text-gray-500 mb-2 sm:mb-0 flex items-center gap-2">
+                    <div className="text-l text-black-500 mb-2 sm:mb-0 flex items-center gap-2">
                         <span>Menampilkan {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredData.length)} dari {filteredData.length} surat tugas</span>
                         <div className="flex items-center ml-4">
-                            <span className="text-gray-600 mr-2">Tampilkan:</span>
+                            <span className="text-black-600 mr-2">Tampilkan:</span>
                             <select
                                 value={itemsPerPage}
                                 onChange={handleItemsPerPageChange}
@@ -143,23 +143,23 @@ const SuratTugasTable: React.FC<{
                         <button
                             onClick={handlePrevPage}
                             disabled={currentPage === 1}
-                            className="p-2 rounded-md border border-gray-300 bg-white text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                            className="p-2 rounded-md border border-gray-300 bg-white text-black-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                         >
                             <ChevronLeft className="h-4 w-4" />
                         </button>
                         <div className="flex items-center">
-                            <span className="px-3 py-1 text-gray-700 bg-gray-100 rounded-md">
+                            <span className="px-3 py-1 text-black-700 bg-gray-100 rounded-md">
                                 {currentPage}
                             </span>
-                            <span className="mx-2 text-gray-600">dari</span>
-                            <span className="px-3 py-1 text-gray-700 bg-gray-100 rounded-md">
+                            <span className="mx-2 text-black-600">dari</span>
+                            <span className="px-3 py-1 text-black-700 bg-gray-100 rounded-md">
                                 {totalPages || 1}
                             </span>
                         </div>
                         <button
                             onClick={handleNextPage}
                             disabled={currentPage === totalPages || totalPages === 0}
-                            className="p-2 rounded-md border border-gray-300 bg-white text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                            className="p-2 rounded-md border border-gray-300 bg-white text-black-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                         >
                             <ChevronRight className="h-4 w-4" />
                         </button>
@@ -202,26 +202,62 @@ const PelaporanSuratTugas: React.FC = () => {
         if (!suratTugas || !suratTugas.reportLink) return;
 
         try {
-            // Show loading indicator
-            Swal.fire({
+            const loadingAlert = Swal.fire({
                 title: 'Memproses...',
                 text: 'Sedang menyiapkan laporan untuk diunduh',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
-                }
+                },
             });
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
 
             const response = await fetch(suratTugas.reportLink, {
                 method: 'GET',
                 credentials: 'include',
+                signal: controller.signal,
+                cache: 'no-store',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
             });
 
+            clearTimeout(timeoutId);
+
             if (!response.ok) {
-                throw new Error('Failed to download file');
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
-            const blob = await response.blob();
+            const reader = response.body?.getReader();
+            const contentLength = +(response.headers.get('Content-Length') || '0');
+
+            let receivedLength = 0;
+            const chunks = [];
+
+            if (reader) {
+                while (true) {
+                    const { done, value } = await reader.read();
+
+                    if (done) {
+                        break;
+                    }
+
+                    chunks.push(value);
+                    receivedLength += value.length;
+
+                    if (contentLength > 0) {
+                        const percentComplete = Math.round((receivedLength / contentLength) * 100);
+                        Swal.update({
+                            text: `Sedang menyiapkan laporan untuk diunduh (${percentComplete}%)`
+                        });
+                    }
+                }
+            }
+
+            const blob = new Blob(chunks);
 
             let filename = `Laporan-${suratTugas.number}.xlsx`;
             const contentDisposition = response.headers.get('Content-Disposition');
@@ -233,19 +269,19 @@ const PelaporanSuratTugas: React.FC = () => {
             }
 
             const downloadUrl = window.URL.createObjectURL(blob);
-
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = downloadUrl;
             a.download = filename;
-
             document.body.appendChild(a);
+
+            await Swal.close();
+
             a.click();
 
             window.URL.revokeObjectURL(downloadUrl);
             document.body.removeChild(a);
 
-            // Show success message
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
@@ -256,12 +292,31 @@ const PelaporanSuratTugas: React.FC = () => {
             });
         } catch (error) {
             console.error("Download error:", error);
+
+            let errorMessage = 'Terjadi kesalahan saat mengunduh laporan.';
+
+            if (error instanceof DOMException && error.name === 'AbortError') {
+                errorMessage = 'Waktu pengunduhan habis. Silakan coba lagi.';
+            } else if (error instanceof Error) {
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    errorMessage = 'Koneksi jaringan terputus. Periksa koneksi internet Anda.';
+                }
+            }
+
             Swal.fire({
                 icon: 'error',
                 title: 'Gagal',
-                text: 'Terjadi kesalahan saat mengunduh laporan.',
-                confirmButtonText: 'Tutup',
-                confirmButtonColor: '#10b981'
+                text: errorMessage,
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: 'Tutup',
+                cancelButtonColor: '#3085d6 !important',
+                customClass: {
+                    popup: 'swal-large-text',
+                    title: 'text-xl',
+                    cancelButton: 'swal2-confirm'
+                },
+                buttonsStyling: true
             });
         }
     };
@@ -283,8 +338,8 @@ const PelaporanSuratTugas: React.FC = () => {
                 <div className="flex items-start gap-3">
                     <Info size={20} className="text-green-500 flex-shrink-0 mt-0.5" />
                     <div>
-                        <h3 className="font-semibold text-gray-800 mb-2">Informasi Penggunaan</h3>
-                        <p className="text-l text-gray-600 leading-relaxed">
+                        <h3 className="font-semibold text-black-800 mb-2">Informasi Penggunaan</h3>
+                        <p className="text-l text-black-600 leading-relaxed">
                             Halaman ini menampilkan seluruh surat tugas patroli yang telah diterbitkan.
                             Anda dapat mencari surat tugas spesifik menggunakan kolom pencarian.
                             Untuk melihat detail laporan, klik ikon <span className="inline-flex items-center"><ExternalLink className="h-3 w-3 mx-1" /></span>,
@@ -299,7 +354,7 @@ const PelaporanSuratTugas: React.FC = () => {
                     <div className="bg-white p-8 rounded-xl shadow flex justify-center items-center">
                         <div className="flex flex-col items-center">
                             <div className="w-12 h-12 border-4 border-t-green-500 border-green-200 rounded-full animate-spin mb-4"></div>
-                            <p className="text-gray-600">Memuat data surat tugas...</p>
+                            <p className="text-black-600">Memuat data surat tugas...</p>
                         </div>
                     </div>
                 ) : (

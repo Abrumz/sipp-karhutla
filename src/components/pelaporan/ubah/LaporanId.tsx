@@ -93,7 +93,7 @@ interface CardProps {
 const FormCard: React.FC<CardProps> = ({ title, icon, children }) => {
     return (
         <div className="border border-gray-200 rounded-xl p-6 my-4 shadow-sm hover:shadow-md transition-shadow duration-200">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+            <h3 className="text-lg font-semibold text-black-800 mb-4 flex items-center">
                 <span className="text-green-600 mr-2">{icon}</span>
                 {title}
             </h3>
@@ -111,7 +111,7 @@ const CheckboxGroup: React.FC<{
 }> = ({ title, options, onChange }) => {
     return (
         <div className="border border-gray-200 rounded-xl p-4 my-4 bg-gray-50">
-            <h3 className="text-gray-700 font-medium mb-4">{title}</h3>
+            <h3 className="text-black-700 font-medium mb-4">{title}</h3>
             <div className="space-y-2">
                 {options.map((option, index) => (
                     <div key={index} className="flex items-start text-left">
@@ -126,7 +126,7 @@ const CheckboxGroup: React.FC<{
                         </div>
                         <label
                             htmlFor={`option-${title}-${index}`}
-                            className="ml-3 block text-sm text-gray-700"
+                            className="ml-3 block text-sm text-black-700"
                         >
                             {option.text}
                         </label>
@@ -800,7 +800,7 @@ function UbahLaporanId() {
 
     const renderField = (label: string, value: string, onChange: any, type = "text") => (
         <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-black-700 mb-1">
                 {label}
             </label>
             <input
@@ -814,7 +814,7 @@ function UbahLaporanId() {
 
     const renderSelect = (label: string, value: string, onChange: any, options: Option[]) => (
         <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-black-700 mb-1">
                 {label}
             </label>
             <select
@@ -865,7 +865,7 @@ function UbahLaporanId() {
                             </div>
                             <button
                                 type="button"
-                                className="text-gray-500 hover:text-gray-700 transition-colors"
+                                className="text-black-500 hover:text-black-700 transition-colors"
                                 onClick={() => {
                                     setValues({
                                         ...values,
@@ -880,13 +880,14 @@ function UbahLaporanId() {
                     </div>
                 )}
 
-                <div className="bg-white rounded-xl shadow-sm p-6 text-gray-800 mb-8">
+                <div className="bg-white rounded-xl shadow-sm p-6 text-black-800 mb-8">
                     <div className="flex items-start gap-3">
                         <Info size={24} className="text-green-500 flex-shrink-0 mt-0.5" />
                         <div>
                             <h3 className="font-semibold text-lg mb-2">Informasi Penggunaan</h3>
-                            <p className="text-gray-600 leading-relaxed">
-                                Formulir ini digunakan untuk mengubah data laporan. Pastikan Anda mengisi semua bagian yang diperlukan untuk memastikan data yang akurat.
+                            <p className="text-black-600 leading-relaxed">
+                                Formulir ini digunakan untuk mengubah data laporan, kecuali data observasi yang hanya bisa dilihat namun tidak dapat diubah.
+                                Pastikan Anda mengisi semua bagian yang diperlukan untuk memastikan data yang akurat.<br></br>
                                 Anda dapat beralih antar tab untuk mengisi berbagai bagian dari laporan. Setelah selesai melakukan perubahan, klik tombol "Simpan Perubahan" untuk menyimpan data.
                             </p>
                         </div>
@@ -899,7 +900,7 @@ function UbahLaporanId() {
                             <button
                                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === '1'
                                     ? 'border-green-500 text-green-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    : 'border-transparent text-black-500 hover:text-black-700 hover:border-gray-300'
                                     }`}
                                 onClick={() => handleChangeTab('1')}
                             >
@@ -911,7 +912,7 @@ function UbahLaporanId() {
                             <button
                                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === '2'
                                     ? 'border-green-500 text-green-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    : 'border-transparent text-black-500 hover:text-black-700 hover:border-gray-300'
                                     }`}
                                 onClick={() => handleChangeTab('2')}
                             >
@@ -923,7 +924,7 @@ function UbahLaporanId() {
                             <button
                                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === '3'
                                     ? 'border-green-500 text-green-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    : 'border-transparent text-black-500 hover:text-black-700 hover:border-gray-300'
                                     }`}
                                 onClick={() => handleChangeTab('3')}
                             >
@@ -1031,9 +1032,9 @@ function UbahLaporanId() {
                             <div>
                                 {observasiNull ? (
                                     <div className="flex flex-col items-center justify-center p-12 bg-gray-50 border border-gray-200 rounded-xl">
-                                        <FileText size={64} className="text-gray-300 mb-4" />
-                                        <h3 className="text-xl font-medium text-gray-700 mb-2">Tidak ada data Observasi</h3>
-                                        <p className="text-gray-500">Data observasi untuk laporan ini belum tersedia.</p>
+                                        <FileText size={64} className="text-black-300 mb-4" />
+                                        <h3 className="text-xl font-medium text-black-700 mb-2">Tidak ada data Observasi</h3>
+                                        <p className="text-black-500">Data observasi untuk laporan ini belum tersedia.</p>
                                     </div>
                                 ) : (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1043,13 +1044,13 @@ function UbahLaporanId() {
                                                     <div className="grid grid-cols-2 gap-2">
                                                         <div className="flex items-center space-x-2">
                                                             <MapPin size={16} className="text-green-600" />
-                                                            <span className="font-medium text-gray-700">Latitude:</span>
-                                                            <span className="text-gray-800">{option.latitude}</span>
+                                                            <span className="font-medium text-black-700">Latitude:</span>
+                                                            <span className="text-black-800">{option.latitude}</span>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
                                                             <MapPin size={16} className="text-green-600" />
-                                                            <span className="font-medium text-gray-700">Longitude:</span>
-                                                            <span className="text-gray-800">{option.longitude}</span>
+                                                            <span className="font-medium text-black-700">Longitude:</span>
+                                                            <span className="text-black-800">{option.longitude}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1065,9 +1066,9 @@ function UbahLaporanId() {
                                                                 <tbody>
                                                                     {option1.atribut.map((option2, index2) => (
                                                                         <tr key={index2} className="border-b border-gray-100 last:border-0">
-                                                                            <td className="py-2 font-medium text-gray-700">{option2.nama_atribut}</td>
-                                                                            <td className="py-2 px-2 text-gray-500">:</td>
-                                                                            <td className="py-2 text-gray-800">
+                                                                            <td className="py-2 font-medium text-black-700">{option2.nama_atribut}</td>
+                                                                            <td className="py-2 px-2 text-black-500">:</td>
+                                                                            <td className="py-2 text-black-800">
                                                                                 {checkObservasi(
                                                                                     option2.nama_atribut,
                                                                                     option2.value
@@ -1104,14 +1105,14 @@ function UbahLaporanId() {
                         <button
                             type="button"
                             className={`inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm ${loading
-                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                ? 'bg-gray-300 text-black-500 cursor-not-allowed'
                                 : 'bg-gradient-primary text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'}`}
                             onClick={handleFormSubmit}
                             disabled={loading}
                         >
                             {loading ? (
                                 <>
-                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
