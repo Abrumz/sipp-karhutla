@@ -1,11 +1,24 @@
+'use client';
+
 import React, { useEffect, useState, useMemo } from 'react';
 import moment from 'moment';
 import 'moment/locale/id';
 import SiteLayout from '@/components/layout/siteLayout/SiteLayout';
-import MapContainer from '@/components/maps/MapPatroli';
+// import MapPatroliContainer from '@/components/maps/MapPatroli';
 import useAuth from '@/context/auth';
 import { getPatroli } from '@/services';
 import { Calendar, User, Truck, Users, Flame, ChevronDown, Map, Menu, ChevronUp } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+const MapWithNoSSR = dynamic(() => import('@/components/maps/MapPatroli'), {
+    ssr: false,
+    loading: () => (
+        <div className="flex justify-center items-center h-full">
+            <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+            <p className="text-blue-600 font-medium ml-4">Memuat Peta...</p>
+        </div>
+    )
+});
 
 interface PatrolCounter {
     mandiri: number;
@@ -14,7 +27,7 @@ interface PatrolCounter {
     padam: number;
 }
 
-interface MapContainerProps {
+interface MapPatroliContainerProps {
     center: {
         lat: number;
         lng: number;
@@ -109,9 +122,7 @@ const FrontPage: React.FC = () => {
     return (
         <SiteLayout>
             <div className="bg-gray-50">
-                {/* Header dengan animasi subtle */}
-                <div className="relative py-6 px-4 mb-6 overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-b-lg shadow-lg">
-                    {/* Background patterns */}
+                <div className="header-primary relative py-6 px-4 mb-6 overflow-hidden text-white rounded-b-lg">
                     <div className="absolute top-0 right-0 w-40 h-40 bg-white opacity-5 rounded-full -mt-20 -mr-20"></div>
                     <div className="absolute bottom-0 left-0 w-40 h-40 bg-white opacity-5 rounded-full -mb-20 -ml-20"></div>
 
@@ -129,7 +140,6 @@ const FrontPage: React.FC = () => {
                 </div>
 
                 <div className="container mx-auto px-4">
-                    {/* Date selector & total counter */}
                     <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                         <div className="flex items-center space-x-2 bg-white rounded-xl shadow-md p-2 flex-grow md:flex-grow-0">
                             <button
@@ -137,7 +147,7 @@ const FrontPage: React.FC = () => {
                                 className="p-2 rounded-lg hover:bg-gray-100 transition"
                                 aria-label="Previous day"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                 </svg>
                             </button>
@@ -148,7 +158,7 @@ const FrontPage: React.FC = () => {
                                     className="flex items-center px-3 py-2 rounded-lg hover:bg-gray-100 transition"
                                 >
                                     <Calendar className="h-5 w-5 text-blue-600 mr-2" />
-                                    <span className="text-gray-800 font-medium">{formattedDate}</span>
+                                    <span className="text-black-800 font-medium">{formattedDate}</span>
                                 </button>
 
                                 {isDatePickerOpen && (
@@ -168,7 +178,7 @@ const FrontPage: React.FC = () => {
                                 className="p-2 rounded-lg hover:bg-gray-100 transition"
                                 aria-label="Next day"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                 </svg>
                             </button>
@@ -181,7 +191,7 @@ const FrontPage: React.FC = () => {
                             </button>
                         </div>
 
-                        <div className="flex items-center bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl shadow-md px-4 py-3">
+                        <div className="flex items-center text-white rounded-xl shadow-md px-4 py-3 bg-gradient-primary">
                             <div className="flex flex-col items-center">
                                 <span className="text-l text-blue-100">Total Aktivitas</span>
                                 <span className="font-bold text-2xl">
@@ -194,12 +204,10 @@ const FrontPage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Main content area with card styling */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                        {/* Map card */}
                         <div className="lg:col-span-2 bg-white rounded-xl shadow-md overflow-hidden">
                             <div className="relative h-[400px] md:h-[500px] w-full">
-                                <MapContainer
+                                <MapWithNoSSR
                                     center={{
                                         lat: -1.5,
                                         lng: 117.384
@@ -208,6 +216,13 @@ const FrontPage: React.FC = () => {
                                     spots={spots}
                                     isLoggedin={isAuthenticated}
                                 />
+
+                                {loading && (
+                                    <div className="absolute inset-0 bg-white bg-opacity-70 z-20 flex flex-col items-center justify-center">
+                                        <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                                        <p className="text-blue-600 font-medium">Memuat data peta...</p>
+                                    </div>
+                                )}
 
                                 {isMobileView && (
                                     <div className="absolute bottom-4 right-4 z-10">
@@ -222,99 +237,94 @@ const FrontPage: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Stats summary card */}
                         <div className={`
                             ${isMobileView && !isMobileStatsExpanded ? 'h-0 opacity-0 overflow-hidden' : 'h-auto opacity-100'}
                             transition-all duration-300 bg-white rounded-xl shadow-md overflow-hidden
                         `}>
-                            <div className="p-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+                            <div className="p-4 text-white bg-gradient-primary">
                                 <h2 className="text-xl font-bold">Statistik Data</h2>
                                 <p className="text-blue-100 text-l">Aktivitas {formattedDate}</p>
                             </div>
 
                             <div className="grid grid-cols-1 divide-y">
-                                {/* Patroli Mandiri */}
                                 <div className="p-4 hover:bg-blue-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
-                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: '#6991fd' }}>
+                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--bs-primary)" }}>
                                                 <User className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
-                                                <h3 className="font-medium text-gray-800">Patroli Mandiri</h3>
-                                                <p className="text-l text-gray-500">Dilakukan oleh individu petugas</p>
+                                                <h3 className="font-medium text-black-800">Patroli Mandiri</h3>
+                                                <p className="text-l text-gray-700">Dilakukan oleh individu petugas</p>
                                             </div>
                                         </div>
                                         {loading ? (
                                             <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-300 border-t-blue-600"></div>
                                         ) : (
-                                            <div className="text-3xl font-bold" style={{ color: '#6991fd' }}>
+                                            <div className="text-3xl font-bold" style={{ color: "var(--bs-primary)" }}>
                                                 {patrolCounter.mandiri}
                                             </div>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* Patroli Rutin */}
                                 <div className="p-4 hover:bg-pink-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
-                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: '#E853C4' }}>
+                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--bs-warning)" }}>
                                                 <Truck className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
-                                                <h3 className="font-medium text-gray-800">Patroli Rutin</h3>
-                                                <p className="text-l text-gray-500">Patroli terjadwal rutin</p>
+                                                <h3 className="font-medium text-black-800">Patroli Rutin</h3>
+                                                <p className="text-l text-gray-700">Patroli terjadwal rutin</p>
                                             </div>
                                         </div>
                                         {loading ? (
                                             <div className="animate-spin rounded-full h-6 w-6 border-2 border-pink-300 border-t-pink-600"></div>
                                         ) : (
-                                            <div className="text-3xl font-bold" style={{ color: '#E853C4' }}>
+                                            <div className="text-3xl font-bold" style={{ color: "var(--bs-warning)" }}>
                                                 {patrolCounter.rutin}
                                             </div>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* Patroli Terpadu */}
                                 <div className="p-4 hover:bg-green-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
-                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: '#04F512' }}>
+                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--bs-success)" }}>
                                                 <Users className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
-                                                <h3 className="font-medium text-gray-800">Patroli Terpadu</h3>
-                                                <p className="text-l text-gray-500">Kolaborasi antar instansi</p>
+                                                <h3 className="font-medium text-black-800">Patroli Terpadu</h3>
+                                                <p className="text-l text-gray-700">Kolaborasi antar instansi</p>
                                             </div>
                                         </div>
                                         {loading ? (
                                             <div className="animate-spin rounded-full h-6 w-6 border-2 border-green-300 border-t-green-600"></div>
                                         ) : (
-                                            <div className="text-3xl font-bold" style={{ color: '#04F512' }}>
+                                            <div className="text-3xl font-bold" style={{ color: "var(--bs-success)" }}>
                                                 {patrolCounter.terpadu}
                                             </div>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* Pemadaman */}
                                 <div className="p-4 hover:bg-red-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
-                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: '#ff4444' }}>
+                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--bs-danger)" }}>
                                                 <Flame className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
-                                                <h3 className="font-medium text-gray-800">Pemadaman</h3>
-                                                <p className="text-l text-gray-500">Aktivitas pemadaman kebakaran</p>
+                                                <h3 className="font-medium text-black-800">Pemadaman</h3>
+                                                <p className="text-l text-gray-700">Aktivitas pemadaman kebakaran</p>
                                             </div>
                                         </div>
                                         {loading ? (
                                             <div className="animate-spin rounded-full h-6 w-6 border-2 border-red-300 border-t-red-600"></div>
                                         ) : (
-                                            <div className="text-3xl font-bold" style={{ color: '#ff4444' }}>
+                                            <div className="text-3xl font-bold" style={{ color: "var(--bs-danger)" }}>
                                                 {patrolCounter.padam}
                                             </div>
                                         )}
@@ -326,8 +336,8 @@ const FrontPage: React.FC = () => {
 
                     <div className="mb-8">
                         <div className="bg-white rounded-xl shadow-md p-4">
-                            <h3 className="text-lg font-semibold text-gray-800 mb-2">Tentang Data</h3>
-                            <p className="text-gray-600 text-l">
+                            <h3 className="text-lg font-semibold text-black-800 mb-2">Tentang Data</h3>
+                            <p className="text-black-600 text-l">
                                 Data patroli dan pemadaman kebakaran hutan dan lahan bersumber dari laporan petugas di lapangan.
                                 Visualisasi ini membantu memahami distribusi aktivitas pencegahan dan penanganan karhutla di seluruh Indonesia.
                             </p>
