@@ -1,6 +1,10 @@
+import { ReactNode } from 'react'
 import { PatroliResponse } from './api'
 
 export interface UserData {
+    nama: any
+    no_registrasi: string
+    no_telepon: string
 	id: number
 	accessId: number
 	name: string
@@ -81,6 +85,7 @@ export interface DaopsList {
 }
 
 export interface RegionData {
+    tipe: string
 	id: string
 	code: string
 	name: string
@@ -110,7 +115,17 @@ export interface SpotData {
 	patroli: PatroliData; 
 }
 
-export interface PatroliData { 
+export interface PatroliData {
+    lon: string
+    longitude: string
+    lat: string
+    latitude: string
+	id: any
+	daops: ReactNode
+	ketua: ReactNode
+	kode: ReactNode
+	daerah: ReactNode
+	kategori: any 
 	regu_patroli: {
 		daerah: {
 			nama_daops: string;
@@ -169,15 +184,62 @@ export interface UserGroundcheckData {
 	anggota: string
 }
 
-export interface SuratTugasTeamMemberData {
-	id: string
-	name: string
-	registrationNumber: string
-	organization: string
-	startDate: string
-	endDate: string
-	posko: string
-	daops: string
+export interface EditPenugasanProps {
+    member: SuratTugasTeamMemberData;
+    skNumber: string;
+    onClose: () => void;
+    onSuccess: () => void;
+}
+
+export interface EmailOption {
+    value: string;
+    label: string;
+}
+
+export interface KelurahanOption {
+    value: string;
+    label: string;
+    data: {
+        id: string;
+        nama: string;
+        kode: string;
+        tipe: string;
+    };
+}
+
+export interface SuratTugasTeamMemberData { 
+  id_daops: string;
+  r_surat_tugas_id: any;
+  no_registrasi: string;
+  groupMembers: any;
+  kode_wilayah: string;
+  isActive: any;
+  r_role_id: string;
+  email: string;
+  phoneNumber: string;
+  id: string;
+  name: string; 
+  registrationNumber: string;
+  organization: string;
+  startDate: string; 
+  endDate: string; 
+  posko: string;
+  daops: string;
+  id_daerah_patroli: string;
+}
+
+export interface ModifySkFormData {
+    id_regu_tim_patroli: string;
+    tanggal_awal: string;
+    tanggal_akhir: string;
+    id_roles: string;
+    email: string;
+    id_daerah_patroli: string;
+    kode_wilayah: string;
+    new_posko: boolean;
+    id_daops: string;
+    new_user: boolean;
+    enabled: boolean;
 }
 
 export interface SuratTugasLaporanData {

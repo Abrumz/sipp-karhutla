@@ -32,6 +32,8 @@ export interface RoleResponse {
 }
 
 export interface UserDetailResponse extends UserBaseResponse {
+	id_user(id_user: any): number
+	no_hp: any
 	id: string
 	instansi: string
 	foto: string | null
@@ -75,6 +77,7 @@ export interface LoginResponse {
 }
 
 export interface RegionResponse {
+	data(data: any): unknown
 	id: string
 	nama: string
 	kode: string
@@ -245,14 +248,24 @@ export interface SuratTugasResponse {
 }
 
 export interface SuratTugasTeamMemberResponse {
-	id: string
-	tanggal_awal: string
-	tanggal_akhir: string
-	nama: string
-	no_registrasi: string
-	instansi: string
-	posko: string
-	daops: string
+  is_active: string
+  id: string;
+  tanggal_awal: string;
+  tanggal_akhir: string;
+  nama: string;
+  no_registrasi: string;
+  email: string;
+  no_hp: string;
+  instansi: string;
+  posko: string;
+  daops: string;
+  id_roles: string; 
+  id_pengguna: string;
+  id_daerah_patroli: string;
+  roles: string;
+  roles_desc: string;
+  kode_wilayah: string;
+  id_daops: string;
 }
 
 export interface SuratTugasLaporanDataResponse {
