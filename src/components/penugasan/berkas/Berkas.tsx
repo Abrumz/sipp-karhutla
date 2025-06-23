@@ -7,6 +7,7 @@ import {
     checkSkNumber
 } from '@/services';
 import Link from 'next/link';
+import Swal from 'sweetalert2';
 
 type AlertElementProps = {
     text: string[]
@@ -24,7 +25,7 @@ const AlertElement = (props: AlertElementProps) => {
     return (
         <>
             {props.text.map((str, index) => (
-                <p key={index}>{str}</p>
+                <p key={index} className="text-base">{str}</p>
             ))}
         </>
     );
@@ -87,7 +88,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
 
     return (
         <div ref={wrapperRef} className="relative">
-            <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor={id} className="block text-base font-medium text-black-700 mb-1">
                 {label}
             </label>
 
@@ -101,11 +102,11 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
                 }}
             >
                 <div className="flex items-center px-3 py-2">
-                    <span className={`block truncate flex-grow ${!selectedOption ? 'text-gray-400' : 'text-gray-900'}`}>
+                    <span className={`block truncate flex-grow text-base ${!selectedOption ? 'text-black-400' : 'text-black-900'}`}>
                         {selectedOption ? selectedOption.label : placeholder}
                     </span>
                     <span className="pointer-events-none flex items-center ml-2">
-                        <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <svg className="h-5 w-5 text-black-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fillRule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                         </svg>
                     </span>
@@ -120,7 +121,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
                     <div className="sticky top-0 z-10 bg-white p-2 border-b border-gray-200">
                         <input
                             type="text"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-base text-black-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="Cari..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -131,7 +132,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
 
                     <div style={{ maxHeight: '220px', overflowY: 'auto' }}>
                         {filteredOptions.length === 0 ? (
-                            <div className="py-2 px-4 text-gray-500">
+                            <div className="py-2 px-4 text-black-500 text-base">
                                 Tidak ada hasil
                             </div>
                         ) : (
@@ -139,7 +140,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
                                 {filteredOptions.map((option) => (
                                     <li
                                         key={option.value}
-                                        className={`cursor-pointer select-none py-2 px-4 hover:bg-blue-50 ${value === option.value ? "bg-blue-100" : ""}`}
+                                        className={`cursor-pointer select-none py-2 px-4 hover:bg-blue-50 ${value === option.value ? "bg-blue-100" : ""} text-base`}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleSelect(option.value);
@@ -262,8 +263,41 @@ const BerkasPenugasan: React.FC<BerkasPenugasanProps> = () => {
         );
         setLoading(false);
 
-        if (!result.success) setAlertSuccess(false);
-        else {
+        if (!result.success) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                html: Array.isArray(result.message) ? result.message.join('<br>') : result.message,
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: 'Tutup',
+                cancelButtonColor: '#3085d6 !important',
+                customClass: {
+                    popup: 'swal-large-text',
+                    title: 'text-xl',
+                    cancelButton: 'swal2-confirm'
+                },
+                buttonsStyling: true
+            });
+            setAlertSuccess(false);
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                html: Array.isArray(result.message) ? result.message.join('<br>') : result.message,
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: 'Tutup',
+                cancelButtonColor: '#3085d6 !important',
+                customClass: {
+                    popup: 'swal-large-text',
+                    title: 'text-xl',
+                    cancelButton: 'swal2-confirm'
+                },
+                buttonsStyling: true
+            }).then(() => {
+                window.location.reload();
+            });
             setAlertSuccess(true);
             setWorkFile(null);
             setWorkType('');
@@ -276,8 +310,38 @@ const BerkasPenugasan: React.FC<BerkasPenugasanProps> = () => {
     const handleClickCheck = async () => {
         if (skNumber !== '') {
             const result = await checkSkNumber(skNumber);
-            if (!result.success) setAlertSuccess(false);
-            else {
+            if (!result.success) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    html: Array.isArray(result.message) ? result.message.join('<br>') : result.message,
+                    showConfirmButton: false,
+                    showCancelButton: true,
+                    cancelButtonText: 'Tutup',
+                    cancelButtonColor: '#3085d6 !important',
+                    customClass: {
+                        popup: 'swal-large-text',
+                        title: 'text-xl',
+                        cancelButton: 'swal2-confirm'
+                    },
+                    buttonsStyling: true
+                });
+            } else {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    html: Array.isArray(result.message) ? result.message.join('<br>') : result.message,
+                    showConfirmButton: false,
+                    showCancelButton: true,
+                    cancelButtonText: 'Tutup',
+                    cancelButtonColor: '#3085d6 !important',
+                    customClass: {
+                        popup: 'swal-large-text',
+                        title: 'text-xl',
+                        cancelButton: 'swal2-confirm'
+                    },
+                    buttonsStyling: true
+                });
                 setAlertSuccess(true);
                 setWorkFile(null);
                 setWorkType('');
@@ -298,26 +362,71 @@ const BerkasPenugasan: React.FC<BerkasPenugasanProps> = () => {
 
     return (
         <div className="bg-gray-50 min-h-full p-6">
-            <div className="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-8 rounded-xl mb-8 shadow-md">
+            <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-7xl mx-auto text-center">
-                    <h1 className="text-3xl font-bold mb-2">Upload Berkas Excel Penugasan</h1>
-                    <p className="text-lg opacity-90">
+                    <h1 className="text-4xl font-bold mb-2">Upload Berkas Excel Penugasan</h1>
+                    <p className="text-xl opacity-90">
                         Isi formulir di bawah untuk mengunggah dokumen penugasan baru
                     </p>
+                </div>
+            </div>
+
+            <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow mb-8">
+                <div className="flex items-start gap-3">
+                    <svg className="w-6 h-6 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div>
+                        <h3 className="font-semibold text-black-800 text-xl mb-3">Informasi dan Petunjuk Pengisian</h3>
+
+                        <div className="mb-4">
+                            <p className="text-black-700 text-base leading-relaxed">
+                                Gunakan File EXCEL dengan format yang dapat diunduh{' '}
+                                <Link href="/file/contoh_template.xlsx" className="text-blue-600 hover:text-blue-800 font-medium">
+                                    disini
+                                </Link>
+                                <br /><br />
+                                Pastikan SEMUA kolom TERISI dan format penulisan telah sesuai.
+                                <br /><br />
+                                Ketentuan Pengisian Template File Excel Surat Tugas Aplikasi Patroli Karhutla dapat diunduh{' '}
+                                <Link href="/file/Ketentuan Pengisian Template File Excel Surat Tugas Aplikasi Patroli Karhutla-update 9April22.pdf" className="text-blue-600 hover:text-blue-800 font-medium">
+                                    disini
+                                </Link>
+                                <br /><br />
+                                Untuk Penamaan Wilayah Patroli dapat dilihat pada{' '}
+                                <Link href="/wilayah" className="text-blue-600 hover:text-blue-800 font-medium">
+                                    Daftar Wilayah
+                                </Link>
+                                <br />
+                                Dan pastikan nama wilayah sama dengan nama yang ada pada daftar wilayah tersebut.
+                            </p>
+                        </div>
+
+                        <p className="text-base text-black-700 leading-relaxed mt-4">
+                            Untuk mengunggah file penugasan, ikuti langkah-langkah berikut:
+                        </p>
+                        <ol className="mt-2 text-base text-black-700 space-y-2 list-decimal list-inside">
+                            <li>Masukkan nomor surat tugas dan klik <b>Cek</b> untuk validasi</li>
+                            <li>Pilih file Excel yang berisi data penugasan</li>
+                            <li>Pilih kategori penugasan (Mandiri/Rutin/Terpadu)</li>
+                            <li>Pilih provinsi dan kabupaten tempat penugasan</li>
+                            <li>Klik tombol <b>Upload</b> untuk mengunggah</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
 
             <div className="max-w-4xl mx-auto">
                 {show && (
                     <div className={`mb-6 p-4 rounded-md ${alertSuccess ? 'bg-green-100 text-green-800 border-l-4 border-green-500' : 'bg-red-100 text-red-800 border-l-4 border-red-500'} flex justify-between items-start`}>
-                        <div>
+                        <div className="text-base">
                             <AlertElement text={alertMessage} />
                         </div>
                         <button
                             onClick={() => setShow(false)}
-                            className="ml-4 text-gray-500 hover:text-gray-700"
+                            className="ml-4 text-black-500 hover:text-black-700"
                         >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                         </button>
@@ -326,14 +435,14 @@ const BerkasPenugasan: React.FC<BerkasPenugasanProps> = () => {
 
                 {showCheck && !show && (
                     <div className={`mb-6 p-4 rounded-md ${alertSuccess ? 'bg-green-100 text-green-800 border-l-4 border-green-500' : 'bg-red-100 text-red-800 border-l-4 border-red-500'} flex justify-between items-start`}>
-                        <div>
+                        <div className="text-base">
                             {alertMessage}
                         </div>
                         <button
                             onClick={() => setShowCheck(false)}
-                            className="ml-4 text-gray-500 hover:text-gray-700"
+                            className="ml-4 text-black-500 hover:text-black-700"
                         >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                         </button>
@@ -342,38 +451,10 @@ const BerkasPenugasan: React.FC<BerkasPenugasanProps> = () => {
 
                 <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
                     <div className="p-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div className="bg-gray-100 p-4 rounded-lg">
-                                <p className="text-gray-700 text-sm leading-relaxed">
-                                    Gunakan File EXCEL dengan format yang dapat diunduh{' '}
-                                    <Link href="/sipp-karhutla/file/contoh_template.xlsx" className="text-blue-600 hover:text-blue-800 font-medium">
-                                        disini
-                                    </Link>
-                                    <br /><br />
-                                    Pastikan SEMUA kolom TERISI dan format penulisan telah sesuai.
-                                    <br /><br />
-                                    Ketentuan Pengisian Template File Excel Surat Tugas Aplikasi Patroli Karhutla dapat diunduh{' '}
-                                    <Link href="/sipp-karhutla/file/Ketentuan Pengisian Template File Excel Surat Tugas Aplikasi Patroli Karhutla-update 9April22.pdf" className="text-blue-600 hover:text-blue-800 font-medium">
-                                        disini
-                                    </Link>
-                                </p>
-                            </div>
-                            <div className="bg-gray-100 p-4 rounded-lg">
-                                <p className="text-gray-700 text-sm leading-relaxed">
-                                    Untuk Penamaan Wilayah Patroli dapat dilihat pada{' '}
-                                    <Link href="/sipp-karhutla/wilayah" className="text-blue-600 hover:text-blue-800 font-medium">
-                                        Daftar Wilayah
-                                    </Link>
-                                    <br /><br />
-                                    Dan pastikan nama wilayah sama dengan nama yang ada pada daftar wilayah tersebut.
-                                </p>
-                            </div>
-                        </div>
-
                         <form className="space-y-6">
                             <div className="flex flex-col md:flex-row gap-4">
                                 <div className="flex-grow">
-                                    <label htmlFor="sk-number" className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label htmlFor="sk-number" className="block text-base font-medium text-black-700 mb-1">
                                         Nomor ST
                                     </label>
                                     <input
@@ -381,7 +462,7 @@ const BerkasPenugasan: React.FC<BerkasPenugasanProps> = () => {
                                         id="sk-number"
                                         name="skNumber"
                                         onChange={handleSkChange}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="w-full px-3 py-3 text-base border border-gray-300 rounded-md text-black-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         required
                                     />
                                 </div>
@@ -389,7 +470,7 @@ const BerkasPenugasan: React.FC<BerkasPenugasanProps> = () => {
                                     <button
                                         type="button"
                                         onClick={handleClickCheck}
-                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md transition-colors text-base"
                                     >
                                         Cek
                                     </button>
@@ -397,7 +478,7 @@ const BerkasPenugasan: React.FC<BerkasPenugasanProps> = () => {
                             </div>
 
                             <div>
-                                <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700 mb-1">
+                                <label htmlFor="file-upload" className="block text-base font-medium text-black-700 mb-1">
                                     Berkas Excel
                                 </label>
                                 <input
@@ -405,7 +486,7 @@ const BerkasPenugasan: React.FC<BerkasPenugasanProps> = () => {
                                     id="file-upload"
                                     name="file"
                                     onChange={handleFileChange}
-                                    className={`w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${!alertCheck && 'opacity-50 cursor-not-allowed'}`}
+                                    className={`w-full px-3 py-3 text-base border border-gray-300 rounded-md text-black-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${!alertCheck && 'opacity-50 cursor-not-allowed'}`}
                                     disabled={!alertCheck}
                                     required
                                 />
@@ -452,14 +533,14 @@ const BerkasPenugasan: React.FC<BerkasPenugasanProps> = () => {
                                 <button
                                     type="button"
                                     onClick={handleClick}
-                                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md flex items-center justify-center space-x-2 transition-colors"
+                                    className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md flex items-center justify-center space-x-2 transition-colors text-lg"
                                     disabled={loading}
                                 >
                                     {loading ? (
-                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                     ) : (
                                         <>
-                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                                             </svg>
                                             <span>Upload</span>
@@ -470,28 +551,23 @@ const BerkasPenugasan: React.FC<BerkasPenugasanProps> = () => {
                         </form>
                     </div>
                 </div>
-
-                <div className="bg-white rounded-xl shadow p-6">
-                    <div className="flex items-start gap-3">
-                        <svg className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <div>
-                            <h3 className="font-semibold text-gray-800 mb-2">Petunjuk Pengisian</h3>
-                            <p className="text-sm text-gray-600 leading-relaxed">
-                                Untuk mengunggah file penugasan, ikuti langkah-langkah berikut:
-                            </p>
-                            <ol className="mt-2 text-sm text-gray-600 space-y-1 list-decimal list-inside">
-                                <li>Masukkan nomor surat tugas dan klik <b>Cek</b> untuk validasi</li>
-                                <li>Pilih file Excel yang berisi data penugasan</li>
-                                <li>Pilih kategori penugasan (Mandiri/Rutin/Terpadu)</li>
-                                <li>Pilih provinsi dan kabupaten tempat penugasan</li>
-                                <li>Klik tombol <b>Upload</b> untuk mengunggah</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
             </div>
+
+            {/* Tambahkan CSS global untuk SweetAlert */}
+            <style jsx global>{`
+                .swal-large-text {
+                    font-size: 1.25rem !important;
+                }
+                .swal2-title {
+                    font-size: 1.75rem !important;
+                }
+                .swal2-content {
+                    font-size: 1.25rem !important;
+                }
+                .swal2-html-container {
+                    font-size: 1.25rem !important;
+                }
+            `}</style>
         </div>
     );
 };
