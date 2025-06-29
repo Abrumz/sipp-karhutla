@@ -215,6 +215,7 @@ const FrontPage: React.FC = () => {
                                     zoom={isMobileView ? 4.5 : 5.1}
                                     spots={spots}
                                     isLoggedin={isAuthenticated}
+                                    spotToFocus={null}
                                 />
 
                                 {loading && (
@@ -250,7 +251,7 @@ const FrontPage: React.FC = () => {
                                 <div className="p-4 hover:bg-blue-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
-                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--bs-primary)" }}>
+                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: 'var(--bg-mandiri)' }}>
                                                 <User className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
@@ -261,7 +262,7 @@ const FrontPage: React.FC = () => {
                                         {loading ? (
                                             <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-300 border-t-blue-600"></div>
                                         ) : (
-                                            <div className="text-3xl font-bold" style={{ color: "var(--bs-primary)" }}>
+                                            <div className="text-3xl font-bold" style={{ color: "var(--bg-mandiri)" }}>
                                                 {patrolCounter.mandiri}
                                             </div>
                                         )}
@@ -271,7 +272,7 @@ const FrontPage: React.FC = () => {
                                 <div className="p-4 hover:bg-pink-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
-                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--bs-warning)" }}>
+                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--bg-rutin)" }}>
                                                 <Truck className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
@@ -282,7 +283,7 @@ const FrontPage: React.FC = () => {
                                         {loading ? (
                                             <div className="animate-spin rounded-full h-6 w-6 border-2 border-pink-300 border-t-pink-600"></div>
                                         ) : (
-                                            <div className="text-3xl font-bold" style={{ color: "var(--bs-warning)" }}>
+                                            <div className="text-3xl font-bold" style={{ color: "var(--bg-rutin)" }}>
                                                 {patrolCounter.rutin}
                                             </div>
                                         )}
@@ -292,7 +293,7 @@ const FrontPage: React.FC = () => {
                                 <div className="p-4 hover:bg-green-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
-                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--bs-success)" }}>
+                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--bg-terpadu)" }}>
                                                 <Users className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
@@ -303,7 +304,7 @@ const FrontPage: React.FC = () => {
                                         {loading ? (
                                             <div className="animate-spin rounded-full h-6 w-6 border-2 border-green-300 border-t-green-600"></div>
                                         ) : (
-                                            <div className="text-3xl font-bold" style={{ color: "var(--bs-success)" }}>
+                                            <div className="text-3xl font-bold" style={{ color: "var(--bg-terpadu)" }}>
                                                 {patrolCounter.terpadu}
                                             </div>
                                         )}
@@ -313,7 +314,7 @@ const FrontPage: React.FC = () => {
                                 <div className="p-4 hover:bg-red-50 transition-colors duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
-                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--bs-danger)" }}>
+                                            <div className="h-10 w-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: "var(--bg-pemadaman)" }}>
                                                 <Flame className="h-5 w-5 text-white" />
                                             </div>
                                             <div>
@@ -324,7 +325,7 @@ const FrontPage: React.FC = () => {
                                         {loading ? (
                                             <div className="animate-spin rounded-full h-6 w-6 border-2 border-red-300 border-t-red-600"></div>
                                         ) : (
-                                            <div className="text-3xl font-bold" style={{ color: "var(--bs-danger)" }}>
+                                            <div className="text-3xl font-bold" style={{ color: "var(--bg-pemadaman)" }}>
                                                 {patrolCounter.padam}
                                             </div>
                                         )}
