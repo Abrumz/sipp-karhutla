@@ -202,6 +202,17 @@ const InfoWindowContent: React.FC<InfoWindowContentProps> = ({ patroli, isLogged
 
                     {patroli.regu_patroli?.daerah?.nama_daops && (
                         <InfoRow
+                            label="ID Laporan"
+                            value={
+                                <span className="block text-l leading-tight break-words">
+                                    {patroli.id_laporan_header}
+                                </span>
+                            }
+                        />
+                    )}
+
+                    {patroli.regu_patroli?.daerah?.nama_daops && (
+                        <InfoRow
                             label="Regu/Tim"
                             value={
                                 <span className="block text-l leading-tight break-words">
