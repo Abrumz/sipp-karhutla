@@ -38,6 +38,7 @@ export interface PatroliServiceResponse {
 	patroliMandiri: PatrolListData[]
 	patroliRutin: PatrolListData[]
 	pemadaman: PatrolListData[]
+	spotsOutsideIndonesia: PatrolData[]
 }
 
 export interface LoginInput {
