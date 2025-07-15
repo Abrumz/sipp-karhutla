@@ -12,6 +12,7 @@ import {
 interface TambahPenggunaProps { }
 
 const toTitleCase = (phrase: string): string => {
+    if (!phrase) return '';
     return phrase
         .toLowerCase()
         .split(' ')
@@ -48,24 +49,20 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
     const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
 
-    // Data untuk dropdown
     const [daopsList, setDaopsList] = useState<any[]>([]);
     const [provinceList, setProvinceList] = useState<any[]>([]);
     const [kabupatenList, setKabupatenList] = useState<any[]>([]);
     const [kecamatanList, setKecamatanList] = useState<any[]>([]);
 
-    // Selected values
     const [daops, setDaops] = useState<string>('');
     const [province, setProvince] = useState<string>('');
     const [kabupaten, setKabupaten] = useState<string>('');
     const [kecamatan, setKecamatan] = useState<string>('');
     const [startDate, setStartDate] = useState<Date>(new Date());
 
-    // Anggota
     const [stateAnggota, setStateAnggota] = useState<string>('');
     const [tblData, setTblData] = useState<{ name: string, action: string }[]>([]);
 
-    // Form values
     const [values, setValues] = useState({
         name: '',
         email: '',
@@ -83,12 +80,10 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
         successDialog: true
     });
 
-    // Alert
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertMessage, setAlertMessage] = useState<string>('');
     const [alertType, setAlertType] = useState<'success' | 'error'>('success');
 
-    // Dropdown search and state
     const [provinsiSearch, setProvinsiSearch] = useState<string>('');
     const [kabupatenSearch, setKabupatenSearch] = useState<string>('');
     const [kecamatanSearch, setKecamatanSearch] = useState<string>('');
@@ -107,7 +102,14 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                     getDaops()
                 ]);
 
-                setProvinceList(provinceData);
+                // SOLUSI: Hilangkan duplikat data provinsi
+                const uniqueProvincesMap = new Map();
+                provinceData.forEach((province: any) => {
+                    uniqueProvincesMap.set(province.kode_wilayah, province);
+                });
+                const uniqueProvinceList = Array.from(uniqueProvincesMap.values());
+
+                setProvinceList(uniqueProvinceList);
                 setDaopsList(daopsData);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -137,10 +139,24 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
 
     const handleProvinceChange = async (provinceId: string, provinceName: string) => {
         try {
-            const data = await getAllKabupaten(provinceId);
-            setValues({ ...values, provinsi: provinceId });
-            setKabupatenList(data);
+            const rawKabupatenData = await getAllKabupaten(provinceId);
+
+            // SOLUSI: Hilangkan duplikat data kabupaten
+            const uniqueKabupatenMap = new Map();
+            rawKabupatenData.forEach((kab: any) => {
+                uniqueKabupatenMap.set(kab.kode_wilayah, kab);
+            });
+            const uniqueKabupatenList = Array.from(uniqueKabupatenMap.values());
+
+            setKabupatenList(uniqueKabupatenList);
+
+            // Reset state berikutnya
+            setValues({ ...values, provinsi: provinceId, kabupaten: '', patroli: '' });
+            setKecamatanList([]);
             setProvince(provinceId);
+            setKabupaten('');
+            setKecamatan('');
+            setProvinsiSearch('');
             setShowProvinsiDropdown(false);
         } catch (error) {
             console.error("Error fetching kabupaten:", error);
@@ -152,10 +168,22 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
 
     const handleKabupatenChange = async (kabupatenId: string, kabupatenName: string) => {
         try {
-            const data = await getAllKecamatanGc(kabupatenId);
-            setValues({ ...values, kabupaten: kabupatenId });
-            setKecamatanList(data);
+            const rawKecamatanData = await getAllKecamatanGc(kabupatenId);
+
+            // SOLUSI: Hilangkan duplikat data kecamatan
+            const uniqueKecamatanMap = new Map();
+            rawKecamatanData.forEach((kec: any) => {
+                uniqueKecamatanMap.set(kec.kode_wilayah, kec);
+            });
+            const uniqueKecamatanList = Array.from(uniqueKecamatanMap.values());
+
+            setKecamatanList(uniqueKecamatanList);
+
+            // Reset state berikutnya
+            setValues({ ...values, kabupaten: kabupatenId, patroli: '' });
             setKabupaten(kabupatenId);
+            setKecamatan('');
+            setKabupatenSearch('');
             setShowKabupatenDropdown(false);
         } catch (error) {
             console.error("Error fetching kecamatan:", error);
@@ -168,12 +196,14 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
     const handleKecamatanChange = (kecamatanId: string, kecamatanName: string) => {
         setValues({ ...values, patroli: kecamatanId });
         setKecamatan(kecamatanId);
+        setKecamatanSearch('');
         setShowKecamatanDropdown(false);
     };
 
     const handleDaopsChange = (daopsName: string) => {
         setValues({ ...values, daops: daopsName });
         setDaops(daopsName);
+        setDaopsSearch('');
         setShowDaopsDropdown(false);
     };
 
@@ -294,7 +324,6 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
 
     const closeAlert = () => setShowAlert(false);
 
-    // Filter arrays for search
     const filteredProvinsi = provinceList.filter(item =>
         item.nama_wilayah.toLowerCase().includes(provinsiSearch.toLowerCase())
     );
@@ -311,7 +340,6 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
         item.nama_daops.toLowerCase().includes(daopsSearch.toLowerCase())
     );
 
-    // Get selected item names for display
     const getSelectedProvinsiName = () => {
         const found = provinceList.find(item => item.kode_wilayah === province);
         return found ? toTitleCase(found.nama_wilayah) : "Pilih Provinsi";
@@ -329,7 +357,6 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
 
     return (
         <div className="bg-gray-50 min-h-full p-6">
-            {/* Alert */}
             {showAlert && (
                 <div className={`fixed top-4 right-4 z-50 p-4 rounded-md flex justify-between items-center shadow-lg ${alertType === 'success'
                     ? 'bg-green-50 text-green-800 border-l-4 border-green-500'
@@ -345,7 +372,6 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                 </div>
             )}
 
-            {/* Header Banner */}
             <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-3xl font-bold mb-2">Tambah Pengguna Ground Check</h1>
@@ -469,7 +495,6 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                         </div>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {/* Provinsi Dropdown */}
                             <div>
                                 <label className="block text-sm font-medium text-black-700 mb-2">
                                     Provinsi <span className="text-red-500">*</span>
@@ -489,7 +514,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                     </div>
 
                                     {showProvinsiDropdown && (
-                                        <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md overflow-auto border border-gray-200">
+                                        <div className="absolute z-20 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md overflow-auto border border-gray-200">
                                             <div className="sticky top-0 bg-white p-2 border-b border-gray-200">
                                                 <div className="relative">
                                                     <input
@@ -517,7 +542,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                     ))
                                                 ) : (
                                                     <li className="px-4 py-2 text-sm text-black-500 text-center">
-                                                        {provinsiSearch ? 'Tidak ada data yang sesuai dengan pencarian' : 'Tidak ada data provinsi'}
+                                                        {provinsiSearch ? 'Tidak ada data yang sesuai' : 'Tidak ada data provinsi'}
                                                     </li>
                                                 )}
                                             </ul>
@@ -526,7 +551,6 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                 </div>
                             </div>
 
-                            {/* Kabupaten Dropdown */}
                             <div>
                                 <label className="block text-sm font-medium text-black-700 mb-2">
                                     Kabupaten <span className="text-red-500">*</span>
@@ -546,7 +570,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                     </div>
 
                                     {showKabupatenDropdown && province && (
-                                        <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md overflow-auto border border-gray-200">
+                                        <div className="absolute z-20 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md overflow-auto border border-gray-200">
                                             <div className="sticky top-0 bg-white p-2 border-b border-gray-200">
                                                 <div className="relative">
                                                     <input
@@ -574,7 +598,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                     ))
                                                 ) : (
                                                     <li className="px-4 py-2 text-sm text-black-500 text-center">
-                                                        {kabupatenSearch ? 'Tidak ada data yang sesuai dengan pencarian' : 'Tidak ada data kabupaten'}
+                                                        {kabupatenSearch ? 'Tidak ada data yang sesuai' : 'Tidak ada data kabupaten'}
                                                     </li>
                                                 )}
                                             </ul>
@@ -585,7 +609,6 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                         </div>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {/* Daops Dropdown */}
                             <div>
                                 <label className="block text-sm font-medium text-black-700 mb-2">
                                     Daops <span className="text-red-500">*</span>
@@ -633,7 +656,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                     ))
                                                 ) : (
                                                     <li className="px-4 py-2 text-sm text-black-500 text-center">
-                                                        {daopsSearch ? 'Tidak ada data yang sesuai dengan pencarian' : 'Tidak ada data daops'}
+                                                        {daopsSearch ? 'Tidak ada data yang sesuai' : 'Tidak ada data daops'}
                                                     </li>
                                                 )}
                                             </ul>
@@ -642,7 +665,6 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                 </div>
                             </div>
 
-                            {/* Daerah Patroli Dropdown */}
                             <div>
                                 <label className="block text-sm font-medium text-black-700 mb-2">
                                     Daerah Patroli <span className="text-red-500">*</span>
@@ -690,7 +712,7 @@ const TambahPengguna: React.FC<TambahPenggunaProps> = () => {
                                                     ))
                                                 ) : (
                                                     <li className="px-4 py-2 text-sm text-black-500 text-center">
-                                                        {kecamatanSearch ? 'Tidak ada data yang sesuai dengan pencarian' : 'Tidak ada data daerah patroli'}
+                                                        {kecamatanSearch ? 'Tidak ada data yang sesuai' : 'Tidak ada data daerah patroli'}
                                                     </li>
                                                 )}
                                             </ul>
