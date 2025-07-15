@@ -57,8 +57,7 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
     }, [])
 
     const generateVisualCaptcha = () => {
-        // Generate random string
-        const chars = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789'; // Exclude confusing chars like O, 0, I, l
+        const chars = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
         const captchaLength = 5;
         let captchaText = '';
 
@@ -72,7 +71,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
         })
         setUserAnswer('')
 
-        // Draw captcha on canvas
         setTimeout(() => {
             drawCaptcha(captchaText)
         }, 100)
@@ -85,21 +83,17 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
         const ctx = canvas.getContext('2d')
         if (!ctx) return
 
-        // Set canvas size
         canvas.width = 200
         canvas.height = 60
 
-        // Clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-        // Background with subtle gradient
         const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
         gradient.addColorStop(0, '#f8f9fa')
         gradient.addColorStop(1, '#e9ecef')
         ctx.fillStyle = gradient
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-        // Add random noise dots
         for (let i = 0; i < 50; i++) {
             ctx.fillStyle = `rgba(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100}, 0.3)`
             ctx.beginPath()
@@ -113,7 +107,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
             ctx.fill()
         }
 
-        // Add random lines for noise
         for (let i = 0; i < 5; i++) {
             ctx.strokeStyle = `rgba(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100}, 0.3)`
             ctx.lineWidth = Math.random() * 2 + 1
@@ -123,25 +116,22 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
             ctx.stroke()
         }
 
-        // Draw text with distortion
         const colors = ['#8B4513', '#4B0082', '#2F4F4F', '#800000', '#2E8B57']
         for (let i = 0; i < text.length; i++) {
             const char = text[i]
-            const x = 25 + i * 28 + (Math.random() * 10 - 5) // Add random offset
-            const y = 35 + (Math.random() * 8 - 4) // Add random vertical offset
-            const rotation = (Math.random() * 0.5 - 0.25) // Random rotation
+            const x = 25 + i * 28 + (Math.random() * 10 - 5)
+            const y = 35 + (Math.random() * 8 - 4)
+            const rotation = (Math.random() * 0.5 - 0.25)
 
             ctx.save()
             ctx.translate(x, y)
             ctx.rotate(rotation)
 
-            // Random color for each character
             ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)]
             ctx.font = 'bold 24px serif'
             ctx.textAlign = 'center'
             ctx.fillText(char, 0, 0)
 
-            // Add shadow effect
             ctx.shadowColor = 'rgba(0,0,0,0.3)'
             ctx.shadowOffsetX = 1
             ctx.shadowOffsetY = 1
@@ -150,7 +140,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
             ctx.restore()
         }
 
-        // Add more distortion with small random rectangles
         for (let i = 0; i < 20; i++) {
             ctx.fillStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.1)`
             ctx.fillRect(
@@ -189,7 +178,7 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
     }
 
     const onVisualCaptchaChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const userInput = e.target.value.toUpperCase(); // Convert to uppercase for comparison
+        const userInput = e.target.value.toUpperCase();
         setUserAnswer(userInput);
         setValues({
             ...values,
@@ -244,7 +233,7 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
         Swal.fire({
             icon: 'error',
             title: 'Login Gagal',
-            text: message,
+            text: 'Email atau Password salah. Silakan coba lagi.',
             timer: 1500,
             showConfirmButton: false,
             timerProgressBar: true,
@@ -352,7 +341,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                     <h2 className="text-xl sm:text-2xl font-bold text-black-800 mb-1">Login ke SIPP Karhutla</h2>
                 </div>
                 <div className="space-y-5 sm:space-y-6">
-                    {/* Email Field */}
                     <div className="space-y-1 sm:space-y-2">
                         <label htmlFor="email" className="block text-black-700 text-l font-semibold mb-1">
                             Email
@@ -396,7 +384,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                         )}
                     </div>
 
-                    {/* Password Field */}
                     <div className="space-y-1 sm:space-y-2">
                         <label htmlFor="password" className="block text-black-700 text-l font-semibold mb-1">
                             Password
@@ -447,7 +434,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                         )}
                     </div>
 
-                    {/* Visual CAPTCHA */}
                     <div className="space-y-1 sm:space-y-2">
                         <label className="block text-black-700 text-l font-semibold mb-1">
                             Kode Verifikasi
@@ -514,7 +500,6 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
                     </div>
                 </div>
 
-                {/* Submit Button */}
                 <div className="mt-6 sm:mt-8 space-y-4">
                     <div className="w-full">
                         {loading ? (
