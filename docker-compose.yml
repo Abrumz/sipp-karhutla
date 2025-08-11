@@ -1,0 +1,6 @@
+version: '3.8'
+services:
+  web:
+    build: . # Docker Compose akan mencari Dockerfile di direktori saat ini
+    ports:
+      - "80:3000" # Mapping port server host (port 80) ke port aplikasi di container (port 3000)
