@@ -248,7 +248,7 @@ const Wilayah: React.FC = () => {
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-4xl font-bold mb-2">Data Wilayah</h1>
                     <p className="text-xl opacity-90">
-                        Kelola data wilayah berdasarkan kode wilayah, nama, dan tipe
+                        Kelola data wilayah berdasarkan kode, nama, dan tipe wilayah.
                     </p>
                 </div>
             </div>
@@ -257,20 +257,22 @@ const Wilayah: React.FC = () => {
                 {/* Informasi yang dipindahkan ke atas */}
                 <div className="bg-white rounded-xl shadow p-6 mb-6">
                     <div className="flex items-start gap-3">
-                        <Info className="w-6 h-6 text-blue-500 flex-shrink-0 mt-1" />
+                        <svg className="w-6 h-6 text-blue-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         <div>
                             <h3 className="font-semibold text-black-800 text-xl mb-3">Informasi Penggunaan</h3>
                             <p className="text-base text-black-700 leading-relaxed">
                                 Halaman ini menampilkan seluruh data wilayah yang terdaftar dalam sistem. Anda dapat mencari wilayah spesifik menggunakan kolom pencarian.
                                 Data wilayah mencakup kode wilayah, nama, dan tipe wilayah.
+                                Untuk mengedit data wilayah, klik ikon <span className="inline-flex items-center"><svg className="h-4 w-4 mx-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg> Ubah</span>,
+                                dan untuk menghapus data, klik ikon <span className="inline-flex items-center"><svg className="h-4 w-4 mx-1 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Hapus</span>.
                             </p>
                             <p className="text-base text-black-700 mt-2 leading-relaxed">
-                                Penggunaan informasi wilayah sangat penting untuk:
+                                Petunjuk penggunaan:
                             </p>
                             <ul className="mt-2 text-base text-black-700 space-y-1 list-disc list-inside">
-                                <li>Definisi wilayah kerja untuk penanggulangan kebakaran hutan dan lahan</li>
-                                <li>Pemetaan area rawan kebakaran berdasarkan wilayah administratif</li>
-                                <li>Informasi lengkap wilayah kerja berdasarkan tingkat administratif</li>
+                                <li>Gunakan kolom pencarian untuk mencari wilayah tertentu</li>
+                                <li>Klik tombol "Tambah Wilayah" untuk menambahkan data baru</li>
+                                <li>Gunakan ikon edit untuk mengubah data dan ikon hapus untuk menghapus data</li>
                             </ul>
                         </div>
                     </div>

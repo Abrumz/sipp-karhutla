@@ -348,7 +348,7 @@ const Balai: React.FC = () => {
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-4xl font-bold mb-2">Data Balai</h1>
                     <p className="text-xl opacity-90">
-                        Kelola data balai pengendalian kebakaran hutan dan lahan
+                        Kelola data balai pengendalian kebakaran hutan
                     </p>
                 </div>
             </div>
@@ -362,6 +362,8 @@ const Balai: React.FC = () => {
                             <p className="text-base text-black-700 leading-relaxed">
                                 Halaman ini menampilkan seluruh data balai yang terdaftar dalam sistem.
                                 Anda dapat mencari balai spesifik menggunakan kolom pencarian.
+                                Untuk mengedit data balai, klik ikon <span className="inline-flex items-center"><svg className="h-4 w-4 mx-1 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg> Ubah</span>,
+                                dan untuk menghapus data, klik ikon <span className="inline-flex items-center"><svg className="h-4 w-4 mx-1 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Hapus</span>.
                             </p>
                             <p className="text-base text-black-700 mt-2 leading-relaxed">
                                 Petunjuk penggunaan:

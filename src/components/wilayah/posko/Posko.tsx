@@ -172,14 +172,16 @@ const Posko: React.FC = () => {
                             <p className="text-base text-black-700 leading-relaxed">
                                 Halaman ini menampilkan seluruh data posko yang terdaftar dalam sistem. Anda dapat mencari posko spesifik menggunakan kolom pencarian.
                                 Data posko mencakup nama posko, daops yang bertanggung jawab, dan kecamatan tempat posko berada.
+                                Untuk mengedit data posko, klik ikon <span className="inline-flex items-center"><svg className="h-4 w-4 mx-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg> Ubah</span>,
+                                dan untuk menghapus data, klik ikon <span className="inline-flex items-center"><svg className="h-4 w-4 mx-1 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Hapus</span>.
                             </p>
                             <p className="text-base text-black-700 mt-2 leading-relaxed">
-                                Fungsi posko penting dalam pengendalian kebakaran:
+                                Petunjuk penggunaan:
                             </p>
                             <ul className="mt-2 text-base text-black-700 space-y-1 list-disc list-inside">
-                                <li>Posko adalah pusat komando dan koordinasi untuk pengendalian kebakaran</li>
-                                <li>Pilih kecamatan sesuai dengan area operasional posko</li>
-                                <li>Tentukan daops yang bertanggung jawab terhadap posko</li>
+                                <li>Gunakan kolom pencarian untuk mencari posko tertentu</li>
+                                <li>Klik tombol "Tambah Posko" untuk menambahkan data baru</li>
+                                <li>Gunakan ikon edit untuk mengubah data dan ikon hapus untuk menghapus data</li>
                             </ul>
                         </div>
                     </div>
