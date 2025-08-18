@@ -618,7 +618,7 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-3xl font-bold mb-2">Manajemen Hak Akses</h1>
                     <p className="text-lg opacity-90">
-                        Kelola hak akses pengguna berdasarkan kategori dan tingkat otoritas dalam sistem
+                        Kelola hak akses pengguna berdasarkan kategori dan peran dalam sistem.
                     </p>
                 </div>
             </div>
@@ -725,7 +725,7 @@ const HakAkses: React.FC<HakAksesProps> = () => {
                                                             onClick={() => {
                                                                 Swal.fire({
                                                                     title: 'Konfirmasi',
-                                                                    text: 'Yakin hapus data ini?',
+                                                                    text: 'Yakin akan menghapus data ini? ',
                                                                     icon: 'warning',
                                                                     showCancelButton: true,
                                                                     confirmButtonColor: '#3085d6',

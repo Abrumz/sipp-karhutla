@@ -162,6 +162,14 @@ const Tambah: React.FC<TambahProps> = () => {
         <div className="bg-gray-50 min-h-full p-6">
             <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-7xl mx-auto text-center">
+                    <div className="flex justify-start mb-4">
+                        <button
+                            onClick={() => router.back()}
+                            className="inline-flex items-center px-3 py-1 rounded-md bg-green-600 text-sm font-medium text-white hover:bg-green-700 transition duration-150 ease-in-out"
+                        >
+                            <span className="mr-1">&#8592;</span> Kembali
+                        </button>
+                    </div>
                     <h1 className="text-3xl font-bold mb-2">Tambah Pengguna</h1>
                     <p className="text-lg opacity-90">
                         Daftarkan pengguna baru dan atur hak akses sesuai dengan peran dan tanggung jawab

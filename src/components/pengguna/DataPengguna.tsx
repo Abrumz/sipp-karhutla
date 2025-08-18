@@ -218,7 +218,7 @@ const DataPengguna: React.FC<DataPenggunaProps> = ({ alertQuery }) => {
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-3xl font-bold mb-2">Manajemen Data Pengguna</h1>
                     <p className="text-lg opacity-90">
-                        Kelola data pengguna sistem dan atur hak akses sesuai dengan peran dan tanggung jawab
+                        Kelola data pengguna sistem dan atur hak akses sesuai dengan peran
                     </p>
                 </div>
             </div>
@@ -335,7 +335,7 @@ const DataPengguna: React.FC<DataPenggunaProps> = ({ alertQuery }) => {
                                                             onClick={() => {
                                                                 Swal.fire({
                                                                     title: 'Konfirmasi',
-                                                                    text: 'Yakin hapus data ini?',
+                                                                    text: 'Yakin akan menghapus data ini? ',
                                                                     icon: 'warning',
                                                                     showCancelButton: true,
                                                                     confirmButtonColor: '#10b981',
@@ -353,7 +353,7 @@ const DataPengguna: React.FC<DataPenggunaProps> = ({ alertQuery }) => {
                                                                         if (response && response.success) {
                                                                             Swal.fire({
                                                                                 title: 'Berhasil!',
-                                                                                text: 'Data berhasil di hapus',
+                                                                                text: 'Data berhasil dihapus',
                                                                                 icon: 'success',
                                                                                 confirmButtonColor: '#10b981',
                                                                                 confirmButtonText: 'OK',
