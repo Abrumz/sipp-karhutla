@@ -46,7 +46,7 @@ const FAQ: React.FC = () => {
                             Pertanyaan yang sering diajukan
                         </h1>
                         <p className="text-blue-100 text-lg max-w-2xl">
-                            Panduan untuk mengatasi masalah umum pada Sistem Informasi Patroli Pencegahan Kebakaran Hutan dan Lahan
+                            Panduan untuk mengatasi masalah umum pada SIPP Karhutla.
                         </p>
                     </div>
                 </div>
@@ -149,8 +149,8 @@ const FAQ: React.FC = () => {
                                             <HelpCircle className="h-7 w-7 text-white" />
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-semibold text-black-800">Ada Pertanyaan Lain?</h3>
-                                            <p className="text-black-600 mt-1">Tim kami siap membantu Anda menyelesaikan masalah</p>
+                                            <h3 className="text-xl font-semibold text-black-800">Memiliki Pertanyaan Lain?</h3>
+                                            <p className="text-black-600 mt-1"> Tim kami siap membantu Anda menyelesaikan masalah dalam penggunaan SIPP Karhutla</p>
                                         </div>
                                     </div>
 
@@ -163,13 +163,13 @@ const FAQ: React.FC = () => {
                                             Email Kami
                                         </a>
 
-                                        <a
+                                        {/* <a
                                             href="#"
                                             className="bg-white border-2 border-blue-600 text-blue-600 py-3 px-6 rounded-lg shadow-l hover:bg-blue-50 transition-all duration-200 flex items-center"
                                         >
                                             <Info className="h-5 w-5 mr-2" />
                                             Bantuan
-                                        </a>
+                                        </a> */}
                                     </div>
                                 </div>
                             </div>
