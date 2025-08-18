@@ -7,7 +7,7 @@ import SiteLayout from '@/components/layout/siteLayout/SiteLayout';
 // import MapPatroliContainer from '@/components/maps/MapPatroli';
 import useAuth from '@/context/auth';
 import { getPatroli } from '@/services';
-import { Calendar, User, Truck, Users, Flame, ChevronDown, Map, Menu, ChevronUp } from 'lucide-react';
+import { Calendar, User, Truck, Users, Flame, ChevronDown, Map, Menu, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 const MapWithNoSSR = dynamic(() => import('@/components/maps/MapPatroli'), {
@@ -51,6 +51,8 @@ const FrontPage: React.FC = () => {
     const [isMobileView, setIsMobileView] = useState<boolean>(false);
     const [isMobileStatsExpanded, setIsMobileStatsExpanded] = useState<boolean>(true);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
+    // Tambahkan state untuk view kalender
+    const [calendarView, setCalendarView] = useState<moment.Moment>(moment());
 
     const totalPatrols = useMemo(() => {
         return patrolCounter.mandiri + patrolCounter.rutin + patrolCounter.terpadu + patrolCounter.padam;
@@ -93,6 +95,11 @@ const FrontPage: React.FC = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    useEffect(() => {
+        // Sinkronkan calendarView dengan date saat date berubah
+        setCalendarView(date.clone());
+    }, [date]);
+
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newDate = e.target.value ? moment(e.target.value) : moment();
         setDate(newDate);
@@ -119,6 +126,129 @@ const FrontPage: React.FC = () => {
         setDate(moment());
     };
 
+    const handleCalendarPrevMonth = () => {
+        setCalendarView(calendarView.clone().subtract(1, 'month'));
+    };
+
+    const handleCalendarNextMonth = () => {
+        setCalendarView(calendarView.clone().add(1, 'month'));
+    };
+
+    const handleCalendarDateClick = (day: moment.Moment) => {
+        setDate(day.clone());
+        setIsDatePickerOpen(false);
+    };
+
+    // --- Tambahkan/ubah renderCalendar agar ada dropdown bulan & tahun ---
+    const renderCalendar = () => {
+        const startOfMonth = calendarView.clone().startOf('month');
+        const endOfMonth = calendarView.clone().endOf('month');
+        const startDate = startOfMonth.clone().startOf('week');
+        const endDate = endOfMonth.clone().endOf('week');
+        const today = moment();
+
+        const calendarDays = [];
+        let day = startDate.clone();
+
+        while (day.isBefore(endDate, 'day')) {
+            calendarDays.push(day.clone());
+            day.add(1, 'day');
+        }
+
+        const weeks = [];
+        for (let i = 0; i < calendarDays.length; i += 7) {
+            weeks.push(calendarDays.slice(i, i + 7));
+        }
+
+        // Dropdown bulan dan tahun
+        const months = moment.months();
+        const currentYear = moment().year();
+        const years = [];
+        for (let y = currentYear - 10; y <= currentYear + 10; y++) {
+            years.push(y);
+        }
+
+        return (
+            <div className="bg-white rounded-lg shadow-xl p-2 z-50 w-72">
+                <div className="flex items-center justify-between mb-2">
+                    <button onClick={handleCalendarPrevMonth} className="p-1 rounded hover:bg-gray-100">
+                        <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <div className="flex items-center space-x-1">
+                        <select
+                            className="text-sm font-semibold bg-transparent outline-none"
+                            value={calendarView.month()}
+                            onChange={e => setCalendarView(calendarView.clone().month(Number(e.target.value)))}
+                        >
+                            {months.map((m, idx) => (
+                                <option key={m} value={idx}>{m}</option>
+                            ))}
+                        </select>
+                        <select
+                            className="text-sm font-semibold bg-transparent outline-none"
+                            value={calendarView.year()}
+                            onChange={e => setCalendarView(calendarView.clone().year(Number(e.target.value)))}
+                        >
+                            {years.map(y => (
+                                <option key={y} value={y}>{y}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <button onClick={handleCalendarNextMonth} className="p-1 rounded hover:bg-gray-100">
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                </div>
+                <div className="grid grid-cols-7 text-xs text-center mb-1">
+                    {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
+                        <div key={d} className="font-semibold text-gray-500">{d}</div>
+                    ))}
+                </div>
+                <div className="grid grid-cols-7 text-sm">
+                    {weeks.map((week, wi) =>
+                        week.map((d, di) => {
+                            const isCurrentMonth = d.month() === calendarView.month();
+                            const isSelected = d.isSame(date, 'day');
+                            const isToday = d.isSame(today, 'day');
+                            return (
+                                <button
+                                    key={wi + '-' + di}
+                                    onClick={() => isCurrentMonth && handleCalendarDateClick(d)}
+                                    className={`
+                                        p-1 m-0.5 rounded-full
+                                        ${isCurrentMonth ? '' : 'text-gray-300'}
+                                        ${isSelected ? 'bg-blue-600 text-white font-bold' : ''}
+                                        ${isToday && !isSelected ? 'border border-blue-400' : ''}
+                                        hover:bg-blue-100
+                                    `}
+                                    disabled={!isCurrentMonth}
+                                >
+                                    {d.date()}
+                                </button>
+                            );
+                        })
+                    )}
+                </div>
+                <div className="flex justify-between mt-2">
+                    <button
+                        onClick={() => setIsDatePickerOpen(false)}
+                        className="text-blue-600 text-xs hover:underline"
+                    >
+                        Tutup
+                    </button>
+                    <button
+                        onClick={() => {
+                            setDate(moment());
+                            setIsDatePickerOpen(false);
+                        }}
+                        className="text-blue-600 text-xs hover:underline"
+                    >
+                        Hari Ini
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <SiteLayout>
             <div className="bg-gray-50">
@@ -130,11 +260,11 @@ const FrontPage: React.FC = () => {
                         <div className="flex items-center mb-2">
                             <Map className="text-white w-8 h-8 mr-3" />
                             <h1 className="text-3xl font-bold">
-                                Sebaran Data Patroli & Pemadaman
+                                Sebaran Data Patroli & Pemadaman Karhutla
                             </h1>
                         </div>
                         <p className="text-blue-100 text-l max-w-2xl">
-                            Platform visualisasi data monitoring patroli dan pemadaman kebakaran hutan dan lahan
+                            Platform visualisasi dan analisis data patroli dan pemadaman kebakaran hutan dan lahan (karhutla)
                         </p>
                     </div>
                 </div>
@@ -152,6 +282,7 @@ const FrontPage: React.FC = () => {
                                 </svg>
                             </button>
 
+                            {/* Kalender popover, hanya satu kontrol */}
                             <div className="relative">
                                 <button
                                     onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
@@ -162,13 +293,8 @@ const FrontPage: React.FC = () => {
                                 </button>
 
                                 {isDatePickerOpen && (
-                                    <div className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-xl p-2 z-50">
-                                        <input
-                                            type="date"
-                                            value={date.format('YYYY-MM-DD')}
-                                            onChange={handleDateChange}
-                                            className="p-2 border rounded"
-                                        />
+                                    <div className="absolute top-full left-0 mt-1 z-50">
+                                        {renderCalendar()}
                                     </div>
                                 )}
                             </div>
@@ -244,7 +370,7 @@ const FrontPage: React.FC = () => {
                         `}>
                             <div className="p-4 text-white bg-gradient-primary">
                                 <h2 className="text-xl font-bold">Statistik Data</h2>
-                                <p className="text-blue-100 text-l">Aktivitas {formattedDate}</p>
+                                <p className="text-blue-100 text-l">Statistik Data {formattedDate}</p>
                             </div>
 
                             <div className="grid grid-cols-1 divide-y">
@@ -256,7 +382,7 @@ const FrontPage: React.FC = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-medium text-black-800">Patroli Mandiri</h3>
-                                                <p className="text-l text-gray-700">Dilakukan oleh individu petugas</p>
+                                                <p className="text-l text-gray-700">Patroli mandiri oleh anggota Manggala Agni (MA)</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -277,7 +403,7 @@ const FrontPage: React.FC = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-medium text-black-800">Patroli Rutin</h3>
-                                                <p className="text-l text-gray-700">Patroli terjadwal rutin</p>
+                                                <p className="text-l text-gray-700">Patroli yang ditugaskan kepada MA dalam seminggu </p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -298,7 +424,7 @@ const FrontPage: React.FC = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-medium text-black-800">Patroli Terpadu</h3>
-                                                <p className="text-l text-gray-700">Kolaborasi antar instansi</p>
+                                                <p className="text-l text-gray-700">Patroli yang dilakukan bersama dengan TNI, POLRI, dan Masyarakat Peduli Api</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -339,8 +465,7 @@ const FrontPage: React.FC = () => {
                         <div className="bg-white rounded-xl shadow-md p-4">
                             <h3 className="text-lg font-semibold text-black-800 mb-2">Tentang Data</h3>
                             <p className="text-black-600 text-l">
-                                Data patroli dan pemadaman kebakaran hutan dan lahan bersumber dari laporan petugas di lapangan.
-                                Visualisasi ini membantu memahami distribusi aktivitas pencegahan dan penanganan karhutla di seluruh Indonesia.
+                                Data patroli dan pemadaman karhutla bersumber dari laporan petugas di lapangan. Visualisasi ini menyajikan distribusi aktivitas pencegahan dan penanganan karhutla di seluruh Indonesia.
                             </p>
                         </div>
                     </div>
