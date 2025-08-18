@@ -52,8 +52,8 @@ const PROTECTED_ROUTES: Record<string, number[]> = {
 	'/hotspot': [0, 1, 2, 3, 4, 5, 6, 7],
 	'/patroli': [0, 1, 2, 3, 4, 5, 6, 7],
 	'/pelaporan': [0, 1, 2, 3, 4, 5, 6, 7],
-	'/pelaporan/laporan-ringkasan': [0, 1, 2, 3, 4, 5, 6, 7],
-	'/pelaporan/rentang-tanggal': [0, 1, 2, 3, 4, 5, 6, 7],
+	'/pelaporan/rekapitulasi-patroli': [0, 1, 2, 3, 4, 5, 6, 7],
+	'/pelaporan/kegiatan-patroli': [0, 1, 2, 3, 4, 5, 6, 7],
 	'/pelaporan/surat-tugas': [0, 1, 2, 3, 4, 5, 6, 7],
 	'/profile': [0, 1, 2, 3, 4, 5, 6, 7]
 };
