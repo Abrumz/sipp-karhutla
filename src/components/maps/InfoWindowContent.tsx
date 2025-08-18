@@ -10,22 +10,22 @@ interface InfoWindowContentProps {
 
 const kategoriColors = {
     "Mandiri": {
-        background: "var(--bs-primary)",
+        background: "var(--bg-mandiri)",
         textColor: "white",
         light: "#cfe2ff"
     },
     "Rutin": {
-        background: "var(--bs-warning)",
+        background: "var(--bg-rutin)",
         textColor: "black",
         light: "#fff3cd"
     },
     "Terpadu": {
-        background: "var(--bs-success)",
+        background: "var(--bg-terpadu)",
         textColor: "white",
         light: "#d1e7dd"
     },
     "Pemadaman": {
-        background: "var(--bs-danger)",
+        background: "var(--bg-pemadaman)",
         textColor: "white",
         light: "#f8d7da"
     }
@@ -84,7 +84,7 @@ const InfoWindowContent: React.FC<InfoWindowContentProps> = ({ patroli, isLogged
                                 <circle cx="12" cy="10" r="3"></circle>
                             </svg>
                             <span className="text-l leading-tight break-words">
-                                Lat: {latitude} | Lng: {longitude}
+                                Lat: {latitude} | long: {longitude}
                             </span>
                         </div>
                     </div>
@@ -99,7 +99,7 @@ const InfoWindowContent: React.FC<InfoWindowContentProps> = ({ patroli, isLogged
                                     className="inline-block px-1.5 py-0.5 rounded text-l font-semibold"
                                     style={{
                                         background: kategoriColor.light,
-                                        color: kategoriColor.background
+                                        color: 'black'
                                     }}
                                 >
                                     {kategoriPatroli}
@@ -177,7 +177,7 @@ const InfoWindowContent: React.FC<InfoWindowContentProps> = ({ patroli, isLogged
                             <circle cx="12" cy="10" r="3"></circle>
                         </svg>
                         <span className="text-l leading-tight break-words">
-                            Lat: {latitude} | Lng: {longitude}
+                            Lat: {latitude} | long: {longitude}
                         </span>
                     </div>
                 </div>
@@ -192,7 +192,7 @@ const InfoWindowContent: React.FC<InfoWindowContentProps> = ({ patroli, isLogged
                                 className="inline-block px-1.5 py-0.5 rounded text-l font-semibold"
                                 style={{
                                     background: kategoriColor.light,
-                                    color: kategoriColor.background
+                                    color: 'black'
                                 }}
                             >
                                 {kategoriPatroli}
