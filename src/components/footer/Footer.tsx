@@ -73,7 +73,7 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
                 <div className="flex flex-col items-center">
                     {/* Heading */}
                     <div className="text-center mb-6">
-                        <h3 className={`text-lg font-semibold ${whiteFont ? 'text-white' : 'text-black-800'}`}>Kerjasama dengan</h3>
+                        <h3 className={`text-lg font-semibold ${whiteFont ? 'text-white' : 'text-black-800'}`}>Kerjasama</h3>
                         <div className="h-0.5 w-20 mx-auto mt-2 bg-blue-500"></div>
                     </div>
 
@@ -170,22 +170,21 @@ const Footer: React.FC<FooterProps> = ({ whiteFont = false }) => {
 
                         <div className={`mt-3 text-l ${whiteFont ? 'text-blue-100' : 'text-black-600'}`}>
                             <p className="text-center md:text-justify">
-                                Sistem ini dikembangkan pada tahun 2022 oleh Departemen Ilmu Komputer FMIPA
-                                IPB, bekerja sama dengan Balai Pengendalian
-                                Perubahan Iklim dan Kebakaran Hutan dan Lahan
-                                (PPIKHL) Wilayah Sumatra, Direktorat Jenderal
-                                Pengendalian Perubahan Iklim, Kementerian Lingkungan
-                                Hidup dan Kehutanan, didanai oleh Lembaga Pengelola
-                                Dana Pendidikan, Kementerian Keuangan Republik
-                                Indonesia
+                                Sistem ini dikembangkan sejak tahun 2020 oleh Departemen Ilmu Komputer FMIPA IPB (saat ini menjadi Sekolah Sains Data, Matematika, dan Informatika (SSMI) IPB), bekerja sama dengan Balai Pengendalian Perubahan Iklim dan Kebakaran Hutan dan Lahan (PPIKHL) Wilayah Sumatra dan Kalimatan, dan Direktorat Pengendalian Kebakaran Hutan dan Lahan, Kementerian Lingkungan Hidup dan Kehutanan (saat ini menjadi Kementerian Kehutanan), didanai oleh Lembaga Pengelola Dana Pendidikan (LPDP), Kementerian Keuangan Republik Indonesia dan International Tropical Timber Organization (ITTO).
+
                             </p>
                         </div>
                     </details>
 
                     <div className={`mt-6 pt-4 border-t ${whiteFont ? 'border-white/10' : 'border-gray-200'} w-full`}>
-                        <div className="flex flex-col sm:flex-row justify-between items-center">
+                        <div className="flex flex-col items-center">
                             <p className={`text-l ${whiteFont ? 'text-white/80' : 'text-black-600'}`}>
                                 © {new Date().getFullYear()} SIPP Karhutla
+                            </p>
+                            <p className={`text-l mt-1 ${whiteFont ? 'text-blue-100' : 'text-black-600'} text-center`}>
+                                Sekolah Sains Data, Matematika dan Informatika (SSMI) IPB<br />
+                                Jl. Meranti Wing 20 Level V, Bogor, Indonesia 16680<br />
+                                E-mail: <a href="mailto:karhutla.ipb@apps.ipb.ac.id" className={`${whiteFont ? 'text-blue-200 hover:text-white' : 'text-blue-700 hover:text-blue-900'} underline transition-colors`}>karhutla.ipb@apps.ipb.ac.id</a>
                             </p>
                         </div>
                     </div>
