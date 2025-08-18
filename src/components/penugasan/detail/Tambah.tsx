@@ -227,7 +227,7 @@ const AddPenugasan: React.FC<AddPenugasanProps> = ({ skNumber, idDaops, idSuratT
         <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
             <div className={`bg-white rounded-xl shadow-xl w-11/12 max-w-7xl max-h-[90vh] overflow-y-auto transition-transform duration-300 transform ${isVisible ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
                 <div className="header-primary text-white p-4 rounded-t-xl flex justify-between items-center sticky top-0 z-10">
-                    <h2 className="text-xl font-semibold">Tambah Regu Baru</h2>
+                    <h2 className="text-xl font-semibold">Tambah Tim Baru</h2>
                     <button onClick={handleClose} className="text-white hover:text-gray-200"><X size={24} /></button>
                 </div>
                 <div className="p-6">
@@ -285,7 +285,7 @@ const AddPenugasan: React.FC<AddPenugasanProps> = ({ skNumber, idDaops, idSuratT
                         </div>
                         <div className="mt-6 flex justify-end">
                             <button type="submit" disabled={loading} className="px-4 py-2 border-transparent rounded-md shadow-sm font-medium text-white header-primary hover:opacity-90 transition-opacity">
-                                {loading ? 'Menyimpan...' : 'Simpan Regu Baru'}
+                                {loading ? 'Menyimpan...' : 'Simpan Penambahan'}
                             </button>
                         </div>
                     </form>

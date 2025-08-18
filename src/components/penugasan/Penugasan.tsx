@@ -273,10 +273,10 @@ const Penugasan: React.FC<PenugasanProps> = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <div>
-                        <h3 className="font-semibold text-black-800 mb-2">Informasi Penggunaan</h3>
+                        <h3 className="font-semibold text-black-800 mb-2">Informasi Surat Tugas</h3>
                         <p className="text-l text-black-600 leading-relaxed">
-                            Halaman ini menampilkan seluruh penugasan patroli yang terdaftar dalam sistem.
-                            Anda dapat mencari penugasan spesifik menggunakan kolom pencarian.
+                            Halaman ini menampilkan detail tim yang termasuk dalam surat tugas.
+                            Anda dapat mencari tim patroli spesifik menggunakan kolom pencarian.
                             Untuk melihat detail penugasan, klik ikon <span className="inline-flex items-center"><svg className="h-3 w-3 mx-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></span>,
                             dan untuk menghapus data, klik ikon <span className="inline-flex items-center"><svg className="h-3 w-3 mx-1 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></span>.
                         </p>
