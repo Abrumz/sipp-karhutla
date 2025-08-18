@@ -66,7 +66,7 @@ const InfoCard: React.FC<{
 
 const StepGuide: React.FC = () => {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
             <div className="flex flex-col items-center text-center">
                 <div className="w-12 h-12 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">1</div>
                 <div>
@@ -77,15 +77,8 @@ const StepGuide: React.FC = () => {
             <div className="flex flex-col items-center text-center">
                 <div className="w-12 h-12 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">2</div>
                 <div>
-                    <h4 className="font-semibold text-lg text-black-800 mb-2">Download Laporan</h4>
-                    <p className="text-l text-black-600">Klik tombol Download Laporan dan tunggu proses selesai</p>
-                </div>
-            </div>
-            <div className="flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">3</div>
-                <div>
-                    <h4 className="font-semibold text-lg text-black-800 mb-2">Analisis Data</h4>
-                    <p className="text-l text-black-600">Buka file laporan untuk melihat data dan statistik lengkap</p>
+                    <h4 className="font-semibold text-lg text-black-800 mb-2">Unduh Laporan</h4>
+                    <p className="text-l text-black-600">Klik tombol Unduh Laporan dan tunggu proses selesai</p>
                 </div>
             </div>
         </div>
@@ -184,9 +177,9 @@ const LaporanRingkasan = () => {
             {/* Header */}
             <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-4xl mx-auto text-center">
-                    <h1 className="text-3xl font-bold mb-2">Laporan Ringkasan</h1>
+                    <h1 className="text-3xl font-bold mb-2">Rekapitulasi Patroli</h1>
                     <p className="text-lg opacity-90">
-                        Download dan analisis data kebakaran hutan dan lahan berdasarkan rentang waktu
+                        Unduh laporan ringkasan data patroli karhutla berdasarkan rentang tanggal
                     </p>
                 </div>
             </div>
@@ -248,7 +241,7 @@ const LaporanRingkasan = () => {
                     <div className="flex items-start gap-3 p-4 bg-gray-100 rounded-lg mb-6">
                         <Info size={18} className="text-black-600 flex-shrink-0 mt-0.5" />
                         <p className="text-l text-black-600 leading-relaxed">
-                            Laporan akan berisi data detail dan ringkasan kegiatan patroli. Pastikan tanggal yang dipilih sesuai dengan periode patroli yang telah dilakukan.
+                            Laporan berisi data detail dan ringkasan kegiatan patroli. Pastikan tanggal yang dipilih sesuai dengan periode patroli yang telah dilakukan.
                         </p>
                     </div>
 

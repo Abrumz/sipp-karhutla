@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useAuth from '@/context/auth'
 import { getSKLaporanDetail, deleteLaporan } from '@/services'
-import { CloudDownload, ExternalLink, Info, Trash2, Search, ChevronLeft, ChevronRight } from 'lucide-react'
+import { CloudDownload, ExternalLink, Info, Trash2, Search, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
 import { apiV2URL } from '@/api'
 import Loader from '@/components/loader/Loader'
 import Swal from 'sweetalert2'
@@ -170,6 +170,15 @@ const DetailLaporan: React.FC = () => {
         <div className="bg-gray-50 min-h-full p-6">
             <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-5xl mx-auto text-center">
+                    <div className="flex justify-start mb-4">
+                        <button
+                            onClick={() => router.back()}
+                            className="inline-flex items-center px-3 py-1 rounded-md bg-green-600 text-sm font-medium text-white hover:bg-green-700 transition duration-150 ease-in-out"
+                        >
+                            {/* ArrowLeft icon is not imported, so use a left arrow unicode or import if needed */}
+                            <span className="mr-1">&#8592;</span> Kembali
+                        </button>
+                    </div>
                     <h1 className="text-3xl font-bold mb-2">Detail Laporan: {noSK}</h1>
                     <p className="text-lg opacity-90">
                         Laporan dari surat tugas yang telah dikeluarkan

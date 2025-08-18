@@ -118,37 +118,37 @@ const PelaporanRentangTanggal: React.FC = () => {
         <div className="bg-gray-50 min-h-full p-6">
             <div className="header-primary text-white p-8 rounded-xl mb-8 shadow-md">
                 <div className="max-w-4xl mx-auto text-center">
-                    <h1 className="text-3xl font-bold mb-2">Rekapitulasi Laporan Per Rentang Tanggal</h1>
+                    <h1 className="text-3xl font-bold mb-2">Laporan Patroli Per Rentang Tanggal</h1>
                     <p className="text-lg opacity-90">
-                        Download dan analisis data kebakaran hutan dan lahan berdasarkan periode waktu tertentu
+                        Unduh laporan patroli karhutla berdasarkan periode waktu tertentu
                     </p>
                 </div>
             </div>
 
             <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow mb-8">
                 <h3 className="text-xl font-semibold text-black-800 mb-6 text-center">Cara Penggunaan Laporan</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col items-center text-center">
                         <div className="w-10 h-10 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">1</div>
                         <div>
                             <h4 className="font-semibold text-base text-black-700 mb-2">Pilih Rentang Tanggal</h4>
-                            <p className="text-l text-black-500">Tentukan periode waktu laporan yang ingin diunduh</p>
+                            <p className="text-l text-black-500">Tentukan periode waktu untuk rekapitulasi laporan patroli</p>
                         </div>
                     </div>
                     <div className="flex flex-col items-center text-center">
                         <div className="w-10 h-10 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">2</div>
                         <div>
-                            <h4 className="font-semibold text-base text-black-700 mb-2">Download Laporan</h4>
-                            <p className="text-l text-black-500">Klik tombol Download Laporan dan tunggu proses selesai</p>
+                            <h4 className="font-semibold text-base text-black-700 mb-2">Unduh Laporan</h4>
+                            <p className="text-l text-black-500">Klik tombol Unduh Laporan dan tunggu proses selesai</p>
                         </div>
                     </div>
-                    <div className="flex flex-col items-center text-center">
+                    {/* <div className="flex flex-col items-center text-center">
                         <div className="w-10 h-10 bg-gradient-primary text-white rounded-full flex items-center justify-center font-semibold text-lg mb-4">3</div>
                         <div>
                             <h4 className="font-semibold text-base text-black-700 mb-2">Analisis Data</h4>
                             <p className="text-l text-black-500">Buka file laporan untuk melihat data dan statistik lengkap</p>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
@@ -158,7 +158,7 @@ const PelaporanRentangTanggal: React.FC = () => {
                         <Clock className="h-8 w-8 text-green-500 bg-green-50 p-1.5 rounded-lg" />
                         <div>
                             <h2 className="text-xl font-bold text-black-800 mb-1">Pilih Rentang Tanggal</h2>
-                            <p className="text-black-500">Tentukan periode waktu untuk rekapitulasi laporan Anda</p>
+                            <p className="text-black-500">Tentukan periode tanggal untuk rekapitulasi laporan patroli.</p>
                         </div>
                     </div>
 
@@ -200,7 +200,7 @@ const PelaporanRentangTanggal: React.FC = () => {
                     <div className="flex items-start gap-3 p-4 bg-gray-100 rounded-lg mb-6">
                         <Info size={18} className="text-black-600 flex-shrink-0 mt-0.5" />
                         <p className="text-l text-black-600 leading-relaxed">
-                            Maksimal rentang tanggal yang dapat dipilih adalah 7 hari. Laporan akan berisi data detail dan ringkasan patroli.
+                            Maksimal rentang tanggal yang dapat dipilih adalah 7 hari. Laporan berisi data detail kegiatan patroli.
                         </p>
                     </div>
 
@@ -221,7 +221,7 @@ const PelaporanRentangTanggal: React.FC = () => {
                             ) : (
                                 <>
                                     <CloudDownload className="mr-2 h-5 w-5" />
-                                    Download Laporan
+                                    Unduh Laporan
                                 </>
                             )}
                         </button>

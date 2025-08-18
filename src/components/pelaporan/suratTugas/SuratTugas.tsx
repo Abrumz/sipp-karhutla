@@ -340,7 +340,7 @@ const PelaporanSuratTugas: React.FC = () => {
                     <div>
                         <h3 className="font-semibold text-black-800 mb-2">Informasi Penggunaan</h3>
                         <p className="text-l text-black-600 leading-relaxed">
-                            Halaman ini menampilkan seluruh surat tugas patroli yang telah diterbitkan.
+                            Halaman ini menampilkan seluruh laporan berdasarkan surat tugas patroli yang telah diterbitkan.
                             Anda dapat mencari surat tugas spesifik menggunakan kolom pencarian.
                             Untuk melihat detail laporan, klik ikon <span className="inline-flex items-center"><ExternalLink className="h-3 w-3 mx-1" /></span>,
                             dan untuk mengunduh laporan, klik ikon <span className="inline-flex items-center"><CloudDownload className="h-3 w-3 mx-1" /></span>.
