@@ -327,7 +327,7 @@ const LoginForm = ({ redirectTo, customClass }: LoginFormProps) => {
             <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-indigo-600 rounded-full opacity-20 blur-2xl"></div>
             <form className="relative px-6 sm:px-8 py-8 sm:py-10 z-10" onSubmit={handleSubmit}>
                 <div className="text-center mb-6 sm:mb-8">
-                    <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#c5c3dd] mb-3 sm:mb-4 shadow-lg relative">
+                    <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full  mb-3 sm:mb-4 shadow-lg relative">
                         <div className="relative h-8 w-8 sm:h-10 sm:w-10">
                             <Image
                                 src={favicon}
