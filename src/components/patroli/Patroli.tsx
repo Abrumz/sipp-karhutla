@@ -20,7 +20,9 @@ import {
     Download as CloudDownloadIcon,
     MapPin,
     X,
-    AlertTriangle
+    AlertTriangle,
+    ChevronLeft,
+    ChevronRight
 } from 'lucide-react';
 import { PatrolData, PatrolListData } from '@/interfaces/data';
 import dynamic from 'next/dynamic';
@@ -253,6 +255,7 @@ const PatroliContent: React.FC = () => {
     const [isMobileView, setIsMobileView] = useState<boolean>(false);
     const [isMobileStatsExpanded, setIsMobileStatsExpanded] = useState<boolean>(true);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
+    const [calendarView, setCalendarView] = useState<moment.Moment>(moment());
 
     const [mandiriCounter, setMandiriCounter] = useState(0);
     const [rutinCounter, setRutinCounter] = useState(0);
@@ -361,6 +364,133 @@ const PatroliContent: React.FC = () => {
         setDate(moment());
     };
 
+    useEffect(() => {
+        // Sinkronkan calendarView dengan date saat date berubah
+        setCalendarView(date.clone());
+    }, [date]);
+
+    const handleCalendarPrevMonth = () => {
+        setCalendarView(calendarView.clone().subtract(1, 'month'));
+    };
+
+    const handleCalendarNextMonth = () => {
+        setCalendarView(calendarView.clone().add(1, 'month'));
+    };
+
+    const handleCalendarDateClick = (day: moment.Moment) => {
+        setDate(day.clone());
+        setIsDatePickerOpen(false);
+    };
+
+    const renderCalendar = () => {
+        const startOfMonth = calendarView.clone().startOf('month');
+        const endOfMonth = calendarView.clone().endOf('month');
+        const startDate = startOfMonth.clone().startOf('week');
+        const endDate = endOfMonth.clone().endOf('week');
+        const today = moment();
+
+        const calendarDays = [];
+        let day = startDate.clone();
+
+        while (day.isBefore(endDate, 'day')) {
+            calendarDays.push(day.clone());
+            day.add(1, 'day');
+        }
+
+        const weeks = [];
+        for (let i = 0; i < calendarDays.length; i += 7) {
+            weeks.push(calendarDays.slice(i, i + 7));
+        }
+
+        // Dropdown bulan dan tahun
+        const months = moment.months();
+        const currentYear = moment().year();
+        const years = [];
+        for (let y = currentYear - 10; y <= currentYear + 10; y++) {
+            years.push(y);
+        }
+
+        return (
+            <div className="bg-white rounded-lg shadow-xl p-2 z-50 w-72">
+                <div className="flex items-center justify-between mb-2">
+                    <button onClick={handleCalendarPrevMonth} className="p-1 rounded hover:bg-gray-100">
+                        <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <div className="flex items-center space-x-1">
+                        <select
+                            className="text-sm font-semibold bg-transparent outline-none"
+                            value={calendarView.month()}
+                            onChange={e => setCalendarView(calendarView.clone().month(Number(e.target.value)))}
+                        >
+                            {months.map((m, idx) => (
+                                <option key={m} value={idx}>{m}</option>
+                            ))}
+                        </select>
+                        <select
+                            className="text-sm font-semibold bg-transparent outline-none"
+                            value={calendarView.year()}
+                            onChange={e => setCalendarView(calendarView.clone().year(Number(e.target.value)))}
+                        >
+                            {years.map(y => (
+                                <option key={y} value={y}>{y}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <button onClick={handleCalendarNextMonth} className="p-1 rounded hover:bg-gray-100">
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                </div>
+                <div className="grid grid-cols-7 text-xs text-center mb-1">
+                    {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
+                        <div key={d} className="font-semibold text-gray-500">{d}</div>
+                    ))}
+                </div>
+                <div className="grid grid-cols-7 text-sm">
+                    {weeks.map((week, wi) =>
+                        week.map((d, di) => {
+                            const isCurrentMonth = d.month() === calendarView.month();
+                            const isSelected = d.isSame(date, 'day');
+                            const isToday = d.isSame(today, 'day');
+                            return (
+                                <button
+                                    key={wi + '-' + di}
+                                    onClick={() => isCurrentMonth && handleCalendarDateClick(d)}
+                                    className={`
+                                        p-1 m-0.5 rounded-full
+                                        ${isCurrentMonth ? '' : 'text-gray-300'}
+                                        ${isSelected ? 'bg-blue-600 text-white font-bold' : ''}
+                                        ${isToday && !isSelected ? 'border border-blue-400' : ''}
+                                        hover:bg-blue-100
+                                    `}
+                                    disabled={!isCurrentMonth}
+                                >
+                                    {d.date()}
+                                </button>
+                            );
+                        })
+                    )}
+                </div>
+                <div className="flex justify-between mt-2">
+                    <button
+                        onClick={() => setIsDatePickerOpen(false)}
+                        className="text-blue-600 text-xs hover:underline"
+                    >
+                        Tutup
+                    </button>
+                    <button
+                        onClick={() => {
+                            setDate(moment());
+                            setIsDatePickerOpen(false);
+                        }}
+                        className="text-blue-600 text-xs hover:underline"
+                    >
+                        Hari Ini
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
     if (!isAuthenticated) return null;
 
     return (
@@ -390,9 +520,7 @@ const PatroliContent: React.FC = () => {
                                 className="p-2 rounded-lg hover:bg-gray-100 transition"
                                 aria-label="Previous day"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                                </svg>
+                                <ChevronLeft className="h-5 w-5 text-black-600" />
                             </button>
                             <div className="relative">
                                 <button
@@ -403,13 +531,8 @@ const PatroliContent: React.FC = () => {
                                     <span className="text-black-800 font-medium">{formattedDate}</span>
                                 </button>
                                 {isDatePickerOpen && (
-                                    <div className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-xl p-2 z-50">
-                                        <input
-                                            type="date"
-                                            value={date.format('YYYY-MM-DD')}
-                                            onChange={handleDateChange}
-                                            className="p-2 border rounded"
-                                        />
+                                    <div className="absolute top-full left-0 mt-1 z-50">
+                                        {renderCalendar()}
                                     </div>
                                 )}
                             </div>
@@ -418,9 +541,7 @@ const PatroliContent: React.FC = () => {
                                 className="p-2 rounded-lg hover:bg-gray-100 transition"
                                 aria-label="Next day"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                </svg>
+                                <ChevronRight className="h-5 w-5 text-black-600" />
                             </button>
                             <button
                                 onClick={goToToday}
@@ -479,7 +600,7 @@ const PatroliContent: React.FC = () => {
                         `}>
                             <div className="p-4 text-white bg-gradient-primary">
                                 <h2 className="text-xl font-bold">Statistik Data</h2>
-                                <p className="text-blue-100 text-l">Aktivitas {formattedDate}</p>
+                                <p className="text-blue-100 text-l">Statistik Data {formattedDate}</p>
                             </div>
                             <div className="grid grid-cols-1 divide-y">
                                 <div className="p-4 hover:bg-blue-50 transition-colors duration-200">
@@ -490,7 +611,7 @@ const PatroliContent: React.FC = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-medium text-black-800">Patroli Mandiri</h3>
-                                                <p className="text-l text-gray-700">Dilakukan oleh individu petugas</p>
+                                                <p className="text-l text-gray-700">Patroli mandiri oleh anggota Manggala Agni (MA)</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -510,7 +631,7 @@ const PatroliContent: React.FC = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-medium text-black-800">Patroli Rutin</h3>
-                                                <p className="text-l text-gray-700">Patroli terjadwal rutin</p>
+                                                <p className="text-l text-gray-700">Patroli yang ditugaskan kepada MA dalam seminggu </p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -530,7 +651,7 @@ const PatroliContent: React.FC = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-medium text-black-800">Patroli Terpadu</h3>
-                                                <p className="text-l text-gray-700">Kolaborasi antar instansi</p>
+                                                <p className="text-l text-gray-700">Patroli yang dilakukan bersama dengan TNI, POLRI, dan Masyarakat Peduli Api</p>
                                             </div>
                                         </div>
                                         {loading ? (
@@ -598,13 +719,13 @@ const PatroliContent: React.FC = () => {
 
                     <div className="mb-8">
                         <div className="bg-white rounded-xl shadow-md p-4 mb-6">
-                            <h2 className="text-xl font-bold text-black-800 mb-4">Detail Data Aktivitas</h2>
+                            <h2 className="text-xl font-bold text-black-800 mb-4">Detail Data Patroli</h2>
                             <div className="border-t border-gray-200 pt-4">
-                                <DataTable title="Data Patroli Mandiri" columns={columns} data={mandiri} loading={loading} onViewOnMap={handleViewOnMap} />
-                                <DataTable title="Data Patroli Rutin" columns={columns} data={rutin} loading={loading} onViewOnMap={handleViewOnMap} />
-                                <DataTable title="Data Patroli Terpadu" columns={columns} data={terpadu} loading={loading} onViewOnMap={handleViewOnMap} />
-                                <DataTable title="Data Pemadaman" columns={columns} data={padam} loading={loading} onViewOnMap={handleViewOnMap} />
-                                <DataTable title="Data Tidak Valid / Diluar Batas" columns={columnsLuarBatas} data={luarBatasIndonesia} loading={loading} onViewOnMap={handleViewOnMap} />
+                                <DataTable title="Patroli Mandiri" columns={columns} data={mandiri} loading={loading} onViewOnMap={handleViewOnMap} />
+                                <DataTable title="Patroli Rutin" columns={columns} data={rutin} loading={loading} onViewOnMap={handleViewOnMap} />
+                                <DataTable title="Patroli Terpadu" columns={columns} data={terpadu} loading={loading} onViewOnMap={handleViewOnMap} />
+                                <DataTable title="Pemadaman" columns={columns} data={padam} loading={loading} onViewOnMap={handleViewOnMap} />
+                                <DataTable title="Data Tidak Valid / di Luar Batas Wilayah Indonesia" columns={columnsLuarBatas} data={luarBatasIndonesia} loading={loading} onViewOnMap={handleViewOnMap} />
                             </div>
                         </div>
                     </div>
