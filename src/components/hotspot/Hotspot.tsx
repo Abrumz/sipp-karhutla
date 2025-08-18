@@ -162,7 +162,7 @@ const Hotspot: React.FC = () => {
                                         <Flame className="h-5 w-5 text-white" />
                                     </div>
                                     <div>
-                                        <h3 className="font-medium text-black-800">Titik Panas (24 Jam Terakhir)</h3>
+                                        <h3 className="font-medium text-black-800">Jumlah Titik Panas (24 Jam Terakhir)</h3>
                                         {isValidating ? (
                                             <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-300 border-t-blue-600"></div>
                                         ) : (
@@ -207,8 +207,8 @@ const Hotspot: React.FC = () => {
                                     </div>
                                 </div>
                                 <br></br>
-                                <h3 className="font-medium text-black-800">Rentang Data</h3>
-                                <p className="text-black-600 text-l">24 Jam Terakhir</p>
+                                {/* <h3 className="font-medium text-black-800">Rentang Data</h3>
+                                <p className="text-black-600 text-l">24 Jam Terakhir</p> */}
                             </div>
                         </div>
 
@@ -250,9 +250,15 @@ const Hotspot: React.FC = () => {
                             </h3>
                             <p className="text-black-600 text-l">
                                 Data titik panas menampilkan semua data dalam 24 jam terakhir yang bersumber dari berbagai satelit, termasuk SNPP, MODIS, dan NOAA20.
-                                Visualisasi ini membantu memahami distribusi titik panas yang berpotensi menjadi kebakaran hutan
-                                dan lahan di seluruh Indonesia.
-                                Tampilan peta di atas menunjukkan data yang diakses pada {accessTime.format('DD MMMM YYYY')} pukul {accessTime.format('HH:mm')}.
+                                Sumber data dari Sipongi+ (Sistem Pemantauan Karhutla){" "}
+                                <a
+                                    href="https://sipongi.menlhk.go.id/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 underline hover:text-blue-800"
+                                >
+                                    https://sipongi.menlhk.go.id/
+                                </a>
                             </p>
                         </div>
                     </div>
