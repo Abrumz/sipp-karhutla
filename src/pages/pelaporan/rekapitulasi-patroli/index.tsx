@@ -7,7 +7,7 @@ export default function PelaporanRingkasanPage() {
     return (
         <SiteLayout>
             <CustomHead
-                title='Laporan Ringkasan'
+                title='Rekapitulasi Patroli'
                 description='Platform visualisasi data monitoring patroli dan pemadaman kebakaran hutan dan lahan'
             >
                 <div>

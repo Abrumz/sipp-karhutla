@@ -7,7 +7,7 @@ export default function PelaporanRentangTanggalPage() {
     return (
         <SiteLayout >
             <CustomHead
-                title='Rentang Tanggal'
+                title='Kegiatan Patroli'
                 description='Platform visualisasi data monitoring patroli dan pemadaman kebakaran hutan dan lahan'
             >
                 <div>
