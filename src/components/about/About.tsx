@@ -58,7 +58,7 @@ const About: React.FC = () => {
                                         </div>
                                         <div>
                                             <h3 className="font-medium text-blue-800">Pengelolaan Data Pengguna</h3>
-                                            <p className="text-blue-700">Manajemen data pengguna aplikasi mobile patroli pencegahan karhutla</p>
+                                            <p className="text-blue-700">Manajemen data pengguna aplikasi mobile dan web patroli pencegahan karhutla </p>
                                         </div>
                                     </div>
 
@@ -80,11 +80,7 @@ const About: React.FC = () => {
                                     </h3>
                                     <div className="pl-8 border-l-2 border-blue-100">
                                         <p className="text-black-700 mb-4 leading-relaxed">
-                                            SIPP Karhutla dibangun pada tahun 2022 oleh Departemen Ilmu Komputer, Fakultas Matematika dan Ilmu
-                                            Pengetahuan Alam, Institut Pertanian Bogor (IPB) bekerja sama dengan Balai Pengendalian
-                                            Perubahan Iklim dan Kebakaran Hutan dan Lahan (PPIKHL) Wilayah Sumatra dan
-                                            Kalimantan, Direktorat Jenderal Pengendalian Perubahan Iklim, Kementerian Lingkungan
-                                            Hidup dan Kehutanan (KLHK), dan Direktorat Pengendalian Kebakaran Hutan dan Lahan KLHK.
+                                            SIPP Karhutla dibangun pada tahun 2020 oleh Departemen Ilmu Komputer, Fakultas Matematika dan Ilmu Pengetahuan Alam, Institut Pertanian Bogor (IPB) (saat ini menjadi Sekolah Sains Data, Matematika dan Informatika (SSMI) IPB bekerja sama dengan Balai Pengendalian Perubahan Iklim dan Kebakaran Hutan dan Lahan (PPIKHL) Wilayah Sumatra dan Kalimantan, dan Direktorat Pengendalian Kebakaran Hutan dan Lahan, Kementerian Lingkungan Hidup dan Kehutanan (KLHK) (saat ini menjadi Kementerian Kehutanan).
                                         </p>
                                     </div>
                                 </div>
@@ -112,10 +108,7 @@ const About: React.FC = () => {
                                     </h3>
                                     <div className="pl-8 border-l-2 border-blue-100">
                                         <p className="text-black-700 leading-relaxed">
-                                            Penggunaan SIPP Karhutla diatur oleh Peraturan Direktur Jenderal Pengendalian
-                                            Perubahan Iklim No. P.10/PPI/SET/KUM.1/12/2020 tentang Tata Cara Penggunaan Sistem
-                                            Informasi Patroli Pencegahan Kebakaran Hutan dan Lahan (SIPP Karhutla) sebagai acuan
-                                            dalam pencegahan kebakaran hutan dan lahan.
+                                            Penggunaan SIPP Karhutla diatur oleh Peraturan Direktur Jenderal Pengendalian Perubahan Iklim No. P.10/PPI/SET/KUM.1/12/2020 tentang Tata Cara Penggunaan Sistem Informasi Patroli Pencegahan Kebakaran Hutan dan Lahan (SIPP Karhutla).
                                         </p>
                                     </div>
                                 </div>
