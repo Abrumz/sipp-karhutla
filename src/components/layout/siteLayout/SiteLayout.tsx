@@ -69,7 +69,16 @@ const SiteLayout: React.FC<SiteLayoutProps> = ({
             </Head>
 
             <Header
-                brand="SIPP Karhutla"
+                brand={
+                    <span className="flex items-center gap-2">
+                        <img
+                            src="/favicon.ico"
+                            alt="Logo"
+                            className="w-7 h-7"
+                        />
+                        SIPP Karhutla
+                    </span>
+                }
                 rightLinks={<HeaderLinks headerColor={headerColor} />}
                 fixed
                 color={headerColor}
