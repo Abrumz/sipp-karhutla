@@ -175,12 +175,12 @@ const AuthenticatedMenu: React.FC<AuthenticatedMenuProps> = ({
                 </Link>
 
                 <MobileDropdown buttonText="Pelaporan">
-                    <div className="py-1 border-b border-gray-100" role="none">
-                        <Link href="/pelaporan/laporan-ringkasan" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
-                            Laporan Ringkasan
+                    <div className="py-1 border-b border-gray-100" role="none">.
+                        <Link href="/pelaporan/kegiatan-patroli" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
+                            Kegiatan Patroli
                         </Link>
-                        <Link href="/pelaporan/rentang-tanggal" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
-                            Rentang Tanggal
+                        <Link href="/pelaporan/rekapitulasi-patroli" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
+                            Rekapitulasi Patroli
                         </Link>
                         <Link href="/pelaporan/surat-tugas" className="block pl-8 pr-4 py-3 text-black-700 hover:bg-gray-100" role="menuitem">
                             Surat Tugas
@@ -264,11 +264,11 @@ const AuthenticatedMenu: React.FC<AuthenticatedMenuProps> = ({
 
             <CustomDropdown buttonText="Pelaporan" headerColor={headerColor}>
                 <div className="py-1" role="none">
-                    <Link href="/pelaporan/laporan-ringkasan" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
-                        Laporan Ringkasan
+                    <Link href="/pelaporan/kegiatan-patroli" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
+                        Kegiatan Patroli
                     </Link>
-                    <Link href="/pelaporan/rentang-tanggal" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
-                        Rentang Tanggal
+                    <Link href="/pelaporan/rekapitulasi-patroli" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
+                        Rekapitulasi Patroli
                     </Link>
                     <Link href="/pelaporan/surat-tugas" className="block px-4 py-2 text-l text-black-700 hover:bg-gray-100" role="menuitem">
                         Surat Tugas

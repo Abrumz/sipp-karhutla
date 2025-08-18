@@ -12,7 +12,7 @@ interface HeaderProps {
     color?: ColorType;
     rightLinks?: ReactNode;
     leftLinks?: ReactNode;
-    brand?: string;
+    brand?: ReactNode;
     fixed?: boolean;
     absolute?: boolean;
     changeColorOnScroll?: ChangeColorConfig;
