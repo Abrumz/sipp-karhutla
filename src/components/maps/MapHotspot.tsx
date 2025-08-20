@@ -241,34 +241,34 @@ const LeafletMap = ({ center, zoom, hotspots }: MapProps) => {
 		street: {
 			url: 'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
 			attribution: 'Map &copy; <a href="https://maps.google.com/">Google</a>',
-			maxZoom: 19,
+			maxZoom: 20,
 			subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
 			errorTileUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/img/marker-icon-grey.png'
 		},
 		hybrid: {
 			url: 'https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
 			attribution: 'Map &copy; <a href="https://maps.google.com/">Google</a>',
-			maxZoom: 19,
+			maxZoom: 20,
 			subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
 			errorTileUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/img/marker-icon-grey.png'
 		},
 		terrain: {
 			url: 'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
 			attribution: 'Map &copy; <a href="https://maps.google.com/">Google</a>',
-			maxZoom: 19,
+			maxZoom: 20,
 			subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
 			errorTileUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/img/marker-icon-grey.png'
 		},
 		esritopo: {
 			url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
 			attribution: 'Map &copy; <a href="https://arcgisonline.com/">Esri</a>',
-			maxZoom: 19,
+			maxZoom: 18,
 			errorTileUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/img/marker-icon-grey.png'
 		},
 		esrisatelite: {
 			url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
 			attribution: 'Map &copy; <a href="https://arcgisonline.com/">Esri</a>',
-			maxZoom: 19,
+			maxZoom: 18,
 			errorTileUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers/img/marker-icon-grey.png'
 		}
 	};
@@ -310,9 +310,17 @@ const LeafletMap = ({ center, zoom, hotspots }: MapProps) => {
 
 							<div className="text-black-600">Confidence:</div>
 							<div className="font-medium">
-								<span className={`inline-block px-2 py-1 rounded text-l text-white ${hotspot.conf === 'high' ? 'bg-red-500' :
-									hotspot.conf === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-									}`}>
+								<span
+									className="inline-block px-2 py-1 rounded text-l text-black"
+									style={{
+										backgroundColor:
+											hotspot.conf === 'high'
+												? 'var(--bs-high)'
+												: hotspot.conf === 'medium'
+													? 'var(--bs-medium)'
+													: 'var(--bs-low)'
+									}}
+								>
 									{hotspot.conf.toUpperCase()}
 								</span>
 							</div>

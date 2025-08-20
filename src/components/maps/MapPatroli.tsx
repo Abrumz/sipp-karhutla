@@ -177,8 +177,8 @@ const LeafletMap = ({
 		street: { url: 'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', attribution: '© Google', maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] },
 		hybrid: { url: 'https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', attribution: '© Google', maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] },
 		terrain: { url: 'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', attribution: '© Google', maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] },
-		esritopo: { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', attribution: '© Esri', maxZoom: 20 },
-		esrisatelite: { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attribution: '© Esri', maxZoom: 20 }
+		esritopo: { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', attribution: '© Esri', maxZoom: 18 },
+		esrisatelite: { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attribution: '© Esri', maxZoom: 18 }
 	};
 
 	const referenceLayer = {
