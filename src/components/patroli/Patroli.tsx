@@ -759,9 +759,9 @@ const PatroliContent: React.FC = () => {
                                     spots={selectedPatroliData ? [selectedPatroliData] : []}
                                     isLoggedin={isAuthenticated}
                                     spotToFocus={selectedPatroliData}
-                                    showInfoWindow={showInfoWindow}
+                                    showInfoWindow={true}
                                     patroliData={selectedPatroliData}
-                                    onCloseInfoWindow={handleCloseInfoWindow}
+                                // onCloseInfoWindow={handleCloseInfoWindow} // Hapus/komentar baris ini
                                 />
                             </div>
                         </div>
