@@ -81,13 +81,9 @@ const Hotspot: React.FC = () => {
         const fetchData = async () => {
             setValidating(true);
             try {
-                // Memanggil HotspotAPI yang sudah dikonfigurasi dengan proxy
                 const responseData = await HotspotAPI.get<HotspotItem[]>('');
 
                 setAccessTime(moment());
-
-                // Karena interceptor Axios Anda mengembalikan response.data,
-                // variabel responseData sudah berisi array yang kita inginkan.
                 const hotspotData = Array.isArray(responseData) ? responseData : [];
 
                 const filteredData = hotspotData.filter((item: HotspotItem) => {
